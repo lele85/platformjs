@@ -12,34 +12,22 @@ game.Camera = game.Camera || {};
         var camera_w_dead_zone = 20;
 
         that.update = function(){
-
-            var targetCameraY = target.y - 220;
-            var cameraDistanceY = Math.abs(context.y - targetCameraY)/levelHeight;
-            var cameraStepY = CAMERA_SPEED * cameraDistanceY;
-
-            //Bottom of the level
-            if (targetCameraY > getBounds().h - 480 +16) {
-                targetCameraY = getBounds().h - 480 +16;
+            var targetCameraY = target.y;
+            if (targetCameraY > getBounds().h - 240){
+                targetCameraY = getBounds().h - 240;
             };
-            //Top of the level
-            if (targetCameraY < 50) {
-                targetCameraY = 0 - 16;
+            if (Math.abs((targetCameraY - 240) - context.y) != 0){
+                var distance = (targetCameraY - 240) - context.y;
+                context.translate(0, -distance*CAMERA_SPEED/levelHeight);
+                context.y += distance*CAMERA_SPEED/levelHeight;
             };
-
-            if (context.y > targetCameraY + 20){
-                context.translate(0,cameraStepY);
-                context.y -= cameraStepY;
-            } else if (context.y < targetCameraY - 20){
-                context.translate(0 ,- cameraStepY);
-                context.y += cameraStepY;
-            };
-
-
-            // x scroll (Correct implementation)
+            
             var targetCameraX = target.x;
-            if (targetCameraX < 320) { targetCameraX = 320};
+            if (targetCameraX < 320) {
+                targetCameraX = 320;
+            };
             if (Math.abs((targetCameraX - 320) - context.x) != 0){
-                var distance = (targetCameraX - 320) -context.x;
+                var distance = (targetCameraX - 320) - context.x;
                 context.translate(-distance*CAMERA_SPEED/640,0);
                 context.x += distance*CAMERA_SPEED/640;
             };

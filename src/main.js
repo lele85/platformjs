@@ -121,17 +121,17 @@ window.onload = function(){
     var player =  game.Player.create(keyboard,level,platform, gravity, jump, player_state);
     var camera = game.Camera.create(context, player.collider, level.getBounds);
 
+    var updatables = [platform, player, camera];
+    var drawables = [level, player, platform];
 
     var mainloop =  function() {
         context.clearRect(context.x - 300,context.y,1000,480);
-        platform.update();
-        player.update();
-        camera.update();
-        
-        level.draw(context);
-        
-        player.draw(context);
-        platform.draw(context);
+        for (var i = updatables.length - 1; i >= 0; i--) {
+            updatables[i].update();
+        };
+        for (var j = drawables.length - 1; j >= 0; j--) {
+            drawables[j].draw(context);
+        };
     };
 
     var animFrame =
