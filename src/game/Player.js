@@ -2,15 +2,15 @@ var game = game || {};
 game.Player = game.Player || {};
 
 (function(Player, Vector){
-    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state){
+    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position){
         var that = {};
 
         that.TIME = 1/60;
         that.speed = Vector.create(0,0);
         that.keyboard =  keyboard;
         that.collider = game.Collider.create({
-            x : 40,
-            y : 2000,
+            x : position.x || 40,
+            y : position.y || 2000,
             w : 20,
             h : 20
         });
@@ -147,7 +147,15 @@ game.Player = game.Player || {};
 
         that.draw = function(context){
             that.collider.draw(context);
-        }
+        };
+
+        that.changeKeyboard = function(other){
+            var other_keyboard = other.keyboard;
+            var this_keyboard = that.keyboard;
+            other.keyboard = this_keyboard;
+            that.keyboard = other_keyboard;
+        };
+
         return that;
     };
 }(game.Player, math.Vector));

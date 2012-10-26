@@ -109,20 +109,37 @@ window.onload = function(){
             "DOWN": 40,
             "CAMERA_UP":87,
             "CAMERA_DOWN":83,
-            "INVERT_GRAVITY":71
+            "INVERT_GRAVITY":71,
+            "SWITCH_PLAYER" : 67
         }
     });
     keyboard.init();
+
+    var mockKeyboard = {
+        init : function(){return false;},
+        isJustPressed : function(){return false;},
+        isHeld : function(){return false;},
+        isJustReleased : function(){return false;},
+    };
 
     var platform = game.MovingPlatform.create();
     var jump =  game.Jump.create();
     var player_state =  game.PlayerState.create();
     var gravity =  game.Gravity.create([jump, player_state]);
-    var player =  game.Player.create(keyboard,level,platform, gravity, jump, player_state);
+    var player =  game.Player.create(keyboard,level,platform, gravity, jump, player_state, {x:40,y:2000});
+
+    var jump2 = game.Jump.create();
+    var player_state2 =  game.PlayerState.create();
+    var player2 =  game.Player.create(mockKeyboard,level,platform, gravity, jump2, player_state2, {x:200,y:1500});
+    
     var camera = game.Camera.create(context, player.collider, level.getBounds);
 
-    var updatables = [platform, player, camera];
-    var drawables = [level, player, platform];
+    var updatables = [platform, player, player2, camera];
+    var drawables = [level, player, player2, platform];
+
+    var players = [player, player2];
+    
+    var active_player = 0;
 
     var mainloop =  function() {
         context.clearRect(context.x - 300,context.y,1000,480);
@@ -132,6 +149,11 @@ window.onload = function(){
         for (var j = drawables.length - 1; j >= 0; j--) {
             drawables[j].draw(context);
         };
+        if (keyboard.isJustPressed("SWITCH_PLAYER")){
+            active_player = ((active_player + 1) % 2);
+            player.changeKeyboard(player2);
+            camera.setTarget(players[active_player].collider);
+        }
     };
 
     var animFrame =
