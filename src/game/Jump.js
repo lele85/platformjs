@@ -12,31 +12,34 @@ game.Jump = game.Vector|| {};
         var current_jump_time = 0;
         var jump_cb = undefined;
         jump.jump_speed = Vector.create(0,0);
+        
+        var jump_direction = Vector.create(1,1);
+        var wall_jump_direction = Vector.create(1,1);
 
         var applyJumpTo = function(current_speed, dt) {
             var new_speed = Vector.create(0,0);
-            new_speed.x = current_speed.x - jump.jump_speed.x;
-            new_speed.y = current_speed.y - jump.jump_speed.y;
+            new_speed.x = jump_direction.x*jump.jump_speed.x;
+            new_speed.y = jump_direction.y*jump.jump_speed.y;
             return new_speed;
         };
 
         var applyLeftWalljumpTo = function(current_speed, dt) {
             var new_speed = Vector.create(0,0);
-            new_speed.x = wall_jump_speed.x;
-            new_speed.y = - wall_jump_speed.y;
+            new_speed.x = wall_jump_direction.x*wall_jump_speed.x;
+            new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
             return new_speed;
         };
 
         var applyRightWalljumpTo = function(current_speed, dt) {
             var new_speed = Vector.create(0,0);
-            new_speed.x = - wall_jump_speed.x;
-            new_speed.y = - wall_jump_speed.y;
+            new_speed.x = - wall_jump_direction.x*wall_jump_speed.x;
+            new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
             return new_speed;
         };
 
         var on_gravity_inversion =  function(){
-            jump.jump_speed.y *= -1;
-            wall_jump_speed.y *= -1;
+            jump_direction.y *= -1;
+            wall_jump_direction.y *= -1;
         };
 
         var start = function(){
@@ -54,7 +57,7 @@ game.Jump = game.Vector|| {};
 
         var update = function(dt){
             if (jump_started) {
-                jump.jump_speed.y = -400*1/(1 + current_jump_time*current_jump_time*1500);
+                jump.jump_speed.y = -400/(1 + current_jump_time*current_jump_time*1500);
                 current_jump_time += dt;
                 if (current_jump_time > max_jump_time){
                     stop();

@@ -126,7 +126,8 @@ game.Player = game.Player || {};
                 that.jump.stop();
                 that.state.update_after_jump();
             };
-            that.speed.y += that.jump.jump_speed.y;
+            var jump_delta = that.jump.applyJumpTo(that.speed, that.TIME);
+            that.speed.y += jump_delta.y;
 
             if ((that.state.left_wall_jump_possible) && (that.state.on_left_wall) && that.keyboard.isJustPressed("JUMP")){
                 that.speed = that.jump.applyLeftWalljumpTo(that.speed);
