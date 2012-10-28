@@ -29,13 +29,14 @@ game.Level = game.Level || {};
         };
 
         var addCollider = function(i,j){
-            collidersMatrix[i][j] = Collider.create({
+            collidersMatrix[j][i] = Collider.create({
                 x: i*TILE_DIMENSION,
                 y: j*TILE_DIMENSION,
                 w: TILE_DIMENSION,
                 h: TILE_DIMENSION
             });
-        }
+            console.log(collidersMatrix);
+        };
 
         var draw = function(context){
             for (var rowIndex in collidersMatrix){
@@ -48,7 +49,7 @@ game.Level = game.Level || {};
             if (element !== undefined){
                 array.push(element);
             };
-        }
+        };
 
         var getCollider = function(x,y,xOffset,yOffset){
             var coll;
@@ -57,7 +58,7 @@ game.Level = game.Level || {};
                 coll = collidersMatrix[Math.floor((y+10)/TILE_DIMENSION)+yOffset][Math.floor((x+10)/TILE_DIMENSION)+xOffset];
             }
             return coll;
-        }
+        };
 
         var getPotentialCollidersAt = function(x,y){
             var potentialColliders = [];
