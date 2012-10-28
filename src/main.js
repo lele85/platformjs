@@ -97,7 +97,8 @@ window.onload = function(){
     });
     level.build();
     var mouse = utils.Mouse.create({
-        "canvas" : canvas
+        "canvas" : canvas,
+        "world" : context
     });
     mouse.init();
 
@@ -124,12 +125,14 @@ window.onload = function(){
 
     var platform = game.MovingPlatform.create();
     var jump =  game.Jump.create();
+    var jump2 = game.Jump.create();
     var player_state =  game.PlayerState.create();
-    var gravity =  game.Gravity.create([jump, player_state]);
+    var player_state2 =  game.PlayerState.create();
+
+    var gravity =  game.Gravity.create([jump, jump2, player_state, player_state2]);
     var player =  game.Player.create(keyboard,level,platform, gravity, jump, player_state, {x:40,y:2000});
 
-    var jump2 = game.Jump.create();
-    var player_state2 =  game.PlayerState.create();
+    
     var player2 =  game.Player.create(mockKeyboard,level,platform, gravity, jump2, player_state2, {x:200,y:1500});
     
     var camera = game.Camera.create(context, player.collider, level.getBounds);

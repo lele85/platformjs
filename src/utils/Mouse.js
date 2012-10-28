@@ -1,15 +1,17 @@
 var utils = utils || {};
 utils.Mouse = utils.Mouse || {};
 
-(function(ns){
+(function(ns, Vector){
     ns.create = function(options){
         // OPTS
         //  canvas : related canvas
+        //  world : world
 
         var x = 0;
         var y = 0;
         var down = false;
         var canvas = options.canvas;
+        var world = options.world;
 
         var toCanvas = function(ev, axis) {
             // Convert window space in canvas space coordinates
@@ -55,7 +57,14 @@ utils.Mouse = utils.Mouse || {};
         var setMouseDown = function(){
             down = true;
         };
+
         var setMouseUp = function(){
+            var screenCoords = Vector.create(x,y);
+            var levelCoords = screenCoords.toWorldSpace(world);
+            console.log("SCREEN:");
+            console.log(screenCoords.x, screenCoords.y);
+            console.log("WORLD:");
+            console.log(levelCoords.x, levelCoords.y);
             down = false;
         }
 
@@ -73,4 +82,4 @@ utils.Mouse = utils.Mouse || {};
             isDown : isDown
         }
     }
-}(utils.Mouse));
+}(utils.Mouse, math.Vector));
