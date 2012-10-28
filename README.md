@@ -1,6 +1,6 @@
 PlatformJS
 ==========
-![Enjoy the amazing graphics of PlatformJS](http://dl.dropbox.com/u/848361/amazesolver/amaze_befs.png "Enjoy the amazing graphics of PlatformJS")
+![Enjoy the amazing graphics of PlatformJS](https://dl.dropbox.com/u/848361/platform-js/thumbnaill.png "Enjoy the amazing graphics of PlatformJS")
 Simple platformer in html5 canvas + vanilla JS
 
 Instructions
