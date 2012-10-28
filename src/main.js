@@ -111,7 +111,9 @@ window.onload = function(){
             "CAMERA_UP":87,
             "CAMERA_DOWN":83,
             "INVERT_GRAVITY":71,
-            "SWITCH_PLAYER" : 67
+            "SWITCH_PLAYER" : 67,
+            "EDITOR_ADD_MODE": 65,
+            "EDITOR_REMOVE_MODE": 82,
         }
     });
     keyboard.init();
@@ -158,7 +160,15 @@ window.onload = function(){
             active_player = ((active_player + 1) % 2);
             player.changeKeyboard(player2);
             camera.setTarget(players[active_player].collider);
-        }
+        };
+        if (keyboard.isJustPressed("EDITOR_ADD_MODE")){
+            console.log("ADD");
+            levelEditor.changeMode("ADD");
+        };
+        if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")){
+            console.log("REMOVE");
+            levelEditor.changeMode("REMOVE");
+        };
     };
 
     var animFrame =

@@ -35,8 +35,11 @@ game.Level = game.Level || {};
                 w: TILE_DIMENSION,
                 h: TILE_DIMENSION
             });
-            console.log(collidersMatrix);
         };
+
+        var removeCollider = function(i,j){
+            delete collidersMatrix[j][i];
+        }
 
         var draw = function(context){
             for (var rowIndex in collidersMatrix){
@@ -113,7 +116,8 @@ game.Level = game.Level || {};
             getVerticalCollidersAt : getVerticalCollidersAt,
             getHorizontalCollidersAt: getHorizontalCollidersAt,
             getBounds : getBounds,
-            addCollider : addCollider
+            addCollider : addCollider,
+            removeCollider : removeCollider
         };
     }
 }(game.Level, game.Collider));
