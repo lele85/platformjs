@@ -59,13 +59,19 @@ utils.Mouse = utils.Mouse || {};
         };
 
         var setMouseUp = function(){
-            var screenCoords = Vector.create(x,y);
-            var levelCoords = screenCoords.toWorldSpace(world);
-            console.log("SCREEN:");
-            console.log(screenCoords.x, screenCoords.y);
-            console.log("WORLD:");
-            console.log(levelCoords.x, levelCoords.y);
+            for (var i = clickObservers.length - 1; i >= 0; i--) {
+                clickObservers[i](Vector.create(x,y));
+            };
             down = false;
+        };
+
+        var clickObservers = [];
+        var onClick = function(cb){
+            clickObservers.push(
+                function(){
+                    cb(Vector.create(x,y));
+                }
+            );
         }
 
 
@@ -79,7 +85,8 @@ utils.Mouse = utils.Mouse || {};
             init : init,
             getX : getX,
             getY : getY,
-            isDown : isDown
+            isDown : isDown,
+            onClick : onClick
         }
     }
 }(utils.Mouse, math.Vector));

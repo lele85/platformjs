@@ -116,6 +116,8 @@ window.onload = function(){
     });
     keyboard.init();
 
+    var levelEditor = game.LevelEditor.create(level, mouse, context);
+
     var mockKeyboard = {
         init : function(){return false;},
         isJustPressed : function(){return false;},
