@@ -2,7 +2,7 @@ var game = game || {};
 game.Player = game.Player || {};
 
 (function(Player, Vector){
-    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position, speed_limits){
+    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position, speed_limits, player_input){
         var that = {};
 
         that.TIME = 1/60;
@@ -37,33 +37,8 @@ game.Player = game.Player || {};
             if (that.keyboard.isJustPressed("INVERT_GRAVITY")){
                 that.gravity.invert_y();
             };
-
-            if (that.keyboard.isHeld("RIGHT")){
-                var x_speed_increment = 0;
-                if (that.speed.x < that.MAX_HORIZONTAL_SPEED)
-                {
-                    x_speed_increment = that.HORIZONTAL_ACCELERATION*that.TIME;
-                };
-                that.speed.x += x_speed_increment;
-            };
-            if (that.keyboard.isHeld("LEFT")){
-                var x_speed_increment = 0;
-                if (that.speed.x > -that.MAX_HORIZONTAL_SPEED)
-                {
-                    x_speed_increment = that.HORIZONTAL_ACCELERATION*that.TIME;
-                };
-                that.speed.x -= x_speed_increment;
-            };
-
-            if (!that.keyboard.isHeld("RIGHT") && !that.keyboard.isHeld("LEFT")){
-                if (that.speed.x > 0) {
-                    that.speed.x -= that.HORIZONTAL_DECELERATION*that.TIME;
-                    if (that.speed.x < 0) that.speed.x = 0;
-                } else if (that.speed.x < 0){
-                    that.speed.x += that.HORIZONTAL_DECELERATION*that.TIME;
-                    if (that.speed.x > 0) that.speed.x = 0;
-                } 
-            };
+            
+            player_input.applyTo(that.speed);
 
             if (that.speed.x > that.MAX_HORIZONTAL_SPEED && that.state.on_ground){
                 that.speed.x = that.MAX_HORIZONTAL_SPEED;
