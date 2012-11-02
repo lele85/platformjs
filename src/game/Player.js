@@ -31,13 +31,9 @@ game.Player = game.Player || {};
             that.horizontalColliders = level.getHorizontalCollidersAt(that.collider.x,that.collider.y);
 
             var oldY = that.collider.y;
-            var speedAfterGravity =  gravity.applyTo(that.speed, that.TIME);
-            var newY = oldY + speedAfterGravity.y * that.TIME;
+            gravity.applyTo(that.speed, that.TIME);
+            var newY = oldY + that.speed.y * that.TIME;
 
-            if (that.keyboard.isJustPressed("INVERT_GRAVITY")){
-                that.gravity.invert_y();
-            };
-            
             player_input.applyTo(that.speed);
 
             if (that.speed.x > that.MAX_HORIZONTAL_SPEED && that.state.on_ground){

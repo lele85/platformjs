@@ -8,6 +8,7 @@ game.SpeedLimits = game.SpeedLimits|| {};
       - down
       - left
       - right
+      - player_state
     */
     SpeedLimits.create = function(params){
         var up = params.up || Infinity;

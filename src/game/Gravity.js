@@ -2,10 +2,19 @@ var game = game || {};
 game.Gravity = game.Gravity|| {};
 
 (function(Gravity, Vector){
-    Gravity.create = function(observers){
+    /*
+    params:
+      - observers
+      - keyboard
+    */
+    Gravity.create = function(params){
+        var keyboard = params.keyboard;
+
     	var gravity = {};
-        gravity.acceleration =  Vector.create(0,7000);
-        gravity.observers =  observers;
+        var acceleration =  Vector.create(0,7000);
+        var observers =  params.observers || [{
+            on_gravity_inversion : function(){}
+        }];
 
         gravity.notify_gravity_inversion = function(){
             for (index in observers) {
@@ -13,16 +22,21 @@ game.Gravity = game.Gravity|| {};
             };
         };
 
-        gravity.applyTo = function(current_speed, dt) {
+        gravity.applyTo = function(speed, dt) {
             var new_speed =  Vector.create(0,0);
-            new_speed.x = current_speed.x + 0.5*gravity.acceleration.x * dt;
-            new_speed.y = current_speed.y + 0.5*gravity.acceleration.y * dt;
-            return new_speed;
+            speed.x = speed.x + 0.5*acceleration.x * dt;
+            speed.y = speed.y + 0.5*acceleration.y * dt;
         };
 
         gravity.invert_y =  function(){
-            gravity.acceleration.y *= -1;
+            acceleration.y *= -1;
             gravity.notify_gravity_inversion();
+        };
+
+        gravity.update = function(){
+            if (keyboard.isJustPressed("INVERT_GRAVITY")){
+                gravity.invert_y();
+            };
         };
 
         return gravity;

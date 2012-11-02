@@ -132,7 +132,11 @@ window.onload = function(){
     var jump2 = game.Jump.create();
     var player_state =  game.PlayerState.create();
     var player_state2 =  game.PlayerState.create();
-    var gravity =  game.Gravity.create([jump, jump2, player_state, player_state2]);
+    var gravity =  game.Gravity.create(
+        {
+            observers:[jump, jump2, player_state, player_state2],
+            keyboard: keyboard
+        });
 
     var speed_limits = game.SpeedLimits.create({
         up: 1000,
@@ -150,7 +154,7 @@ window.onload = function(){
     
     var camera = game.Camera.create(context, player.collider, level.getBounds);
 
-    var updatables = [platform, player, player2, camera];
+    var updatables = [platform, player, player2, camera, gravity];
     var drawables = [level, player, player2, platform];
 
     var players = [player, player2];
