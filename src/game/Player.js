@@ -2,7 +2,7 @@ var game = game || {};
 game.Player = game.Player || {};
 
 (function(Player, Vector){
-    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position){
+    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position, speed_limits){
         var that = {};
 
         that.TIME = 1/60;
@@ -114,8 +114,8 @@ game.Player = game.Player || {};
             that.state.update(totalResponse);
             
             //Top speed
-            if (that.speed.y > 1000) that.speed.y = 1000;
-            if (that.speed.y < -1000) that.speed.y = -1000;
+            speed_limits.applyTo(that.speed);
+
 
             that.jump.update(that.TIME);
             if ( that.state.on_ground && that.keyboard.isJustPressed("JUMP")){
