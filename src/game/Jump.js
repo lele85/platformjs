@@ -2,7 +2,10 @@ var game = game || {};
 game.Jump = game.Vector|| {};
 
 (function(Jump, Vector){
-    Jump.create = function(){
+    Jump.create = function(params){
+        var TIME = 1/60.0;
+        var player_state = params.player_state;
+        var keyboard = params.keyboard;
 
     	var jump = {};
     	var wall_jump_speed = Vector.create(350,1000);
@@ -16,21 +19,19 @@ game.Jump = game.Vector|| {};
         var jump_direction = Vector.create(1,1);
         var wall_jump_direction = Vector.create(1,1);
 
-        var applyJumpTo = function(current_speed, dt) {
-            var new_speed = Vector.create(0,0);
-            new_speed.x = jump_direction.x*jump.jump_speed.x;
-            new_speed.y = jump_direction.y*jump.jump_speed.y;
-            return new_speed;
-        };
+        var applyTo = function(current_speed) {
+            current_speed.x += jump_direction.x*jump.jump_speed.x;
+            current_speed.y += jump_direction.y*jump.jump_speed.y;
+        }
 
-        var applyLeftWalljumpTo = function(current_speed, dt) {
+        var applyLeftWalljumpTo = function(current_speed) {
             var new_speed = Vector.create(0,0);
             new_speed.x = wall_jump_direction.x*wall_jump_speed.x;
             new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
             return new_speed;
         };
 
-        var applyRightWalljumpTo = function(current_speed, dt) {
+        var applyRightWalljumpTo = function(current_speed) {
             var new_speed = Vector.create(0,0);
             new_speed.x = - wall_jump_direction.x*wall_jump_speed.x;
             new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
@@ -55,23 +56,32 @@ game.Jump = game.Vector|| {};
             }
         };
 
-        var update = function(dt){
+        var update = function(){
             if (jump_started) {
                 jump.jump_speed.y = -400/(1 + current_jump_time*current_jump_time*1500);
-                current_jump_time += dt;
+                current_jump_time += TIME;
                 if (current_jump_time > max_jump_time){
                     stop();
                 }
-            }
+            };
+            if ( player_state.on_ground && keyboard.isJustPressed("JUMP")){
+                start();
+                player_state.update_after_jump();
+            };
+            if ( player_state.on_ground && keyboard.isJustReleased("JUMP")){
+                stop();
+                player_state.update_after_jump();
+            };
+
         };
 
         jump.start = start;
         jump.stop = stop;
         jump.update = update;
         jump.on_gravity_inversion = on_gravity_inversion;
-        jump.applyJumpTo = applyJumpTo;
         jump.applyRightWalljumpTo = applyRightWalljumpTo;
         jump.applyLeftWalljumpTo = applyLeftWalljumpTo;
+        jump.applyTo = applyTo;
 
         return jump;
     }

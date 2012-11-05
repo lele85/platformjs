@@ -87,7 +87,7 @@ game.Player = game.Player || {};
             //Top speed
             speed_limits.applyTo(that.speed);
 
-
+            /*
             that.jump.update(that.TIME);
             if ( that.state.on_ground && that.keyboard.isJustPressed("JUMP")){
                 that.jump.start();
@@ -98,7 +98,8 @@ game.Player = game.Player || {};
                 that.state.update_after_jump();
             };
             var jump_delta = that.jump.applyJumpTo(that.speed, that.TIME);
-            that.speed.y += jump_delta.y;
+            that.speed.y += jump_delta.y;*/
+            that.jump.applyTo(that.speed);
 
             if ((that.state.left_wall_jump_possible) && (that.state.on_left_wall) && that.keyboard.isJustPressed("JUMP")){
                 that.speed = that.jump.applyLeftWalljumpTo(that.speed);

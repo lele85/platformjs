@@ -128,10 +128,20 @@ window.onload = function(){
     };
 
     var platform = game.MovingPlatform.create();
-    var jump =  game.Jump.create();
-    var jump2 = game.Jump.create();
+
     var player_state =  game.PlayerState.create();
     var player_state2 =  game.PlayerState.create();
+
+    var jump =  game.Jump.create({
+        player_state : player_state,
+        keyboard : keyboard
+    });
+
+    var jump2 = game.Jump.create({
+        player_state: player_state2,
+        keyboard : mockKeyboard
+    });
+    
     var gravity =  game.Gravity.create(
         {
             observers:[jump, jump2, player_state, player_state2],
@@ -154,7 +164,7 @@ window.onload = function(){
     
     var camera = game.Camera.create(context, player.collider, level.getBounds);
 
-    var updatables = [platform, player, player2, camera, gravity];
+    var updatables = [platform, jump, jump2, player, player2, camera, gravity];
     var drawables = [level, player, player2, platform];
 
     var players = [player, player2];
