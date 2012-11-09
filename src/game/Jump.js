@@ -22,20 +22,27 @@ game.Jump = game.Vector|| {};
         var applyTo = function(current_speed) {
             current_speed.x += jump_direction.x*jump.jump_speed.x;
             current_speed.y += jump_direction.y*jump.jump_speed.y;
+            applyLeftWalljumpTo(current_speed);
+            applyRightWalljumpTo(current_speed);
         }
 
+        var should_left_wall_jump = false;
         var applyLeftWalljumpTo = function(current_speed) {
-            var new_speed = Vector.create(0,0);
-            new_speed.x = wall_jump_direction.x*wall_jump_speed.x;
-            new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
-            return new_speed;
+            if (!should_left_wall_jump){ return };
+            current_speed.x = wall_jump_direction.x*wall_jump_speed.x;
+            current_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
+            should_left_wall_jump = false;
+            player_state.update_after_left_wall_jump();
         };
 
+        var should_rightwall_jump = false;
         var applyRightWalljumpTo = function(current_speed) {
-            var new_speed = Vector.create(0,0);
-            new_speed.x = - wall_jump_direction.x*wall_jump_speed.x;
-            new_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
-            return new_speed;
+            if (!should_rightwall_jump){ return };
+            current_speed.x = - wall_jump_direction.x*wall_jump_speed.x;
+            current_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
+            should_rightwall_jump = false;
+            player_state.update_after_right_wall_jump();
+
         };
 
         var on_gravity_inversion =  function(){
@@ -71,6 +78,12 @@ game.Jump = game.Vector|| {};
             if ( player_state.on_ground && keyboard.isJustReleased("JUMP")){
                 stop();
                 player_state.update_after_jump();
+            };
+            if ((player_state.left_wall_jump_possible) && (player_state.on_left_wall) && keyboard.isJustPressed("JUMP")){
+                should_left_wall_jump = true;
+            };
+            if ((player_state.right_wall_jump_possible) && (player_state.on_right_wall) && keyboard.isJustPressed("JUMP")){
+                should_rightwall_jump = true;
             };
 
         };

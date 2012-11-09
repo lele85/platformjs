@@ -87,17 +87,6 @@ game.Player = game.Player || {};
 
             //Jump
             that.jump.applyTo(that.speed);
-
-            if ((that.state.left_wall_jump_possible) && (that.state.on_left_wall) && that.keyboard.isJustPressed("JUMP")){
-                that.speed = that.jump.applyLeftWalljumpTo(that.speed);
-                that.state.update_after_left_wall_jump();
-            };
-            if ((that.state.right_wall_jump_possible) && (that.state.on_right_wall) && that.keyboard.isJustPressed("JUMP")){
-                that.speed = that.jump.applyRightWalljumpTo(that.speed);
-                that.state.update_after_right_wall_jump();
-            };
-
-
             
         }
 
