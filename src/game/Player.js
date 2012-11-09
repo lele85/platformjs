@@ -80,25 +80,12 @@ game.Player = game.Player || {};
 
             that.speed.y = (that.collider.y - oldY)/that.TIME;
 
-            
-
             that.state.update(totalResponse);
             
             //Top speed
             speed_limits.applyTo(that.speed);
 
-            /*
-            that.jump.update(that.TIME);
-            if ( that.state.on_ground && that.keyboard.isJustPressed("JUMP")){
-                that.jump.start();
-                that.state.update_after_jump();
-            };
-            if ( that.state.on_ground && that.keyboard.isJustReleased("JUMP")){
-                that.jump.stop();
-                that.state.update_after_jump();
-            };
-            var jump_delta = that.jump.applyJumpTo(that.speed, that.TIME);
-            that.speed.y += jump_delta.y;*/
+            //Jump
             that.jump.applyTo(that.speed);
 
             if ((that.state.left_wall_jump_possible) && (that.state.on_left_wall) && that.keyboard.isJustPressed("JUMP")){
