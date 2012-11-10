@@ -44,8 +44,8 @@ game.Camera = game.Camera || {};
         };
 
         that.nextTarget = function(){
-            console.log(current_target);
-            current_target = targets[(targets.length + 1) % targets.length];
+            active = ((active + 1) % targets.length);
+            current_target = targets[active];
         };
 
         return that;
