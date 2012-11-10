@@ -118,14 +118,10 @@ window.onload = function(){
     });
     keyboard.init();
 
-    var levelEditor = game.LevelEditor.create(level, mouse, context);
+    var mockKeyboard = utils.Keyboard.createMock();
+    mockKeyboard.init();
 
-    var mockKeyboard = {
-        init : function(){return false;},
-        isJustPressed : function(){return false;},
-        isHeld : function(){return false;},
-        isJustReleased : function(){return false;},
-    };
+    var levelEditor = game.LevelEditor.create(level, mouse, context);
 
     var platform = game.MovingPlatform.create();
 

@@ -60,5 +60,16 @@ utils.Keyboard = utils.Keyboard || {};
             isHeld : isHeld,
             isJustReleased : isJustReleased,
         }
-    }
+    };
+
+    ns.createMock = function(){
+        var mockKeyboard = {
+            init : function(){return false;},
+            isJustPressed : function(){return false;},
+            isHeld : function(){return false;},
+            isJustReleased : function(){return false;},
+            init : function(){}
+        };
+        return mockKeyboard;
+    };
 }(utils.Keyboard));
