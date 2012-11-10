@@ -121,21 +121,34 @@ window.onload = function(){
     var mockKeyboard = utils.Keyboard.createMock();
     mockKeyboard.init();
 
+    var player_keyboard_provider = game.PlayerKeyboardProvider.create({
+        keyboards: {
+            "PLAYER_1" : keyboard,
+            "PLAYER_2" : mockKeyboard,
+        }
+    });
+
     var levelEditor = game.LevelEditor.create(level, mouse, context);
 
     var platform = game.MovingPlatform.create();
 
-    var player_state =  game.PlayerState.create();
-    var player_state2 =  game.PlayerState.create();
+    var player_state =  game.PlayerState.create({
+        player_id : "PLAYER_1"
+    });
+    var player_state2 =  game.PlayerState.create({
+        player_id : "PLAYER_2"
+    });
 
     var jump =  game.Jump.create({
+        player_id : "PLAYER_1",
         player_state : player_state,
-        keyboard : keyboard
+        keyboard_provider : player_keyboard_provider
     });
 
     var jump2 = game.Jump.create({
+        player_id : "PLAYER_2",
         player_state: player_state2,
-        keyboard : mockKeyboard
+        keyboard_provider : player_keyboard_provider
     });
     
     var gravity =  game.Gravity.create(
@@ -148,25 +161,32 @@ window.onload = function(){
         up: 1000,
         down: 1000
     });
+
     var player_input_1 = game.PlayerInput.create({
+        player_id : "PLAYER_1",
+        keyboard_provider : player_keyboard_provider,
         keyboard : keyboard
     });
     var player_input_2 = game.PlayerInput.create({
+        player_id : "PLAYER_2",
+        keyboard_provider : player_keyboard_provider,
         keyboard : mockKeyboard
     });
 
-    var player =  game.Player.create(keyboard,level,platform, gravity, jump, player_state, {x:40,y:2000},speed_limits, player_input_1);
-    var player2 =  game.Player.create(mockKeyboard,level,platform, gravity, jump2, player_state2, {x:200,y:1500}, speed_limits, player_input_2);
+    var player =  game.Player.create(level,platform, gravity, jump, player_state, {x:40,y:2000},speed_limits, player_input_1);
+    var player2 =  game.Player.create(level,platform, gravity, jump2, player_state2, {x:200,y:1500}, speed_limits, player_input_2);
     
-    var camera = game.Camera.create(context, player.collider, level.getBounds);
+    var camera = game.Camera.create({
+        context : context,
+        targets : [player.collider, player2.collider],
+        getBounds : level.getBounds
+    });
 
     var updatables = [platform, jump, jump2, player, player2, camera, gravity];
     var drawables = [level, player, player2, platform];
 
     var players = [player, player2];
     
-    var active_player = 0;
-
     var mainloop =  function() {
         context.clearRect(context.x - 300,context.y,1000,480);
         for (var i = updatables.length - 1; i >= 0; i--) {
@@ -176,16 +196,13 @@ window.onload = function(){
             drawables[j].draw(context);
         };
         if (keyboard.isJustPressed("SWITCH_PLAYER")){
-            active_player = ((active_player + 1) % 2);
-            player.changeKeyboard(player2);
-            camera.setTarget(players[active_player].collider);
+            player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
+            camera.nextTarget();
         };
         if (keyboard.isJustPressed("EDITOR_ADD_MODE")){
-            console.log("ADD");
             levelEditor.changeMode("ADD");
         };
         if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")){
-            console.log("REMOVE");
             levelEditor.changeMode("REMOVE");
         };
     };

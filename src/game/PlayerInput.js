@@ -2,18 +2,17 @@ var game = game || {};
 game.PlayerInput = game.PlayerInput|| {};
 
 (function(PlayerInput){
-    /*
-    Options:
-      - keyboard
-    */
     PlayerInput.create = function(params){
-        var keyboard = params.keyboard;
+        var player_id = params.player_id;
+        var keyboard_provider = params.keyboard_provider;
         var MAX_HORIZONTAL_SPEED = 250;
         var HORIZONTAL_DECELERATION = 1600;
         var HORIZONTAL_ACCELERATION = 2000;
         var TIME = 1/60;
 
+        //Todo: Refactoring updatable non deve andare sull'apply to
         var applyTo = function(speed){
+            var keyboard = keyboard_provider.getKeyboard(player_id);
             if (keyboard.isHeld("RIGHT")){
                 var x_speed_increment = 0;
                 if (speed.x < MAX_HORIZONTAL_SPEED)
@@ -43,8 +42,13 @@ game.PlayerInput = game.PlayerInput|| {};
             };
         }
 
+        var update = function(){
+
+        };
+
         return {
-            applyTo: applyTo
+            applyTo: applyTo,
+            update : update
         }
     }
 }(game.PlayerInput));

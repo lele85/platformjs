@@ -2,8 +2,12 @@ var game = game || {};
 game.Camera = game.Camera || {};
 
 (function(Camera){
-    Camera.create = function(context, target, getBounds){
-        
+    Camera.create = function(params){
+        var context = params.context;
+        var targets = params.targets;
+        var getBounds = params.getBounds;
+        var active = 0;
+
         var that = {};
         var CAMERA_SPEED = 300;
         var levelWidth = 640;
@@ -11,7 +15,7 @@ game.Camera = game.Camera || {};
         var semi_camera_w = camera_w/2;
         var camera_h = 480;
         var semi_camera_h = camera_h/2;
-        var current_target = target;
+        var current_target = targets[0];
 
         that.update = function(){
             var targetCameraY = current_target.y;
@@ -39,9 +43,9 @@ game.Camera = game.Camera || {};
             context.y += dy;
         };
 
-        that.setTarget = function(newTarget){
-            current_target = newTarget;
-
+        that.nextTarget = function(){
+            console.log(current_target);
+            current_target = targets[(targets.length + 1) % targets.length];
         };
 
         return that;

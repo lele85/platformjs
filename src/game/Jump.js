@@ -4,8 +4,9 @@ game.Jump = game.Vector|| {};
 (function(Jump, Vector){
     Jump.create = function(params){
         var TIME = 1/60.0;
+        var player_id = params.player_id;
+        var keyboard_provider = params.keyboard_provider;
         var player_state = params.player_state;
-        var keyboard = params.keyboard;
 
     	var jump = {};
     	var wall_jump_speed = Vector.create(350,1000);
@@ -64,6 +65,7 @@ game.Jump = game.Vector|| {};
         };
 
         var update = function(){
+            var keyboard = keyboard_provider.getKeyboard(player_id);
             if (jump_started) {
                 jump.jump_speed.y = -400/(1 + current_jump_time*current_jump_time*1500);
                 current_jump_time += TIME;
@@ -79,10 +81,16 @@ game.Jump = game.Vector|| {};
                 stop();
                 player_state.update_after_jump();
             };
-            if ((player_state.left_wall_jump_possible) && (player_state.on_left_wall) && keyboard.isJustPressed("JUMP")){
+            if ((player_state.left_wall_jump_possible) && 
+                (player_state.on_left_wall) && 
+                keyboard.isJustPressed("JUMP")){
+                
                 should_left_wall_jump = true;
             };
-            if ((player_state.right_wall_jump_possible) && (player_state.on_right_wall) && keyboard.isJustPressed("JUMP")){
+            if ((player_state.right_wall_jump_possible) && 
+                (player_state.on_right_wall) && 
+                keyboard.isJustPressed("JUMP")){
+                
                 should_rightwall_jump = true;
             };
 

@@ -2,9 +2,10 @@ var game = game || {};
 game.PlayerState = game.PlayerState || {};
 
 (function(PlayerState, Vector){
-    PlayerState.create = function(){
-        var  that = {};
+    PlayerState.create = function(params){
 
+        var  that = {};
+        that.player_id = params.player_id;
         that.on_ground = true;
         that.on_left_wall = false;
         that.on_right_wall = false;

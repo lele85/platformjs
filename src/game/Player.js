@@ -2,12 +2,11 @@ var game = game || {};
 game.Player = game.Player || {};
 
 (function(Player, Vector){
-    Player.create = function(keyboard, level, movingPlatform, gravity, jump, state, position, speed_limits, player_input){
+    Player.create = function(level, movingPlatform, gravity, jump, state, position, speed_limits, player_input){
         var that = {};
 
         that.TIME = 1/60;
         that.speed = Vector.create(0,0);
-        that.keyboard =  keyboard;
         that.collider = game.Collider.create({
             x : position.x || 40,
             y : position.y || 2000,
@@ -96,13 +95,6 @@ game.Player = game.Player || {};
 
         that.draw = function(context){
             that.collider.draw(context);
-        };
-
-        that.changeKeyboard = function(other){
-            var other_keyboard = other.keyboard;
-            var this_keyboard = that.keyboard;
-            other.keyboard = this_keyboard;
-            that.keyboard = other_keyboard;
         };
 
         return that;
