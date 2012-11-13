@@ -38,8 +38,6 @@ game.Portal = game.Portal|| {};
                 player.collider.x = portal.target.x - 30;
                 player.collider.y = portal.target.y;
             };
-
-            //console.log(player.collider.collides(collider).x);
         };
     	
         return portal;

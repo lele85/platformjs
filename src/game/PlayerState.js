@@ -29,11 +29,13 @@ game.PlayerState = game.PlayerState || {};
             that.right_wall_jump_possible = false;
         }
 
-        that.update = function(collisionResponse, isMovingPlatform){
+        that.update = function(collisionResponse){
+            /*
             if (isMovingPlatform){
                 that.setCollisionWithMovingPlatformState();
                 return;
             }
+            */
             that.update_check_on_ground(collisionResponse);
             that.update_check_on_walls(collisionResponse);
         };

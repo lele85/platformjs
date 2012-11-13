@@ -14,14 +14,7 @@ game.Player = game.Player || {};
             h : 20
         });
         
-        that.MAX_HORIZONTAL_SPEED = 250;
-        that.HORIZONTAL_DECELERATION = 1600;
-        that.HORIZONTAL_ACCELERATION = 2000;
-        that.JUMP_SPEED = 1000;
-        that.WALL_JUMP_SPEED = 350;
         that.movingPlatform =  movingPlatform;
-        that.gravity =  gravity;
-        that.jump =  jump;
         that.state = state;
 
         that.update =  function(){
@@ -30,21 +23,18 @@ game.Player = game.Player || {};
             that.horizontalColliders = level.getHorizontalCollidersAt(that.collider.x,that.collider.y);
 
             var oldY = that.collider.y;
+            var oldX = that.collider.x;
+            
+            //Applica le forze
             gravity.applyTo(that.speed, that.TIME);
-            var newY = oldY + that.speed.y * that.TIME;
-
             player_input.applyTo(that.speed);
+            speed_limits.applyTo(that.speed);
+            jump.applyTo(that.speed);
+            
 
-            if (that.speed.x > that.MAX_HORIZONTAL_SPEED && that.state.on_ground){
-                that.speed.x = that.MAX_HORIZONTAL_SPEED;
-            }
-            if (that.speed.x < - that.MAX_HORIZONTAL_SPEED && that.state.on_ground){
-                that.speed.x = - that.MAX_HORIZONTAL_SPEED;
-            }
+            that.collider.y = oldY + that.speed.y * that.TIME;
+            that.collider.x =  oldX + that.speed.x*that.TIME;
 
-            that.collider.x =  that.collider.x + that.speed.x*that.TIME;
-
-            that.collider.y = newY;
             //that.speed.y = Math.round((newY - oldY)/that.TIME);
             var totalXResponse = 0;
             var totalYResponse = 0;
@@ -65,27 +55,24 @@ game.Player = game.Player || {};
             };
 
             //Collision with moving platform
+            /*
             var response = that.movingPlatform.collides(that.collider);
             if (response.y != 0){
                 that.collider.x += that.movingPlatform.SPEED;
                 that.collider.y -= response.y;
                 totalYResponse -= response.y;
                 collisionWithMovingPlatform = true;
-            };
+            };*/
 
             var totalResponse = Vector.create(totalXResponse,totalYResponse);
 
-            that.state.update(totalResponse, collisionWithMovingPlatform);
+            //that.state.update(totalResponse);
 
             that.speed.y = (that.collider.y - oldY)/that.TIME;
 
             that.state.update(totalResponse);
             
-            //Top speed
-            speed_limits.applyTo(that.speed);
-
-            //Jump
-            that.jump.applyTo(that.speed);
+            
             
         }
 
