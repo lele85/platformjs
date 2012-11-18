@@ -173,16 +173,55 @@ window.onload = function(){
         keyboard : mockKeyboard
     });
 
-    var player =  game.Player.create(level,platform, gravity, jump, player_state, {x:40,y:2000},speed_limits, player_input_1);
-    var player2 =  game.Player.create(level,platform, gravity, jump2, player_state2, {x:200,y:1500}, speed_limits, player_input_2);
+    var player_collider_1 = game.Collider.create({
+            x : 40,
+            y : 2000,
+            w : 20,
+            h : 20
+    });
+
+    var player_collider_2 = game.Collider.create({
+            x : 200,
+            y : 1500,
+            w : 20,
+            h : 20
+    });
+
+    var level_limits_1 = game.LevelLimits.create({
+        level : level,
+        collider : player_collider_1
+    });
+
+    var level_limits_2 = game.LevelLimits.create({
+        level : level,
+        collider : player_collider_2
+    });
+
+    var player =  game.Player.create({
+        collider : player_collider_1,
+        platform : platform,
+        player_state : player_state,
+        speed_influencers : [jump,speed_limits,player_input_1,gravity],
+        mouse : mouse,
+        level_limits : level_limits_1
+    });
+
+    var player2 =  game.Player.create({
+        collider : player_collider_2,
+        platform : platform,
+        player_state : player_state2,
+        speed_influencers : [jump2,speed_limits,player_input_2,gravity],
+        mouse : mouse,
+        level_limits : level_limits_2
+    });
     
     var camera = game.Camera.create({
         context : context,
-        targets : [player.collider, player2.collider],
+        targets : [player_collider_1, player_collider_2],
         getBounds : level.getBounds
     });
 
-    var updatables = [platform, jump, jump2, player, player2, camera, gravity];
+    var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2];
     var drawables = [level, player, player2, platform];
 
     var players = [player, player2];

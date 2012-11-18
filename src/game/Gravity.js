@@ -8,6 +8,7 @@ game.Gravity = game.Gravity|| {};
       - keyboard
     */
     Gravity.create = function(params){
+        var TIME = 1/60.0;
         var keyboard = params.keyboard;
 
     	var gravity = {};
@@ -22,10 +23,10 @@ game.Gravity = game.Gravity|| {};
             };
         };
 
-        gravity.applyTo = function(speed, dt) {
+        gravity.applyTo = function(speed) {
             var new_speed =  Vector.create(0,0);
-            speed.x = speed.x + 0.5*acceleration.x * dt;
-            speed.y = speed.y + 0.5*acceleration.y * dt;
+            speed.x = speed.x + 0.5*acceleration.x * TIME;
+            speed.y = speed.y + 0.5*acceleration.y * TIME;
         };
 
         gravity.invert_y =  function(){

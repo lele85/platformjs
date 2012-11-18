@@ -50,6 +50,14 @@ utils.Mouse = utils.Mouse || {};
             return y;
         };
 
+        var getWorldX = function(context){
+            return context.x + getX();
+        };
+
+        var getWorldY = function(context){
+            return context.y + getY();
+        }
+
         var isDown = function(){
             return down;
         };
@@ -85,6 +93,8 @@ utils.Mouse = utils.Mouse || {};
             init : init,
             getX : getX,
             getY : getY,
+            getWorldX : getWorldX,
+            getWorldY : getWorldY,
             isDown : isDown,
             onClick : onClick
         }
