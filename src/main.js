@@ -145,15 +145,27 @@ window.onload = function(){
         keyboard_provider : player_keyboard_provider
     });
 
-    var jump2 = game.Jump.create({
+    var jump2 =  game.Jump.create({
         player_id : "PLAYER_2",
-        player_state: player_state2,
+        player_state : player_state2,
+        keyboard_provider : player_keyboard_provider
+    });
+
+    var wall_jump =  game.WallJump.create({
+        player_id : "PLAYER_1",
+        player_state : player_state,
+        keyboard_provider : player_keyboard_provider
+    });
+
+    var wall_jump2 =  game.WallJump.create({
+        player_id : "PLAYER_2",
+        player_state : player_state2,
         keyboard_provider : player_keyboard_provider
     });
     
     var gravity =  game.Gravity.create(
         {
-            observers:[jump, jump2, player_state, player_state2],
+            observers:[jump, jump2, player_state, player_state2, wall_jump, wall_jump2],
             keyboard: keyboard
         });
 
@@ -201,7 +213,7 @@ window.onload = function(){
         collider : player_collider_1,
         platform : platform,
         player_state : player_state,
-        speed_influencers : [jump,speed_limits,player_input_1,gravity],
+        speed_influencers : [jump,speed_limits,player_input_1,gravity, wall_jump],
         mouse : mouse,
         level_limits : level_limits_1
     });
@@ -210,7 +222,7 @@ window.onload = function(){
         collider : player_collider_2,
         platform : platform,
         player_state : player_state2,
-        speed_influencers : [jump2,speed_limits,player_input_2,gravity],
+        speed_influencers : [jump2,speed_limits,player_input_2,gravity, wall_jump2],
         mouse : mouse,
         level_limits : level_limits_2
     });
@@ -221,10 +233,8 @@ window.onload = function(){
         getBounds : level.getBounds
     });
 
-    var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2];
+    var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2, wall_jump, wall_jump2];
     var drawables = [level, player, player2, platform];
-
-    var players = [player, player2];
     
     var mainloop =  function() {
         context.clearRect(context.x - 300,context.y,1000,480);

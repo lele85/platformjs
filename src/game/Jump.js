@@ -1,5 +1,5 @@
 var game = game || {};
-game.Jump = game.Vector|| {};
+game.Jump = game.Jump|| {};
 
 (function(Jump, Vector){
     Jump.create = function(params){
@@ -9,7 +9,7 @@ game.Jump = game.Vector|| {};
         var player_state = params.player_state;
 
     	var jump = {};
-    	var wall_jump_speed = Vector.create(350,1000);
+
         
         var jump_started =  false;
         var max_jump_time = 5;
@@ -18,37 +18,15 @@ game.Jump = game.Vector|| {};
         jump.jump_speed = Vector.create(0,0);
         
         var jump_direction = Vector.create(1,1);
-        var wall_jump_direction = Vector.create(1,1);
+        
 
         var applyTo = function(current_speed) {
             current_speed.x += jump_direction.x*jump.jump_speed.x;
             current_speed.y += jump_direction.y*jump.jump_speed.y;
-            applyLeftWalljumpTo(current_speed);
-            applyRightWalljumpTo(current_speed);
         }
-
-        var should_left_wall_jump = false;
-        var applyLeftWalljumpTo = function(current_speed) {
-            if (!should_left_wall_jump){ return };
-            current_speed.x = wall_jump_direction.x*wall_jump_speed.x;
-            current_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
-            should_left_wall_jump = false;
-            player_state.update_after_left_wall_jump();
-        };
-
-        var should_rightwall_jump = false;
-        var applyRightWalljumpTo = function(current_speed) {
-            if (!should_rightwall_jump){ return };
-            current_speed.x = - wall_jump_direction.x*wall_jump_speed.x;
-            current_speed.y = - wall_jump_direction.y*wall_jump_speed.y;
-            should_rightwall_jump = false;
-            player_state.update_after_right_wall_jump();
-
-        };
 
         var on_gravity_inversion =  function(){
             jump_direction.y *= -1;
-            wall_jump_direction.y *= -1;
         };
 
         var start = function(){
@@ -81,18 +59,7 @@ game.Jump = game.Vector|| {};
                 stop();
                 player_state.update_after_jump();
             };
-            if ((player_state.left_wall_jump_possible) && 
-                (player_state.on_left_wall) && 
-                keyboard.isJustPressed("JUMP")){
-                
-                should_left_wall_jump = true;
-            };
-            if ((player_state.right_wall_jump_possible) && 
-                (player_state.on_right_wall) && 
-                keyboard.isJustPressed("JUMP")){
-                
-                should_rightwall_jump = true;
-            };
+            
 
         };
 
@@ -100,8 +67,6 @@ game.Jump = game.Vector|| {};
         jump.stop = stop;
         jump.update = update;
         jump.on_gravity_inversion = on_gravity_inversion;
-        jump.applyRightWalljumpTo = applyRightWalljumpTo;
-        jump.applyLeftWalljumpTo = applyLeftWalljumpTo;
         jump.applyTo = applyTo;
 
         return jump;
