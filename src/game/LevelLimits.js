@@ -31,7 +31,7 @@ game.LevelLimits = game.LevelLimits || {};
             return Vector.create(totalXResponse,totalYResponse); 
        };
 
-       var update = function(){
+       var update = function(dt){
        		potentialColliders = level.getPotentialCollidersAt(collider.x,collider.y);
             verticalColliders = level.getVerticalCollidersAt(collider.x,collider.y);
             horizontalColliders = level.getHorizontalCollidersAt(collider.x,collider.y);

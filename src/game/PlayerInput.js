@@ -42,8 +42,8 @@ game.PlayerInput = game.PlayerInput|| {};
             };
         }
 
-        var update = function(){
-
+        var update = function(dt){
+            TIME = dt;
         };
 
         return {

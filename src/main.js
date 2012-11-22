@@ -236,24 +236,34 @@ window.onload = function(){
     var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2, wall_jump, wall_jump2];
     var drawables = [level, player, player2, platform];
     
+    var dateTime = utils.DateTime.create();
+    var last_frame_ticks = dateTime.now();
+    var current_frame_ticks = last_frame_ticks;
+    var dt;
+
     var mainloop =  function() {
-        context.clearRect(context.x - 300,context.y,1000,480);
-        for (var i = updatables.length - 1; i >= 0; i--) {
-            updatables[i].update();
-        };
-        for (var j = drawables.length - 1; j >= 0; j--) {
-            drawables[j].draw(context);
-        };
-        if (keyboard.isJustPressed("SWITCH_PLAYER")){
-            player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
-            camera.nextTarget();
-        };
-        if (keyboard.isJustPressed("EDITOR_ADD_MODE")){
-            levelEditor.changeMode("ADD");
-        };
-        if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")){
-            levelEditor.changeMode("REMOVE");
-        };
+        current_frame_ticks = dateTime.now();
+        dt = (current_frame_ticks - last_frame_ticks)/1000;
+        if (dt < 0.02){
+            context.clearRect(context.x - 300,context.y,1000,480);
+            for (var i = updatables.length - 1; i >= 0; i--) {
+                updatables[i].update(dt);
+            };
+            for (var j = drawables.length - 1; j >= 0; j--) {
+                drawables[j].draw(context);
+            };
+            if (keyboard.isJustPressed("SWITCH_PLAYER")){
+                player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
+                camera.nextTarget();
+            };
+            if (keyboard.isJustPressed("EDITOR_ADD_MODE")){
+                levelEditor.changeMode("ADD");
+            };
+            if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")){
+                levelEditor.changeMode("REMOVE");
+            };
+        }
+        last_frame_ticks = current_frame_ticks;
     };
 
     var animFrame =

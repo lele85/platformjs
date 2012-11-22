@@ -16,7 +16,7 @@ game.MovingPlatform = game.MovingPlatform || {};
         that.PIXEL_PER_FRAME = 1;
         that.SPEED = 1;
 
-        that.update = function(){
+        that.update = function(dt){
             that.collider.x += that.PIXEL_PER_FRAME;
             if (that.collider.x > that.END_X)
             {

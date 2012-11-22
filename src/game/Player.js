@@ -13,13 +13,12 @@ game.Player = game.Player || {};
         var collider = params.collider;
         var level_limits = params.level_limits;
 
-        that.TIME = 1/60;
         that.speed = Vector.create(0,0);
         
         that.movingPlatform =  movingPlatform;
         that.state = state;
 
-        that.update =  function(){
+        that.update =  function(dt){
 
             var oldY = collider.y;
             var oldX = collider.x;
@@ -30,8 +29,8 @@ game.Player = game.Player || {};
             };
             
 
-            collider.y = oldY + that.speed.y*that.TIME;
-            collider.x =  oldX + that.speed.x*that.TIME;
+            collider.y = oldY + that.speed.y*dt;
+            collider.x =  oldX + that.speed.x*dt;
 
             var totalResponse = level_limits.applyTo(collider);
             
@@ -45,7 +44,7 @@ game.Player = game.Player || {};
                 collisionWithMovingPlatform = true;
             };*/
 
-            that.speed.y = (collider.y - oldY)/that.TIME;
+            that.speed.y = (collider.y - oldY)/dt;
             that.state.update(totalResponse);
         }
 

@@ -34,7 +34,8 @@ game.Gravity = game.Gravity|| {};
             gravity.notify_gravity_inversion();
         };
 
-        gravity.update = function(){
+        gravity.update = function(dt){
+            TIME = dt;
             if (keyboard.isJustPressed("INVERT_GRAVITY")){
                 gravity.invert_y();
             };

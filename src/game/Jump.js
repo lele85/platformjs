@@ -3,7 +3,6 @@ game.Jump = game.Jump|| {};
 
 (function(Jump, Vector){
     Jump.create = function(params){
-        var TIME = 1/60.0;
         var player_id = params.player_id;
         var keyboard_provider = params.keyboard_provider;
         var player_state = params.player_state;
@@ -42,11 +41,11 @@ game.Jump = game.Jump|| {};
             }
         };
 
-        var update = function(){
+        var update = function(dt){
             var keyboard = keyboard_provider.getKeyboard(player_id);
             if (jump_started) {
                 jump.jump_speed.y = -400/(1 + current_jump_time*current_jump_time*1500);
-                current_jump_time += TIME;
+                current_jump_time += dt;
                 if (current_jump_time > max_jump_time){
                     stop();
                 }
