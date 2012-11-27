@@ -9,6 +9,7 @@ game.Collider = game.Collider || {};
         that.y = options.y;
         that.w = options.w;
         that.h = options.h;
+        that.debug = options.debug;
 
         var collides = function(collider){
             var top = that.y;
@@ -43,11 +44,13 @@ game.Collider = game.Collider || {};
         };
 
         var draw = function(context){
-            if (that.y > (context.y + 480 + 32) || that.y < (context.y -32)){
-                return;
-            };
-            context.strokeStyle = "rgb(0,0,0);";
-            context.strokeRect(that.x, that.y, that.w, that.h);
+            if (that.debug !== false){
+                if (that.y > (context.y + 480 + 32) || that.y < (context.y -32)){
+                    return;
+                };
+                context.strokeStyle = "rgb(0,0,0);";
+                context.strokeRect(that.x, that.y, that.w, that.h);
+            }
         };
 
         that.collides = collides;

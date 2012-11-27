@@ -1,7 +1,8 @@
 window.onload = function(){
-
+    
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
+    context.webkitImageSmoothingEnabled = false;
     context.y = 0;
     context.x = 0;
 
@@ -189,14 +190,26 @@ window.onload = function(){
             x : 40,
             y : 2000,
             w : 20,
-            h : 20
+            h : 20,
+            debug : false
     });
 
     var player_collider_2 = game.Collider.create({
             x : 200,
             y : 1500,
             w : 20,
-            h : 20
+            h : 20,
+            debug : false
+    });
+
+    var spriteSheet = game.SpriteSheet.create({
+        url:"assets/walk2.png",
+        position : player_collider_1,
+    });
+
+    var spriteSheet2 = game.SpriteSheet.create({
+        url:"assets/walk2.png",
+        position : player_collider_2,
     });
 
     var level_limits_1 = game.LevelLimits.create({
@@ -210,6 +223,7 @@ window.onload = function(){
     });
 
     var player =  game.Player.create({
+        sprite : spriteSheet,
         collider : player_collider_1,
         platform : platform,
         player_state : player_state,
@@ -219,6 +233,7 @@ window.onload = function(){
     });
 
     var player2 =  game.Player.create({
+        sprite : spriteSheet,
         collider : player_collider_2,
         platform : platform,
         player_state : player_state2,
@@ -233,13 +248,15 @@ window.onload = function(){
         getBounds : level.getBounds
     });
 
-    var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2, wall_jump, wall_jump2];
-    var drawables = [level, player, player2, platform];
+    var updatables = [platform, jump, jump2, player, player2, camera, gravity, level_limits_1, level_limits_2, wall_jump, wall_jump2, spriteSheet, spriteSheet2];
+    var drawables = [spriteSheet, spriteSheet2, level, player, player2, platform];
     
     var dateTime = utils.DateTime.create();
     var last_frame_ticks = dateTime.now();
     var current_frame_ticks = last_frame_ticks;
     var dt;
+
+
 
     var mainloop =  function() {
         current_frame_ticks = dateTime.now();
@@ -280,4 +297,4 @@ window.onload = function(){
     }
 
     animFrame(recursiveAnim);
-    };
+};
