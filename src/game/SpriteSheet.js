@@ -5,6 +5,7 @@ game.SpriteSheet = game.SpriteSheet || {};
     SpriteSheet.create = function(options){
 
         var position = options.position;
+        var player_state = options.player_state;
 
         var spriteSheet = {};
         spriteSheet.draw = function(){};
@@ -28,8 +29,10 @@ game.SpriteSheet = game.SpriteSheet || {};
 
         img.onload = function(){
             spriteSheet.draw = function(ctx){
+                ctx.save();
                 //ctx.drawImage(img, (current_frame-1)*96, 0, 96, 96, 100, 1800, 96, 96);
-                ctx.drawImage(img, current_frame*20, 0, 20, 20, position.x, position.y, 20, 20);
+                ctx.drawImage(img, current_frame*20, 20, 20, 20, position.x, position.y, 20, 20);
+                ctx.restore();
             };
             console.log("loaded");
         };

@@ -205,11 +205,13 @@ window.onload = function(){
     var spriteSheet = game.SpriteSheet.create({
         url:"assets/walk2.png",
         position : player_collider_1,
+        player_state : player_state
     });
 
     var spriteSheet2 = game.SpriteSheet.create({
         url:"assets/walk2.png",
         position : player_collider_2,
+        player_state : player_state2
     });
 
     var level_limits_1 = game.LevelLimits.create({

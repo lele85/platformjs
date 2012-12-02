@@ -83,6 +83,14 @@ game.PlayerState = game.PlayerState || {};
             that.gravity_versor.y *= -1;
         };
 
+        that.get_state =  function(){
+            var state = [];
+            if (that.on_ground) { state.push('on_ground')};
+            if (that.on_left_wall) { state.push('on_left_wall')};
+            if (that.on_right_wall) { state.push('on_right_wall')};
+            return state;
+        };
+
         return that;
     }
 }(game.PlayerState, math.Vector));
