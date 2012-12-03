@@ -1,5 +1,6 @@
 window.onload = function(){
     
+    var socket = io.connect('http://localhost:8080');
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
     context.webkitImageSmoothingEnabled = false;
@@ -103,7 +104,12 @@ window.onload = function(){
     });
     mouse.init();
 
+    var networkEventSource = utils.SocketKeyboardEventSource.create({
+        socket : socket
+    });
+
     var keyboard = utils.Keyboard.create({
+        eventSource : networkEventSource,
         actionKeyMap : {
             "LEFT" : 37,
             "JUMP": 32,
@@ -114,7 +120,7 @@ window.onload = function(){
             "INVERT_GRAVITY":71,
             "SWITCH_PLAYER" : 67,
             "EDITOR_ADD_MODE": 65,
-            "EDITOR_REMOVE_MODE": 82,
+            "EDITOR_REMOVE_MODE": 82
         }
     });
     keyboard.init();
@@ -125,7 +131,7 @@ window.onload = function(){
     var player_keyboard_provider = game.PlayerKeyboardProvider.create({
         keyboards: {
             "PLAYER_1" : keyboard,
-            "PLAYER_2" : mockKeyboard,
+            "PLAYER_2" : mockKeyboard
         }
     });
 
@@ -258,7 +264,7 @@ window.onload = function(){
     var current_frame_ticks = last_frame_ticks;
     var dt;
 
-
+    
 
     var mainloop =  function() {
         current_frame_ticks = dateTime.now();

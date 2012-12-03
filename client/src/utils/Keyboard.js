@@ -10,6 +10,7 @@ utils.Keyboard = utils.Keyboard || {};
         var justPressed = {};
         var firstEventMap = {};
         var justReleased = {};
+        var eventSource = options.eventSource;
 
         var onKeyDown = function(ev){
             keyPressed[ev.keyCode] = true;
@@ -29,8 +30,8 @@ utils.Keyboard = utils.Keyboard || {};
         };
 
         var init = function(){
-            window.addEventListener('keydown', onKeyDown, true);
-            window.addEventListener('keyup', onKeyUp, false);
+            eventSource.addEventListener('keydown', onKeyDown, true);
+            eventSource.addEventListener('keyup', onKeyUp, false);
         };
 
         var isJustPressed = function(action){

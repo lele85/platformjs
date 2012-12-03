@@ -1,0 +1,10 @@
+{
+  "name": "platform-js-server",
+  "version": "0.0.1",
+  "description": "Platform js server",
+  "author": "Emanuele Rampichini <emanuele.rampichini@gmail.com>",
+  "dependencies": {
+    "socket.io": "*"
+  },
+  "engine": "node >= 0.8"
+}
