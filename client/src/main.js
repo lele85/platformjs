@@ -104,28 +104,36 @@ window.onload = function(){
     });
     mouse.init();
 
-    var networkEventSource = utils.SocketKeyboardEventSource.create({
+    var networkEventSource1 = utils.SocketKeyboardEventSource.create({
+        socket : socket
+    });
+    var networkEventSource2 = utils.SocketKeyboardEventSource.create({
         socket : socket
     });
 
+    var actionKeyMap = {
+        "LEFT" : 37,
+        "JUMP": 32,
+        "RIGHT" : 39,
+        "DOWN": 40,
+        "CAMERA_UP":87,
+        "CAMERA_DOWN":83,
+        "INVERT_GRAVITY":71,
+        "SWITCH_PLAYER" : 67,
+        "EDITOR_ADD_MODE": 65,
+        "EDITOR_REMOVE_MODE": 82
+    };
+
     var keyboard = utils.Keyboard.create({
-        eventSource : networkEventSource,
-        actionKeyMap : {
-            "LEFT" : 37,
-            "JUMP": 32,
-            "RIGHT" : 39,
-            "DOWN": 40,
-            "CAMERA_UP":87,
-            "CAMERA_DOWN":83,
-            "INVERT_GRAVITY":71,
-            "SWITCH_PLAYER" : 67,
-            "EDITOR_ADD_MODE": 65,
-            "EDITOR_REMOVE_MODE": 82
-        }
+        eventSource : networkEventSource1,
+        actionKeyMap : actionKeyMap
     });
     keyboard.init();
 
-    var mockKeyboard = utils.Keyboard.createMock();
+    var mockKeyboard = utils.Keyboard.create({
+        eventSource : networkEventSource2,
+        actionKeyMap : actionKeyMap
+    });
     mockKeyboard.init();
 
     var player_keyboard_provider = game.PlayerKeyboardProvider.create({

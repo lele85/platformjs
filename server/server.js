@@ -17,11 +17,27 @@ function handler (req, res) {
   });
 }
 
+var unassigned_clients = [];
+var client_socket;
+
+
 io.sockets.on('connection', function (socket) {
-  setTimeout(function(){
-    socket.emit('keydown', {keyCode:39})
-  }, 2000);
-  setTimeout(function(){
-    socket.emit('keyup', {keyCode:39})
-  }, 2500);
+  socket.on('register_client', function (from) {
+    unassigned_clients.push(from);
+    console.log(unassigned_clients);
+    client_socket = socket;
+  });
+  
+  socket.on('register_keyboard', function (from) {
+    var client_id = unassigned_clients.pop();
+    console.log(unassigned_clients);
+    
+    socket.on('keydown', function(e){
+      client_socket.emit('keydown_'+ client_id, e);
+    });
+
+    socket.on('keyup', function(e){
+      client_socket.emit('keyup_'+ client_id, e);
+    });
+  });
 });
