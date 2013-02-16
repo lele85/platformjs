@@ -1,6 +1,24 @@
 window.onload = function(){
     
     var socket = io.connect('http://localhost:8080');
+
+    var network_players = [];
+
+    socket.on('new_player', function(player){
+        var player = game.NetworkEntity.create(player.id)
+        network_players.push(player);
+        drawables.push(player);
+    });
+
+    socket.on('update', function(e){
+        for (var i = network_players.length - 1; i >= 0; i--) {
+            if (network_players[i].id === e.id){
+                network_players[i].update(e.event);
+                break;
+            }
+        };
+    });
+
     var canvas = document.getElementById("myCanvas");
     var context = canvas.getContext("2d");
     context.webkitImageSmoothingEnabled = false;
@@ -104,12 +122,14 @@ window.onload = function(){
     });
     mouse.init();
 
+    /*
     var networkEventSource1 = utils.SocketKeyboardEventSource.create({
         socket : socket
     });
     var networkEventSource2 = utils.SocketKeyboardEventSource.create({
         socket : socket
     });
+    */
 
     var actionKeyMap = {
         "LEFT" : 37,
@@ -125,15 +145,12 @@ window.onload = function(){
     };
 
     var keyboard = utils.Keyboard.create({
-        eventSource : networkEventSource1,
+        eventSource : window,
         actionKeyMap : actionKeyMap
     });
     keyboard.init();
 
-    var mockKeyboard = utils.Keyboard.create({
-        eventSource : networkEventSource2,
-        actionKeyMap : actionKeyMap
-    });
+    var mockKeyboard = utils.Keyboard.createMock();
     mockKeyboard.init();
 
     var player_keyboard_provider = game.PlayerKeyboardProvider.create({
@@ -239,6 +256,7 @@ window.onload = function(){
     });
 
     var player =  game.Player.create({
+        position_notifier : socket,
         sprite : spriteSheet,
         collider : player_collider_1,
         platform : platform,

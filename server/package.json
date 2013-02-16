@@ -4,7 +4,8 @@
   "description": "Platform js server",
   "author": "Emanuele Rampichini <emanuele.rampichini@gmail.com>",
   "dependencies": {
-    "socket.io": "*"
+    "socket.io": "*",
+    "underscore": "*"
   },
   "engine": "node >= 0.8"
 }

@@ -4,7 +4,7 @@ game.Player = game.Player || {};
 (function(Player, Vector){
     Player.create = function(params){
         var that = {};
-
+        var position_notifier = params.position_notifier || {emit: function(){}};
         var movingPlatform = params.platform;
         var state = params.player_state;
         var position = params.position;
@@ -23,6 +23,9 @@ game.Player = game.Player || {};
             var oldY = collider.y;
             var oldX = collider.x;
             
+            var old_X_Int = parseInt(oldX);
+            var old_Y_Int = parseInt(oldY);
+
             //Apply speed influencers
             for (var i = speed_influencers.length - 1; i >= 0; i--) {
                 speed_influencers[i].applyTo(that.speed);
@@ -46,6 +49,14 @@ game.Player = game.Player || {};
 
             that.speed.y = (collider.y - oldY)/dt;
             that.state.update(totalResponse);
+
+            
+            var new_X_Int = parseInt(collider.x);
+            var new_Y_Int = parseInt(collider.y);
+            if (new_X_Int != old_X_Int || new_Y_Int != old_Y_Int){
+                position_notifier.emit('update',{x:new_X_Int,y:new_Y_Int});
+            }
+            //position_notifier.emit('update',{collider.x,collider.y});
         }
 
         that.collides =  function(otherCollider){
