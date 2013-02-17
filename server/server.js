@@ -20,23 +20,26 @@ function handler (req, res) {
 
 var unassigned_clients = [];
 var client_socket;
-
 var players = [];
 
 
 io.sockets.on('connection', function (socket) {
+  players.push(socket);
+  socket.emit('connected', {id : socket.id});
+  
+  var players_ids = _.map(players, function(player){return player.id});
+
   _.each(players, function(player){
     player.emit('new_player', {id : socket.id});
+    player.emit('players_changed', players_ids);
   });
-  players.push(socket);
-  console.log("Connesso un player: " + socket.id);
   
   socket.on('update', function(e){
     var otherPlayers = _.filter(players, function(player){
       return player.id !== socket.id;
     });
     
-    _.each(otherPlayers, function(player){
+    _.each(players, function(player){
       player.emit('update', {id : socket.id, event: e});
     });
   });

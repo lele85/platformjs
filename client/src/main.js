@@ -1,13 +1,20 @@
 window.onload = function(){
     
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://local.platformjs.com:8080');
 
     var network_players = [];
+    var network_players_map = {};
 
+/*
     socket.on('new_player', function(player){
         var player = game.NetworkEntity.create(player.id)
         network_players.push(player);
+        network_players_map[player.id] = player;
         drawables.push(player);
+    });
+*/
+   socket.on('connected', function(e){
+        network_players_map[e.id] = true;
     });
 
     socket.on('update', function(e){
@@ -16,6 +23,20 @@ window.onload = function(){
                 network_players[i].update(e.event);
                 break;
             }
+        };
+    });
+
+    socket.on('players_changed', function(ids){
+        console.log(ids);
+        for (var i = ids.length - 1; i >= 0; i--) {
+            var id = ids[i];
+            if (!network_players_map[id]) {
+                console.log("QUI");
+                var player = game.NetworkEntity.create(id)
+                network_players.push(player);
+                network_players_map[id] = player;
+                drawables.push(player);
+            };
         };
     });
 
