@@ -1,16 +1,20 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
-  , _ = require('underscore');
+var app = require("http").createServer(handler),
+  io = require("socket.io")(app, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  }),
+  fs = require("fs"),
+  _ = require("underscore");
 
 app.listen(8080);
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
+function handler(req, res) {
+  fs.readFile(__dirname + "/index.html", function (err, data) {
     if (err) {
       res.writeHead(500);
-      return res.end('Error loading index.html');
+      return res.end("Error loading index.html");
     }
 
     res.writeHead(200);
@@ -22,25 +26,26 @@ var unassigned_clients = [];
 var client_socket;
 var players = [];
 
-
-io.sockets.on('connection', function (socket) {
+io.sockets.on("connection", function (socket) {
   players.push(socket);
-  socket.emit('connected', {id : socket.id});
-  
-  var players_ids = _.map(players, function(player){return player.id});
+  socket.emit("connected", { id: socket.id });
 
-  _.each(players, function(player){
-    player.emit('new_player', {id : socket.id});
-    player.emit('players_changed', players_ids);
+  var players_ids = _.map(players, function (player) {
+    return player.id;
   });
-  
-  socket.on('update', function(e){
-    var otherPlayers = _.filter(players, function(player){
+
+  _.each(players, function (player) {
+    player.emit("new_player", { id: socket.id });
+    player.emit("players_changed", players_ids);
+  });
+
+  socket.on("update", function (e) {
+    var otherPlayers = _.filter(players, function (player) {
       return player.id !== socket.id;
     });
-    
-    _.each(players, function(player){
-      player.emit('update', {id : socket.id, event: e});
+
+    _.each(players, function (player) {
+      player.emit("update", { id: socket.id, event: e });
     });
   });
   /*
