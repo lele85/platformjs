@@ -16,6 +16,7 @@ import { Collider } from "./game/Collider";
 import { SpriteSheet } from "./game/SpriteSheet";
 import { LevelLimits } from "./game/LevelLimits";
 import { Camera } from "./game/Camera";
+import { MockKeyboard } from "./utils/MockKeyboard";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
@@ -122,25 +123,23 @@ window.onload = function () {
   mouse.init();
 
   var actionKeyMap = {
-    LEFT: 37,
-    JUMP: 32,
-    RIGHT: 39,
-    DOWN: 40,
-    CAMERA_UP: 87,
-    CAMERA_DOWN: 83,
-    INVERT_GRAVITY: 71,
-    SWITCH_PLAYER: 67,
-    EDITOR_ADD_MODE: 65,
-    EDITOR_REMOVE_MODE: 82,
+    LEFT: "ArrowLeft",
+    JUMP: "Space",
+    RIGHT: "ArrowRight",
+    DOWN: "ArrowDown",
+    INVERT_GRAVITY: "KeyG",
+    SWITCH_PLAYER: "KeyC",
+    EDITOR_ADD_MODE: "KeyA",
+    EDITOR_REMOVE_MODE: "KeyR",
   };
 
-  var keyboard = Keyboard.create({
+  var keyboard = new Keyboard({
     eventSource: window,
     actionKeyMap: actionKeyMap,
   });
   keyboard.init();
 
-  var mockKeyboard = Keyboard.createMock();
+  var mockKeyboard = new MockKeyboard();
   mockKeyboard.init();
 
   var player_keyboard_provider = PlayerKeyboardProvider.create({

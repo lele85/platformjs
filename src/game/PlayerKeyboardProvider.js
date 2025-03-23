@@ -1,11 +1,11 @@
-import { Keyboard } from "../utils/Keyboard.js";
+import { MockKeyboard } from "../utils/MockKeyboard.js";
 
 export const PlayerKeyboardProvider = {
   create: (options) => {
     var keyboards = options.keyboards;
 
     var getKeyboard = function (player) {
-      return keyboards[player] || Keyboard.createMock();
+      return keyboards[player] || new MockKeyboard();
     };
 
     var switchKeyboards = function (player, other_player) {

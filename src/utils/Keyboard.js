@@ -1,78 +1,111 @@
-export const Keyboard = {
-  create: function (options) {
-    var actionKeyMap = options.actionKeyMap || {};
+// @ts-check
+export class Keyboard {
+  /**
+   * @type {ActionKeyMap}
+   */
+  actionKeyMap = {};
+  /**
+   * @type {ActionState}
+   */
+  keyPressed = {};
+  /**
+   * @type {ActionState}
+   */
+  justPressed = {};
+  /**
+   * @type {ActionState}
+   */
+  firstEventMap = {};
+  /**
+   * @type {ActionState}
+   */
+  justReleased = {};
+  /**
+   * @type {KeyboardEventSource}
+   */
+  eventSource = {
+    addEventListener: () => {},
+    removeEventListener: () => {},
+  };
 
-    var keyPressed = {};
-    var justPressed = {};
-    var firstEventMap = {};
-    var justReleased = {};
-    var eventSource = options.eventSource;
+  /**
+   *
+   * @param {{actionKeyMap: ActionKeyMap, eventSource: KeyboardEventSource}} params
+   */
+  constructor({ actionKeyMap, eventSource }) {
+    this.actionKeyMap = actionKeyMap;
+    this.eventSource = eventSource;
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+  }
 
-    var onKeyDown = function (ev) {
-      keyPressed[ev.keyCode] = true;
-      if (firstEventMap[ev.keyCode]) {
-        justPressed[ev.keyCode] = true;
-        firstEventMap[ev.keyCode] = false;
-      } else {
-        justPressed[ev.keyCode] = false;
-      }
-    };
+  init() {
+    this.eventSource.addEventListener("keydown", this.onKeyDown, true);
+    this.eventSource.addEventListener("keyup", this.onKeyUp, false);
+  }
 
-    var onKeyUp = function (ev) {
-      keyPressed[ev.keyCode] = false;
-      justPressed[ev.keyCode] = false;
-      firstEventMap[ev.keyCode] = true;
-      justReleased[ev.keyCode] = true;
-    };
+  destroy() {
+    this.eventSource.removeEventListener("keydown", this.onKeyDown, true);
+    this.eventSource.removeEventListener("keyup", this.onKeyUp, false);
+  }
 
-    var init = function () {
-      eventSource.addEventListener("keydown", onKeyDown, true);
-      eventSource.addEventListener("keyup", onKeyUp, false);
-    };
+  /**
+   *
+   * @param {KeyboardEvent} ev
+   */
+  onKeyDown(ev) {
+    this.keyPressed[ev.code] = true;
+    if (this.firstEventMap[ev.code]) {
+      this.justPressed[ev.code] = true;
+      this.firstEventMap[ev.code] = false;
+    } else {
+      this.justPressed[ev.code] = false;
+    }
+  }
 
-    var isJustPressed = function (action) {
-      if (justPressed[actionKeyMap[action]] === true) {
-        justPressed[actionKeyMap[action]] = false;
-        return true;
-      }
-      return false;
-    };
+  /**
+   *
+   * @param {KeyboardEvent} ev
+   */
+  onKeyUp(ev) {
+    this.keyPressed[ev.code] = false;
+    this.justPressed[ev.code] = false;
+    this.firstEventMap[ev.code] = true;
+    this.justReleased[ev.code] = true;
+  }
 
-    var isHeld = function (action) {
-      return keyPressed[actionKeyMap[action]];
-    };
+  /**
+   *
+   * @param {string} action
+   * @returns
+   */
+  isJustPressed(action) {
+    if (this.justPressed[this.actionKeyMap[action]] === true) {
+      this.justPressed[this.actionKeyMap[action]] = false;
+      return true;
+    }
+    return false;
+  }
 
-    var isJustReleased = function (action) {
-      if (justReleased[actionKeyMap[action]] === true) {
-        justReleased[actionKeyMap[action]] = false;
-        return true;
-      }
-      return false;
-    };
+  /**
+   *
+   * @param {string} action
+   * @returns
+   */
+  isHeld(action) {
+    return this.keyPressed[this.actionKeyMap[action]];
+  }
 
-    return {
-      init: init,
-      isJustPressed: isJustPressed,
-      isHeld: isHeld,
-      isJustReleased: isJustReleased,
-    };
-  },
-  createMock: function () {
-    var mockKeyboard = {
-      init: function () {
-        return false;
-      },
-      isJustPressed: function () {
-        return false;
-      },
-      isHeld: function () {
-        return false;
-      },
-      isJustReleased: function () {
-        return false;
-      },
-      init: function () {},
-    };
-    return mockKeyboard;
-  },
-};
+  /**
+   *
+   * @param {string} action
+   * @returns
+   */
+  isJustReleased(action) {
+    if (this.justReleased[this.actionKeyMap[action]] === true) {
+      this.justReleased[this.actionKeyMap[action]] = false;
+      return true;
+    }
+    return false;
+  }
+}

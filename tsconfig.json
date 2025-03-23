@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "module": "commonjs",
+    "checkJs": false,
+    "outDir": "compiled"
+  },
+  "exclude": ["node_modules"],
+  "include": ["src/**/*", "types/*"]
+}
