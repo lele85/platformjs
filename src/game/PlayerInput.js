@@ -1,8 +1,5 @@
-var game = game || {};
-game.PlayerInput = game.PlayerInput || {};
-
-(function (PlayerInput) {
-  PlayerInput.create = function (params) {
+export const PlayerInput = {
+  create: (params) => {
     var player_id = params.player_id;
     var keyboard_provider = params.keyboard_provider;
     var MAX_HORIZONTAL_SPEED = 250;
@@ -48,5 +45,5 @@ game.PlayerInput = game.PlayerInput || {};
       applyTo: applyTo,
       update: update,
     };
-  };
-})(game.PlayerInput);
+  },
+};

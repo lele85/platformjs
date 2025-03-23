@@ -1,8 +1,5 @@
-var game = game || {};
-game.LevelEditor = game.LevelEditor || {};
-
-(function (LevelEditor) {
-  LevelEditor.create = function (level, mouse, world) {
+export const LevelEditor = {
+  create: (level, mouse, world) => {
     var mode = "ADD";
 
     var functions = {
@@ -27,5 +24,5 @@ game.LevelEditor = game.LevelEditor || {};
     return {
       changeMode: changeMode,
     };
-  };
-})(game.LevelEditor);
+  },
+};

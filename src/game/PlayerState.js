@@ -1,8 +1,7 @@
-var game = game || {};
-game.PlayerState = game.PlayerState || {};
+import { Vector } from "../math/Vector.js";
 
-(function (PlayerState, Vector) {
-  PlayerState.create = function (params) {
+export const PlayerState = {
+  create: (params) => {
     var that = {};
     that.player_id = params.player_id;
     that.on_ground = true;
@@ -93,5 +92,5 @@ game.PlayerState = game.PlayerState || {};
     };
 
     return that;
-  };
-})(game.PlayerState, math.Vector);
+  },
+};

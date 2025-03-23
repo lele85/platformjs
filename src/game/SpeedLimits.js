@@ -1,7 +1,4 @@
-var game = game || {};
-game.SpeedLimits = game.SpeedLimits || {};
-
-(function (SpeedLimits) {
+export const SpeedLimits = {
   /*
     Options:
       - up
@@ -10,7 +7,7 @@ game.SpeedLimits = game.SpeedLimits || {};
       - right
       - player_state
     */
-  SpeedLimits.create = function (params) {
+  create: (params) => {
     var up = params.up || Infinity;
     var down = params.down || Infinity;
     var left = params.left || Infinity;
@@ -34,5 +31,5 @@ game.SpeedLimits = game.SpeedLimits || {};
     return {
       applyTo: applyTo,
     };
-  };
-})(game.SpeedLimits);
+  },
+};

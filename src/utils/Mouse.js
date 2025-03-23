@@ -1,8 +1,9 @@
+import { Vector } from "../math/Vector.js";
 var utils = utils || {};
 utils.Mouse = utils.Mouse || {};
 
-(function (ns, Vector) {
-  ns.create = function (options) {
+export const Mouse = {
+  create: function (options) {
     // OPTS
     //  canvas : related canvas
     //  world : world
@@ -68,7 +69,7 @@ utils.Mouse = utils.Mouse || {};
     };
 
     var setMouseUp = function () {
-      for (var i = clickObservers.length - 1; i >= 0; i--) {
+      for (let i = clickObservers.length - 1; i >= 0; i--) {
         clickObservers[i](Vector.create(x, y));
       }
       down = false;
@@ -96,5 +97,5 @@ utils.Mouse = utils.Mouse || {};
       isDown: isDown,
       onClick: onClick,
     };
-  };
-})(utils.Mouse, math.Vector);
+  },
+};

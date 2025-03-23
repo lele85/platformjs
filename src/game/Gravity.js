@@ -1,13 +1,12 @@
-var game = game || {};
-game.Gravity = game.Gravity || {};
+import { Vector } from "../math/Vector.js";
 
-(function (Gravity, Vector) {
+export const Gravity = {
   /*
     params:
       - observers
       - keyboard
-    */
-  Gravity.create = function (params) {
+  */
+  create: (params) => {
     var TIME = 1 / 60.0;
     var keyboard = params.keyboard;
 
@@ -20,7 +19,8 @@ game.Gravity = game.Gravity || {};
     ];
 
     gravity.notify_gravity_inversion = function () {
-      for (index in observers) {
+      console.log(observers);
+      for (let index in observers) {
         observers[index].on_gravity_inversion();
       }
     };
@@ -43,5 +43,5 @@ game.Gravity = game.Gravity || {};
     };
 
     return gravity;
-  };
-})(game.Gravity, math.Vector);
+  },
+};

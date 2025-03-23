@@ -1,8 +1,7 @@
-var game = game || {};
-game.Player = game.Player || {};
+import { Vector } from "../math/Vector.js";
 
-(function (Player, Vector) {
-  Player.create = function (params) {
+export const Player = {
+  create: (params) => {
     var that = {};
     var movingPlatform = params.platform;
     var state = params.player_state;
@@ -20,7 +19,7 @@ game.Player = game.Player || {};
       var oldX = collider.x;
 
       //Apply speed influencers
-      for (var i = speed_influencers.length - 1; i >= 0; i--) {
+      for (let i = speed_influencers.length - 1; i >= 0; i--) {
         speed_influencers[i].applyTo(that.speed);
       }
 
@@ -52,5 +51,5 @@ game.Player = game.Player || {};
     };
 
     return that;
-  };
-})(game.Player, math.Vector);
+  },
+};

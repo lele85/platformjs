@@ -1,8 +1,5 @@
-var math = math || {};
-math.Vector = math.Vector || {};
-
-(function (Vector) {
-  Vector.create = function (x, y) {
+export const Vector = {
+  create: function (x, y) {
     var TILE_DIMENSION = 32;
 
     var toWorldSpace = function (worldPosition) {
@@ -27,5 +24,5 @@ math.Vector = math.Vector || {};
       x: x,
       y: y,
     };
-  };
-})(math.Vector);
+  },
+};

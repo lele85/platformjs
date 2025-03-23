@@ -1,8 +1,5 @@
-var utils = utils || {};
-utils.DateTime = utils.DateTime || {};
-
-(function (ns) {
-  ns.create = function (options) {
+export const DateTime = {
+  create: function () {
     window.performance = window.performance || {};
 
     window.performance.now = (function () {
@@ -23,5 +20,5 @@ utils.DateTime = utils.DateTime || {};
         return window.performance.now();
       },
     };
-  };
-})(utils.DateTime);
+  },
+};

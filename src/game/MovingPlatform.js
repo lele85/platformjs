@@ -1,8 +1,7 @@
-var game = game || {};
-game.MovingPlatform = game.MovingPlatform || {};
+import { Collider } from "./Collider";
 
-(function (MovingPlatform, Collider) {
-  MovingPlatform.create = function () {
+export const MovingPlatform = {
+  create: () => {
     var that = {};
 
     that.collider = Collider.create({
@@ -39,5 +38,5 @@ game.MovingPlatform = game.MovingPlatform || {};
     };
 
     return that;
-  };
-})(game.MovingPlatform, game.Collider);
+  },
+};

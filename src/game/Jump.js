@@ -1,8 +1,7 @@
-var game = game || {};
-game.Jump = game.Jump || {};
+import { Vector } from "../math/Vector.js";
 
-(function (Jump, Vector) {
-  Jump.create = function (params) {
+export const Jump = {
+  create: (params) => {
     var player_id = params.player_id;
     var keyboard_provider = params.keyboard_provider;
     var player_state = params.player_state;
@@ -66,5 +65,5 @@ game.Jump = game.Jump || {};
     jump.applyTo = applyTo;
 
     return jump;
-  };
-})(game.Jump, math.Vector);
+  },
+};

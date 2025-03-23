@@ -1,8 +1,5 @@
-var game = game || {};
-game.Camera = game.Camera || {};
-
-(function (Camera) {
-  Camera.create = function (params) {
+export const Camera = {
+  create: (params) => {
     var context = params.context;
     var targets = params.targets;
     var getBounds = params.getBounds;
@@ -47,5 +44,5 @@ game.Camera = game.Camera || {};
     };
 
     return that;
-  };
-})(game.Camera);
+  },
+};

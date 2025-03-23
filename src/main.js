@@ -1,3 +1,22 @@
+import { Level } from "./game/Level";
+import { Mouse } from "./utils/Mouse";
+import { Keyboard } from "./utils/Keyboard";
+import { PlayerKeyboardProvider } from "./game/PlayerKeyboardProvider";
+import { DateTime } from "./utils/DateTime";
+import { Player } from "./game/Player";
+import { LevelEditor } from "./game/LevelEditor";
+import { MovingPlatform } from "./game/MovingPlatform";
+import { PlayerState } from "./game/PlayerState";
+import { Jump } from "./game/Jump";
+import { WallJump } from "./game/WallJump";
+import { Gravity } from "./game/Gravity";
+import { SpeedLimits } from "./game/SpeedLimits";
+import { PlayerInput } from "./game/PlayerInput";
+import { Collider } from "./game/Collider";
+import { SpriteSheet } from "./game/SpriteSheet";
+import { LevelLimits } from "./game/LevelLimits";
+import { Camera } from "./game/Camera";
+
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
   var context = canvas.getContext("2d");
@@ -92,11 +111,11 @@ window.onload = function () {
     ],
   ];
 
-  var level = game.Level.create({
+  var level = Level.create({
     definition: levelDefinition,
   });
   level.build();
-  var mouse = utils.Mouse.create({
+  var mouse = Mouse.create({
     canvas: canvas,
     world: context,
   });
@@ -115,59 +134,59 @@ window.onload = function () {
     EDITOR_REMOVE_MODE: 82,
   };
 
-  var keyboard = utils.Keyboard.create({
+  var keyboard = Keyboard.create({
     eventSource: window,
     actionKeyMap: actionKeyMap,
   });
   keyboard.init();
 
-  var mockKeyboard = utils.Keyboard.createMock();
+  var mockKeyboard = Keyboard.createMock();
   mockKeyboard.init();
 
-  var player_keyboard_provider = game.PlayerKeyboardProvider.create({
+  var player_keyboard_provider = PlayerKeyboardProvider.create({
     keyboards: {
       PLAYER_1: keyboard,
       PLAYER_2: mockKeyboard,
     },
   });
 
-  var levelEditor = game.LevelEditor.create(level, mouse, context);
+  var levelEditor = LevelEditor.create(level, mouse, context);
 
-  var platform = game.MovingPlatform.create();
+  var platform = MovingPlatform.create();
 
-  var player_state = game.PlayerState.create({
+  var player_state = PlayerState.create({
     player_id: "PLAYER_1",
   });
 
-  var player_state2 = game.PlayerState.create({
+  var player_state2 = PlayerState.create({
     player_id: "PLAYER_2",
   });
 
-  var jump = game.Jump.create({
-    player_id: "PLAYER_1",
-    player_state: player_state,
-    keyboard_provider: player_keyboard_provider,
-  });
-
-  var jump2 = game.Jump.create({
-    player_id: "PLAYER_2",
-    player_state: player_state2,
-    keyboard_provider: player_keyboard_provider,
-  });
-
-  var wall_jump = game.WallJump.create({
+  var jump = Jump.create({
     player_id: "PLAYER_1",
     player_state: player_state,
     keyboard_provider: player_keyboard_provider,
   });
 
-  var wall_jump2 = game.WallJump.create({
+  var jump2 = Jump.create({
     player_id: "PLAYER_2",
     player_state: player_state2,
     keyboard_provider: player_keyboard_provider,
   });
 
-  var gravity = game.Gravity.create({
+  var wall_jump = WallJump.create({
+    player_id: "PLAYER_1",
+    player_state: player_state,
+    keyboard_provider: player_keyboard_provider,
+  });
+
+  var wall_jump2 = WallJump.create({
+    player_id: "PLAYER_2",
+    player_state: player_state2,
+    keyboard_provider: player_keyboard_provider,
+  });
+
+  var gravity = Gravity.create({
     observers: [
       jump,
       jump2,
@@ -179,23 +198,23 @@ window.onload = function () {
     keyboard: keyboard,
   });
 
-  var speed_limits = game.SpeedLimits.create({
+  var speed_limits = SpeedLimits.create({
     up: 1000,
     down: 1000,
   });
 
-  var player_input_1 = game.PlayerInput.create({
+  var player_input_1 = PlayerInput.create({
     player_id: "PLAYER_1",
     keyboard_provider: player_keyboard_provider,
     keyboard: keyboard,
   });
-  var player_input_2 = game.PlayerInput.create({
+  var player_input_2 = PlayerInput.create({
     player_id: "PLAYER_2",
     keyboard_provider: player_keyboard_provider,
     keyboard: mockKeyboard,
   });
 
-  var player_collider_1 = game.Collider.create({
+  var player_collider_1 = Collider.create({
     x: 40,
     y: 2000,
     w: 20,
@@ -203,7 +222,7 @@ window.onload = function () {
     debug: false,
   });
 
-  var player_collider_2 = game.Collider.create({
+  var player_collider_2 = Collider.create({
     x: 200,
     y: 1500,
     w: 20,
@@ -211,29 +230,29 @@ window.onload = function () {
     debug: false,
   });
 
-  var spriteSheet = game.SpriteSheet.create({
+  var spriteSheet = SpriteSheet.create({
     url: "assets/walk2.png",
     position: player_collider_1,
     player_state: player_state,
   });
 
-  var spriteSheet2 = game.SpriteSheet.create({
+  var spriteSheet2 = SpriteSheet.create({
     url: "assets/walk2.png",
     position: player_collider_2,
     player_state: player_state2,
   });
 
-  var level_limits_1 = game.LevelLimits.create({
+  var level_limits_1 = LevelLimits.create({
     level: level,
     collider: player_collider_1,
   });
 
-  var level_limits_2 = game.LevelLimits.create({
+  var level_limits_2 = LevelLimits.create({
     level: level,
     collider: player_collider_2,
   });
 
-  var player = game.Player.create({
+  var player = Player.create({
     sprite: spriteSheet,
     collider: player_collider_1,
     platform: platform,
@@ -243,7 +262,7 @@ window.onload = function () {
     level_limits: level_limits_1,
   });
 
-  var player2 = game.Player.create({
+  var player2 = Player.create({
     sprite: spriteSheet,
     collider: player_collider_2,
     platform: platform,
@@ -259,7 +278,7 @@ window.onload = function () {
     level_limits: level_limits_2,
   });
 
-  var camera = game.Camera.create({
+  var camera = Camera.create({
     context: context,
     targets: [player_collider_1, player_collider_2],
     getBounds: level.getBounds,
@@ -282,7 +301,7 @@ window.onload = function () {
   ];
   var drawables = [spriteSheet, spriteSheet2, level, player, player2, platform];
 
-  var dateTime = utils.DateTime.create();
+  var dateTime = DateTime.create();
   var last_frame_ticks = dateTime.now();
   var current_frame_ticks = last_frame_ticks;
   var dt;
@@ -292,10 +311,10 @@ window.onload = function () {
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
     if (dt < 0.02) {
       context.clearRect(context.x - 300, context.y, 1000, 480);
-      for (var i = updatables.length - 1; i >= 0; i--) {
+      for (let i = updatables.length - 1; i >= 0; i--) {
         updatables[i].update(dt);
       }
-      for (var j = drawables.length - 1; j >= 0; j--) {
+      for (let j = drawables.length - 1; j >= 0; j--) {
         drawables[j].draw(context);
       }
       if (keyboard.isJustPressed("SWITCH_PLAYER")) {

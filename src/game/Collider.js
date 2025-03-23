@@ -1,8 +1,7 @@
-var game = game || {};
-game.Collider = game.Collider || {};
+import { Vector } from "../math/Vector.js";
 
-(function (Collider, Vector) {
-  Collider.create = function (options) {
+export const Collider = {
+  create: function (options) {
     var that = {};
     that.x = options.x;
     that.y = options.y;
@@ -61,5 +60,5 @@ game.Collider = game.Collider || {};
     that.collides = collides;
     that.draw = draw;
     return that;
-  };
-})(game.Collider, math.Vector);
+  },
+};

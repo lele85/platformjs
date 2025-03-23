@@ -1,8 +1,7 @@
-var game = game || {};
-game.Level = game.Level || {};
+import { Collider } from "./Collider";
 
-(function (Level, Collider) {
-  Level.create = function (options) {
+export const Level = {
+  create: (options) => {
     var TILE_DIMENSION = 32;
 
     var definition = options.definition || [];
@@ -42,8 +41,8 @@ game.Level = game.Level || {};
     };
 
     var draw = function (context) {
-      for (var rowIndex in collidersMatrix) {
-        for (var columnIndex in collidersMatrix[rowIndex])
+      for (let rowIndex in collidersMatrix) {
+        for (let columnIndex in collidersMatrix[rowIndex])
           collidersMatrix[rowIndex][columnIndex].draw(context);
       }
     };
@@ -124,5 +123,5 @@ game.Level = game.Level || {};
       addCollider: addCollider,
       removeCollider: removeCollider,
     };
-  };
-})(game.Level, game.Collider);
+  },
+};

@@ -1,8 +1,7 @@
-var game = game || {};
-game.PlayerKeyboardProvider = game.PlayerKeyboardProvider || {};
+import { Keyboard } from "../utils/Keyboard.js";
 
-(function (ns, Keyboard) {
-  ns.create = function (options) {
+export const PlayerKeyboardProvider = {
+  create: (options) => {
     var keyboards = options.keyboards;
 
     var getKeyboard = function (player) {
@@ -20,5 +19,5 @@ game.PlayerKeyboardProvider = game.PlayerKeyboardProvider || {};
       getKeyboard: getKeyboard,
       switchKeyboards: switchKeyboards,
     };
-  };
-})(game.PlayerKeyboardProvider, utils.Keyboard);
+  },
+};

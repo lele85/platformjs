@@ -1,8 +1,7 @@
-var game = game || {};
-game.LevelLimits = game.LevelLimits || {};
+import { Vector } from "../math/Vector.js";
 
-(function (LevelLimits, Vector) {
-  LevelLimits.create = function (options) {
+export const LevelLimits = {
+  create: function (options) {
     var level = options.level;
     var collider = options.collider;
 
@@ -14,14 +13,14 @@ game.LevelLimits = game.LevelLimits || {};
       var totalXResponse = 0;
       var totalYResponse = 0;
       //Vertical collisions with level
-      for (var index in verticalColliders) {
+      for (let index in verticalColliders) {
         var otherCollider = verticalColliders[index];
         var response = collider.collides(otherCollider);
         totalYResponse += response.y;
         position.y += response.y;
       }
       //Horizontal collisions with level
-      for (var index in potentialColliders) {
+      for (let index in potentialColliders) {
         var otherCollider = potentialColliders[index];
         var response = collider.collides(otherCollider);
         totalXResponse += response.x;
@@ -46,5 +45,5 @@ game.LevelLimits = game.LevelLimits || {};
       applyTo: applyTo,
       update: update,
     };
-  };
-})(game.LevelLimits, math.Vector);
+  },
+};

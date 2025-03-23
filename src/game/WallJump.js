@@ -1,8 +1,7 @@
-var game = game || {};
-game.WallJump = game.WallJump || {};
+import { Vector } from "../math/Vector.js";
 
-(function (WallJump, Vector) {
-  WallJump.create = function (params) {
+export const WallJump = {
+  create: (params) => {
     var player_state = params.player_state;
     var keyboard_provider = params.keyboard_provider;
     var player_id = params.player_id;
@@ -63,5 +62,5 @@ game.WallJump = game.WallJump || {};
       update: update,
       applyTo: applyTo,
     };
-  };
-})(game.WallJump, math.Vector);
+  },
+};

@@ -1,8 +1,5 @@
-var utils = utils || {};
-utils.Keyboard = utils.Keyboard || {};
-
-(function (ns) {
-  ns.create = function (options) {
+export const Keyboard = {
+  create: function (options) {
     var actionKeyMap = options.actionKeyMap || {};
 
     var keyPressed = {};
@@ -59,9 +56,8 @@ utils.Keyboard = utils.Keyboard || {};
       isHeld: isHeld,
       isJustReleased: isJustReleased,
     };
-  };
-
-  ns.createMock = function () {
+  },
+  createMock: function () {
     var mockKeyboard = {
       init: function () {
         return false;
@@ -78,5 +74,5 @@ utils.Keyboard = utils.Keyboard || {};
       init: function () {},
     };
     return mockKeyboard;
-  };
-})(utils.Keyboard);
+  },
+};

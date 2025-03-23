@@ -1,10 +1,6 @@
-var game = game || {};
-game.SpriteSheet = game.SpriteSheet || {};
-
-(function (SpriteSheet, Vector) {
-  SpriteSheet.create = function (options) {
+export const SpriteSheet = {
+  create: (options) => {
     var position = options.position;
-    var player_state = options.player_state;
 
     var spriteSheet = {};
     spriteSheet.draw = function () {};
@@ -45,5 +41,5 @@ game.SpriteSheet = game.SpriteSheet || {};
     img.src = url;
 
     return spriteSheet;
-  };
-})(game.SpriteSheet);
+  },
+};
