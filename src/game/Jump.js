@@ -12,9 +12,9 @@ export const Jump = {
     var max_jump_time = 5;
     var current_jump_time = 0;
     var jump_cb = undefined;
-    jump.jump_speed = Vector.create(0, 0);
+    jump.jump_speed = new Vector(0, 0);
 
-    var jump_direction = Vector.create(1, 1);
+    var jump_direction = new Vector(1, 1);
 
     var applyTo = function (current_speed) {
       current_speed.x += jump_direction.x * jump.jump_speed.x;

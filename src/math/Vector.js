@@ -1,28 +1,41 @@
-export const Vector = {
-  create: function (x, y) {
-    var TILE_DIMENSION = 32;
+export class Vector {
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {Vector}
+   */
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  /**
+   *
+   * @param {Vector} worldPosition
+   * @returns {Vector}
+   */
+  toWorldSpace(worldPosition) {
+    return new Vector(this.x + worldPosition.x, this.y + worldPosition.y);
+  }
 
-    var toWorldSpace = function (worldPosition) {
-      return Vector.create(x + worldPosition.x, y + worldPosition.y);
-    };
+  /**
+   *
+   * @param {Vector} worldPosition
+   * @returns {Vector}
+   */
+  toScreenSpace(worldPosition) {
+    return new Vector(this.x - worldPosition.x, this.y - worldPosition.y);
+  }
 
-    var toScreenSpace = function (worldPosition) {
-      return Vector.create(x - worldPosition.x, y - worldPosition.y);
-    };
-
-    var toTileSpace = function () {
-      return Vector.create(
-        Math.floor(x / TILE_DIMENSION),
-        Math.floor(y / TILE_DIMENSION)
-      );
-    };
-
-    return {
-      toWorldSpace: toWorldSpace,
-      toScreenSpace: toScreenSpace,
-      toTileSpace: toTileSpace,
-      x: x,
-      y: y,
-    };
-  },
-};
+  /**
+   *
+   * @returns {Vector}
+   */
+  toTileSpace() {
+    const TILE_DIMENSION = 32;
+    return new Vector(
+      Math.floor(this.x / TILE_DIMENSION),
+      Math.floor(this.y / TILE_DIMENSION)
+    );
+  }
+}

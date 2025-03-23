@@ -11,7 +11,7 @@ export const Gravity = {
     var keyboard = params.keyboard;
 
     var gravity = {};
-    var acceleration = Vector.create(0, 7000);
+    var acceleration = new Vector(0, 7000);
     var observers = params.observers || [
       {
         on_gravity_inversion: function () {},

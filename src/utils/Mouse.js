@@ -1,6 +1,4 @@
 import { Vector } from "../math/Vector.js";
-var utils = utils || {};
-utils.Mouse = utils.Mouse || {};
 
 export const Mouse = {
   create: function (options) {
@@ -70,7 +68,7 @@ export const Mouse = {
 
     var setMouseUp = function () {
       for (let i = clickObservers.length - 1; i >= 0; i--) {
-        clickObservers[i](Vector.create(x, y));
+        clickObservers[i](new Vector(x, y));
       }
       down = false;
     };
@@ -78,7 +76,7 @@ export const Mouse = {
     var clickObservers = [];
     var onClick = function (cb) {
       clickObservers.push(function () {
-        cb(Vector.create(x, y));
+        cb(new Vector(x, y));
       });
     };
 

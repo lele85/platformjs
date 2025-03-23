@@ -22,7 +22,7 @@ export const Collider = {
       var centerY = that.y + that.h / 2;
       var otherCenterX = collider.x + collider.w / 2;
       var otherCenterY = collider.y + collider.h / 2;
-      var response = Vector.create(0, 0);
+      var response = new Vector(0, 0);
 
       if (bottom <= otherTop) return response;
       if (top >= otherBottom) return response;

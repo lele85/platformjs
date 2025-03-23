@@ -7,8 +7,8 @@ export const WallJump = {
     var player_id = params.player_id;
     var should_rightwall_jump = false;
     var should_left_wall_jump = false;
-    var wall_jump_speed = Vector.create(350, 1000);
-    var wall_jump_direction = Vector.create(1, 1);
+    var wall_jump_speed = new Vector(350, 1000);
+    var wall_jump_direction = new Vector(1, 1);
 
     var applyTo = function (current_speed) {
       applyLeftWalljumpTo(current_speed);

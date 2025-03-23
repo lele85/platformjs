@@ -9,7 +9,7 @@ export const PlayerState = {
     that.on_right_wall = false;
     that.left_wall_jump_possible = true;
     that.right_wall_jump_possible = true;
-    that.gravity_versor = Vector.create(1, -1);
+    that.gravity_versor = new Vector(1, -1);
 
     that.setOnGroundState = function () {
       that.on_ground = true;

@@ -9,7 +9,7 @@ export const Player = {
     var collider = params.collider;
     var level_limits = params.level_limits;
 
-    that.speed = Vector.create(0, 0);
+    that.speed = new Vector(0, 0);
 
     that.movingPlatform = movingPlatform;
     that.state = state;

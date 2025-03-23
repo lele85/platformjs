@@ -301,13 +301,12 @@ window.onload = function () {
   ];
   var drawables = [spriteSheet, spriteSheet2, level, player, player2, platform];
 
-  var dateTime = DateTime.create();
-  var last_frame_ticks = dateTime.now();
+  var last_frame_ticks = DateTime.now();
   var current_frame_ticks = last_frame_ticks;
   var dt;
 
   var mainloop = function () {
-    current_frame_ticks = dateTime.now();
+    current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
     if (dt < 0.02) {
       context.clearRect(context.x - 300, context.y, 1000, 480);

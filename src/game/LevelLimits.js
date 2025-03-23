@@ -26,7 +26,7 @@ export const LevelLimits = {
         totalXResponse += response.x;
         position.x += response.x;
       }
-      return Vector.create(totalXResponse, totalYResponse);
+      return new Vector(totalXResponse, totalYResponse);
     };
 
     var update = function (dt) {
