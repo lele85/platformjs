@@ -47,9 +47,9 @@ export const Collider = {
       return response;
     };
 
-    var draw = function (context) {
+    var draw = function (context, worldOffset) {
       if (that.debug !== false) {
-        if (that.y > context.y + 480 + 32 || that.y < context.y - 32) {
+        if (that.y > worldOffset.y + 480 + 32 || that.y < worldOffset.y - 32) {
           return;
         }
         context.strokeStyle = "rgb(0,0,0);";

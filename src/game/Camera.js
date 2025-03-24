@@ -1,6 +1,7 @@
 export const Camera = {
   create: (params) => {
     var context = params.context;
+    var worldOffset = params.worldOffset;
     var targets = params.targets;
     var getBounds = params.getBounds;
     var active = 0;
@@ -23,7 +24,8 @@ export const Camera = {
       if (targetCameraY < targetCameraYTopLimit) {
         targetCameraY = targetCameraYTopLimit;
       }
-      var targetToCameraDistance = targetCameraY - semi_camera_h - context.y;
+      var targetToCameraDistance =
+        targetCameraY - semi_camera_h - worldOffset.y;
       var dy = (targetToCameraDistance * CAMERA_SPEED) / getBounds().h;
 
       var targetCameraX = current_target.x;
@@ -31,11 +33,12 @@ export const Camera = {
       if (targetCameraX < targetCameraXLeftLimit) {
         targetCameraX = targetCameraXLeftLimit;
       }
-      var targetToCameraXDistance = targetCameraX - semi_camera_w - context.x;
+      var targetToCameraXDistance =
+        targetCameraX - semi_camera_w - worldOffset.x;
       var dx = (targetToCameraXDistance * CAMERA_SPEED) / camera_w;
       context.translate(-dx, -dy);
-      context.x += dx;
-      context.y += dy;
+      worldOffset.x += dx;
+      worldOffset.y += dy;
     };
 
     that.nextTarget = function () {

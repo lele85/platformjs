@@ -17,13 +17,13 @@ import { SpriteSheet } from "./game/SpriteSheet";
 import { LevelLimits } from "./game/LevelLimits";
 import { Camera } from "./game/Camera";
 import { MockKeyboard } from "./utils/MockKeyboard";
+import { Vector } from "./math/Vector";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
   var context = canvas.getContext("2d");
   context.webkitImageSmoothingEnabled = false;
-  context.y = 0;
-  context.x = 0;
+  var worldOffset = new Vector(0, 0);
 
   var levelDefinition = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -148,7 +148,7 @@ window.onload = function () {
     },
   });
 
-  var levelEditor = LevelEditor.create(level, mouse, context);
+  var levelEditor = LevelEditor.create(level, mouse, worldOffset);
 
   var platform = MovingPlatform.create();
 
@@ -278,6 +278,7 @@ window.onload = function () {
 
   var camera = Camera.create({
     context: context,
+    worldOffset: worldOffset,
     targets: [player_collider_1, player_collider_2],
     getBounds: level.getBounds,
   });
@@ -307,12 +308,12 @@ window.onload = function () {
     current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
     if (dt < 0.02) {
-      context.clearRect(context.x - 300, context.y, 1000, 480);
+      context.clearRect(worldOffset.x - 300, worldOffset.y, 1000, 480);
       for (let i = updatables.length - 1; i >= 0; i--) {
         updatables[i].update(dt);
       }
       for (let j = drawables.length - 1; j >= 0; j--) {
-        drawables[j].draw(context);
+        drawables[j].draw(context, worldOffset);
       }
       if (keyboard.isJustPressed("SWITCH_PLAYER")) {
         player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");

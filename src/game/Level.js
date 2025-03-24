@@ -40,10 +40,10 @@ export const Level = {
       delete collidersMatrix[j][i];
     };
 
-    var draw = function (context) {
+    var draw = function (context, worldOffset) {
       for (let rowIndex in collidersMatrix) {
         for (let columnIndex in collidersMatrix[rowIndex])
-          collidersMatrix[rowIndex][columnIndex].draw(context);
+          collidersMatrix[rowIndex][columnIndex].draw(context, worldOffset);
       }
     };
 

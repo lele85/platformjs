@@ -15,10 +15,6 @@ export class Keyboard {
   /**
    * @type {ActionState}
    */
-  firstEventMap = {};
-  /**
-   * @type {ActionState}
-   */
   justReleased = {};
   /**
    * @type {KeyboardEventSource}
@@ -54,13 +50,14 @@ export class Keyboard {
    * @param {KeyboardEvent} ev
    */
   onKeyDown(ev) {
-    this.keyPressed[ev.code] = true;
-    if (this.firstEventMap[ev.code]) {
+    if (!this.keyPressed[ev.code]) {
+      // If the key was not pressed before, it is "justPressed"
       this.justPressed[ev.code] = true;
-      this.firstEventMap[ev.code] = false;
     } else {
+      // Otherwise, it is not "justPressed"
       this.justPressed[ev.code] = false;
     }
+    this.keyPressed[ev.code] = true; // Key is now pressed
   }
 
   /**
@@ -70,7 +67,6 @@ export class Keyboard {
   onKeyUp(ev) {
     this.keyPressed[ev.code] = false;
     this.justPressed[ev.code] = false;
-    this.firstEventMap[ev.code] = true;
     this.justReleased[ev.code] = true;
   }
 

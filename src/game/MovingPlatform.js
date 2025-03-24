@@ -29,8 +29,8 @@ export const MovingPlatform = {
       }
     };
 
-    that.draw = function (context) {
-      that.collider.draw(context);
+    that.draw = function (context, worldOffset) {
+      that.collider.draw(context, worldOffset);
     };
 
     that.collides = function (otherCollider) {

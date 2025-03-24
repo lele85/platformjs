@@ -1,14 +1,14 @@
 export const LevelEditor = {
-  create: (level, mouse, world) => {
+  create: (level, mouse, worldOffset) => {
     var mode = "ADD";
 
     var functions = {
       ADD: function (position) {
-        var tileSpaceCoords = position.toWorldSpace(world).toTileSpace();
+        var tileSpaceCoords = position.toWorldSpace(worldOffset).toTileSpace();
         level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);
       },
       REMOVE: function (position) {
-        var tileSpaceCoords = position.toWorldSpace(world).toTileSpace();
+        var tileSpaceCoords = position.toWorldSpace(worldOffset).toTileSpace();
         level.removeCollider(tileSpaceCoords.x, tileSpaceCoords.y);
       },
     };

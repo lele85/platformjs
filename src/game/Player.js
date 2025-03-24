@@ -46,8 +46,8 @@ export const Player = {
       return collider.collides(otherCollider);
     };
 
-    that.draw = function (context) {
-      collider.draw(context);
+    that.draw = function (context, worldOffset) {
+      collider.draw(context, worldOffset);
     };
 
     return that;
