@@ -7,9 +7,9 @@ export class Mouse {
   down = false;
 
   /**
-   * @type {HTMLCanvasElement|null}
+   * @type {HTMLCanvasElement}
    */
-  canvas = null;
+  canvas;
 
   /**
    * @type {((pos: Vector) => void)[]}
@@ -30,48 +30,14 @@ export class Mouse {
   /**
    *
    * @param {MouseEvent} ev
-   * @param {'X' | 'Y'} axis
-   */
-  toCanvas(ev, axis) {
-    // Convert window space in canvas space coordinates
-    let scrollOffset = {
-      X: "Top",
-      Y: "Left",
-    };
-
-    let pageProp = `page${axis}`;
-    let clientProp = `client${axis}`;
-    let scrollProp = `scroll${scrollOffset[axis]}`;
-    let offsetProp = `offset${scrollOffset[axis]}`;
-
-    let pos = 0;
-
-    // @ts-ignore
-    if (ev[pageProp]) {
-      // @ts-ignore
-      pos = ev[pageProp];
-      // @ts-ignore
-    } else if (ev[clientProp]) {
-      pos =
-        // @ts-ignore
-        ev[clientProp] +
-        // @ts-ignore
-        document.body[scrollProp] +
-        // @ts-ignore
-        document.documentElement[scrollProp];
-    }
-    // @ts-ignore
-    pos = pos - this.canvas[offsetProp];
-    return pos;
-  }
-
-  /**
-   *
-   * @param {MouseEvent} ev
    */
   update(ev) {
-    this.x = this.toCanvas(ev, "X");
-    this.y = this.toCanvas(ev, "Y");
+    // Obtain the rectangle that defines the area of the canvas
+    const rect = this.canvas.getBoundingClientRect();
+
+    // Calculate the position of the mouse in the canvas
+    this.x = ev.clientX - rect.left;
+    this.y = ev.clientY - rect.top;
   }
 
   getX() {
@@ -108,14 +74,14 @@ export class Mouse {
   }
 
   init() {
-    this.canvas?.addEventListener("mousemove", this.update, false);
-    this.canvas?.addEventListener("mousedown", this.setMouseDown, false);
-    this.canvas?.addEventListener("mouseup", this.setMouseUp, false);
+    this.canvas.addEventListener("mousemove", this.update, false);
+    this.canvas.addEventListener("mousedown", this.setMouseDown, false);
+    this.canvas.addEventListener("mouseup", this.setMouseUp, false);
   }
 
   destroy() {
-    this.canvas?.removeEventListener("mousemove", this.update, false);
-    this.canvas?.removeEventListener("mousedown", this.setMouseDown, false);
-    this.canvas?.removeEventListener("mouseup", this.setMouseUp, false);
+    this.canvas.removeEventListener("mousemove", this.update, false);
+    this.canvas.removeEventListener("mousedown", this.setMouseDown, false);
+    this.canvas.removeEventListener("mouseup", this.setMouseUp, false);
   }
 }
