@@ -19,7 +19,6 @@ export const Gravity = {
     ];
 
     gravity.notify_gravity_inversion = function () {
-      console.log(observers);
       for (let index in observers) {
         observers[index].on_gravity_inversion();
       }
