@@ -1,99 +1,121 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
 
-export const Mouse = {
-  create: function (options) {
-    // OPTS
-    //  canvas : related canvas
-    //  world : world
+export class Mouse {
+  x = 0;
+  y = 0;
+  down = false;
 
-    var x = 0;
-    var y = 0;
-    var down = false;
-    var canvas = options.canvas;
-    var world = options.world;
+  /**
+   * @type {HTMLCanvasElement|null}
+   */
+  canvas = null;
 
-    var toCanvas = function (ev, axis) {
-      // Convert window space in canvas space coordinates
-      var scrollOffset = {
-        X: "Top",
-        Y: "Left",
-      };
+  /**
+   * @type {((pos: Vector) => void)[]}
+   */
+  clickObservers = [];
 
-      var pageProp = "page" + axis;
-      var clientProp = "client" + axis;
-      var scrollProp = "scroll" + scrollOffset[axis];
-      var offsetProp = "offset" + scrollOffset[axis];
+  /**
+   *
+   * @param {{canvas: HTMLCanvasElement }} params
+   */
+  constructor({ canvas }) {
+    this.canvas = canvas;
+    this.update = this.update.bind(this);
+    this.setMouseDown = this.setMouseDown.bind(this);
+    this.setMouseUp = this.setMouseUp.bind(this);
+  }
 
-      var pos = 0;
-      if (ev[pageProp]) {
-        pos = ev[pageProp];
-      } else if (ev[clientProp]) {
-        pos =
-          ev[clientProp] +
-          document.body[scrollProp] +
-          document.documentElement[scrollProp];
-      }
-      pos = pos - canvas[offsetProp];
-      return pos;
+  /**
+   *
+   * @param {MouseEvent} ev
+   * @param {'X' | 'Y'} axis
+   */
+  toCanvas(ev, axis) {
+    // Convert window space in canvas space coordinates
+    let scrollOffset = {
+      X: "Top",
+      Y: "Left",
     };
 
-    var update = function (ev) {
-      x = toCanvas(ev, "X");
-      y = toCanvas(ev, "Y");
-    };
+    let pageProp = `page${axis}`;
+    let clientProp = `client${axis}`;
+    let scrollProp = `scroll${scrollOffset[axis]}`;
+    let offsetProp = `offset${scrollOffset[axis]}`;
 
-    var getX = function () {
-      return x;
-    };
+    let pos = 0;
 
-    var getY = function () {
-      return y;
-    };
+    // @ts-ignore
+    if (ev[pageProp]) {
+      // @ts-ignore
+      pos = ev[pageProp];
+      // @ts-ignore
+    } else if (ev[clientProp]) {
+      pos =
+        // @ts-ignore
+        ev[clientProp] +
+        // @ts-ignore
+        document.body[scrollProp] +
+        // @ts-ignore
+        document.documentElement[scrollProp];
+    }
+    // @ts-ignore
+    pos = pos - this.canvas[offsetProp];
+    return pos;
+  }
 
-    var getWorldX = function (context) {
-      return context.x + getX();
-    };
+  /**
+   *
+   * @param {MouseEvent} ev
+   */
+  update(ev) {
+    this.x = this.toCanvas(ev, "X");
+    this.y = this.toCanvas(ev, "Y");
+  }
 
-    var getWorldY = function (context) {
-      return context.y + getY();
-    };
+  getX() {
+    return this.x;
+  }
 
-    var isDown = function () {
-      return down;
-    };
+  getY() {
+    return this.y;
+  }
 
-    var setMouseDown = function () {
-      down = true;
-    };
+  isDown() {
+    return this.down;
+  }
 
-    var setMouseUp = function () {
-      for (let i = clickObservers.length - 1; i >= 0; i--) {
-        clickObservers[i](new Vector(x, y));
-      }
-      down = false;
-    };
+  setMouseDown() {
+    this.down = true;
+  }
 
-    var clickObservers = [];
-    var onClick = function (cb) {
-      clickObservers.push(function () {
-        cb(new Vector(x, y));
-      });
-    };
+  setMouseUp() {
+    for (let i = this.clickObservers.length - 1; i >= 0; i--) {
+      this.clickObservers[i](new Vector(this.x, this.y));
+    }
+    this.down = false;
+  }
 
-    var init = function () {
-      canvas.addEventListener("mousemove", update, false);
-      canvas.addEventListener("mousedown", setMouseDown, false);
-      canvas.addEventListener("mouseup", setMouseUp, false);
-    };
+  /**
+   *
+   * @param {(pos: Vector) => void} cb
+   */
+  onClick(cb) {
+    this.clickObservers.push(() => {
+      cb(new Vector(this.x, this.y));
+    });
+  }
 
-    return {
-      init: init,
-      getX: getX,
-      getY: getY,
-      getWorldX: getWorldX,
-      getWorldY: getWorldY,
-      isDown: isDown,
-      onClick: onClick,
-    };
-  },
-};
+  init() {
+    this.canvas?.addEventListener("mousemove", this.update, false);
+    this.canvas?.addEventListener("mousedown", this.setMouseDown, false);
+    this.canvas?.addEventListener("mouseup", this.setMouseUp, false);
+  }
+
+  destroy() {
+    this.canvas?.removeEventListener("mousemove", this.update, false);
+    this.canvas?.removeEventListener("mousedown", this.setMouseDown, false);
+    this.canvas?.removeEventListener("mouseup", this.setMouseUp, false);
+  }
+}

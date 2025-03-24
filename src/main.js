@@ -116,9 +116,8 @@ window.onload = function () {
     definition: levelDefinition,
   });
   level.build();
-  var mouse = Mouse.create({
+  var mouse = new Mouse({
     canvas: canvas,
-    world: context,
   });
   mouse.init();
 
