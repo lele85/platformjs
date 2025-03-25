@@ -1,69 +1,73 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
+import { PlayerKeyboardProvider } from "./PlayerKeyboardProvider.js";
 
-export const Jump = {
-  create: (params) => {
-    var player_id = params.player_id;
-    var keyboard_provider = params.keyboard_provider;
-    var player_state = params.player_state;
+export class Jump {
+  /**
+   *
+   * @param {{
+   *  player_id : string,
+   *  keyboard_provider : PlayerKeyboardProvider,
+   *  player_state: any
+   * }} options
+   */
+  constructor({ player_id, keyboard_provider, player_state }) {
+    this.player_id = player_id;
+    this.keyboard_provider = keyboard_provider;
+    this.player_state = player_state;
 
-    var jump = {};
+    this.jump_started = false;
+    this.max_jump_time = 5;
+    this.current_jump_time = 0;
+    this.jump_speed = new Vector(0, 0);
+    this.jump_direction = new Vector(1, 1);
+  }
 
-    var jump_started = false;
-    var max_jump_time = 5;
-    var current_jump_time = 0;
-    var jump_cb = undefined;
-    jump.jump_speed = new Vector(0, 0);
+  /**
+   * @param {Vector} current_speed
+   */
+  applyTo(current_speed) {
+    current_speed.x += this.jump_direction.x * this.jump_speed.x;
+    current_speed.y += this.jump_direction.y * this.jump_speed.y;
+  }
 
-    var jump_direction = new Vector(1, 1);
+  onGravityInversion() {
+    this.jump_direction.y *= -1;
+  }
 
-    var applyTo = function (current_speed) {
-      current_speed.x += jump_direction.x * jump.jump_speed.x;
-      current_speed.y += jump_direction.y * jump.jump_speed.y;
-    };
+  start() {
+    this.jump_started = true;
+  }
 
-    var onGravityInversion = function () {
-      jump_direction.y *= -1;
-    };
+  stop() {
+    if (this.jump_started == true) {
+      this.jump_started = false;
+      this.current_jump_time = 0;
+      this.jump_speed.x = 0;
+      this.jump_speed.y = 0;
+    }
+  }
 
-    var start = function () {
-      jump_started = true;
-    };
-
-    var stop = function () {
-      if (jump_started == true) {
-        jump_started = false;
-        current_jump_time = 0;
-        jump.jump_speed.x = 0;
-        jump.jump_speed.y = 0;
+  /**
+   * @param {number} dt
+   */
+  update(dt) {
+    var keyboard = this.keyboard_provider.getKeyboard(this.player_id);
+    if (this.jump_started) {
+      this.jump_speed.y =
+        -400 / (1 + this.current_jump_time * this.current_jump_time * 1500);
+      this.current_jump_time += dt;
+      if (this.current_jump_time > this.max_jump_time) {
+        this.stop();
       }
-    };
-
-    var update = function (dt) {
-      var keyboard = keyboard_provider.getKeyboard(player_id);
-      if (jump_started) {
-        jump.jump_speed.y =
-          -400 / (1 + current_jump_time * current_jump_time * 1500);
-        current_jump_time += dt;
-        if (current_jump_time > max_jump_time) {
-          stop();
-        }
-      }
-      if (player_state.on_ground && keyboard.isJustPressed("JUMP")) {
-        start();
-        player_state.update_after_jump();
-      }
-      if (player_state.on_ground && keyboard.isJustReleased("JUMP")) {
-        stop();
-        player_state.update_after_jump();
-      }
-    };
-
-    jump.start = start;
-    jump.stop = stop;
-    jump.update = update;
-    jump.onGravityInversion = onGravityInversion;
-    jump.applyTo = applyTo;
-
-    return jump;
-  },
-};
+    }
+    if (this.player_state.on_ground && keyboard.isJustPressed("JUMP")) {
+      this.start();
+      this.player_state.update_after_jump();
+    }
+    if (this.player_state.on_ground && keyboard.isJustReleased("JUMP")) {
+      this.stop();
+      this.player_state.update_after_jump();
+    }
+  }
+}

@@ -22,3 +22,8 @@ type KeyboardEventSource = {
 type GravityObserver = {
   onGravityInversion: () => void;
 };
+
+type Bounds = {
+  w: number;
+  h: number;
+};

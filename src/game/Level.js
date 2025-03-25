@@ -1,127 +1,182 @@
+// @ts-check
+import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
 
-export const Level = {
-  create: (options) => {
-    var TILE_DIMENSION = 32;
+export class Level {
+  /**
+   *
+   * @param {{ definition: number[][] }} options
+   */
+  constructor(options) {
+    this.TILE_DIMENSION = 32;
+    this.definition = options.definition || [];
+    /**
+     * @type {Collider[][]}
+     */
+    this.collidersMatrix = [];
+    this.h = this.definition.length * this.TILE_DIMENSION;
+  }
 
-    var definition = options.definition || [];
-    var collidersMatrix = [];
-    var h = definition.length * TILE_DIMENSION;
-
-    var build = function () {
-      var i, j;
-      for (i = 0; i < definition.length; i++) {
-        var row = [];
-        for (j = 0; j < definition[i].length; j++) {
-          if (definition[i][j] === 1) {
-            var coll = new Collider({
-              x: j * TILE_DIMENSION,
-              y: i * TILE_DIMENSION,
-              w: TILE_DIMENSION,
-              h: TILE_DIMENSION,
-            });
-            row[j] = coll;
-          }
-          collidersMatrix[i] = row;
+  build() {
+    for (let i = 0; i < this.definition.length; i++) {
+      var row = [];
+      for (let j = 0; j < this.definition[i].length; j++) {
+        if (this.definition[i][j] === 1) {
+          var coll = new Collider({
+            x: j * this.TILE_DIMENSION,
+            y: i * this.TILE_DIMENSION,
+            w: this.TILE_DIMENSION,
+            h: this.TILE_DIMENSION,
+            debug: true,
+          });
+          row[j] = coll;
         }
+        this.collidersMatrix[i] = row;
       }
+    }
+  }
+  /**
+   *
+   * @param {number} i
+   * @param {number} j
+   */
+  addCollider(i, j) {
+    this.collidersMatrix[j][i] = new Collider({
+      x: i * this.TILE_DIMENSION,
+      y: j * this.TILE_DIMENSION,
+      w: this.TILE_DIMENSION,
+      h: this.TILE_DIMENSION,
+      debug: true,
+    });
+  }
+
+  /**
+   *
+   * @param {number} i
+   * @param {number} j
+   */
+  removeCollider(i, j) {
+    delete this.collidersMatrix[j][i];
+  }
+
+  /**
+   *
+   * @param {CanvasRenderingContext2D} context
+   * @param {Vector} worldOffset
+   */
+  draw(context, worldOffset) {
+    for (let rowIndex in this.collidersMatrix) {
+      for (let columnIndex in this.collidersMatrix[rowIndex])
+        this.collidersMatrix[rowIndex][columnIndex].draw(context, worldOffset);
+    }
+  }
+
+  /**
+   *
+   * @param {Collider|undefined} element
+   * @param {Collider[]} array
+   */
+  addIfNotUndefined(element, array) {
+    if (element !== undefined) {
+      array.push(element);
+    }
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @param {number} xOffset
+   * @param {number} yOffset
+   * @returns {Collider|undefined}
+   */
+  getCollider(x, y, xOffset, yOffset) {
+    var coll;
+    if (
+      this.collidersMatrix[
+        Math.floor((y + 10) / this.TILE_DIMENSION) + xOffset
+      ] != undefined
+    ) {
+      coll =
+        this.collidersMatrix[
+          Math.floor((y + 10) / this.TILE_DIMENSION) + yOffset
+        ][Math.floor((x + 10) / this.TILE_DIMENSION) + xOffset];
+    }
+    return coll;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {Collider[]}
+   */
+  getPotentialCollidersAt(x, y) {
+    /**
+     * @type {Collider[]}
+     */
+    var potentialColliders = [];
+
+    this.addIfNotUndefined(this.getCollider(x, y, -1, -1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, -1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 1, -1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, -1, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 1, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, -1, 1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, 1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 1, 1), potentialColliders);
+
+    return potentialColliders;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {Collider[]}
+   */
+  getVerticalCollidersAt(x, y) {
+    /**
+     * @type {Collider[]}
+     */
+    var potentialColliders = [];
+
+    this.addIfNotUndefined(this.getCollider(x, y, 0, -1), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, 1), potentialColliders);
+
+    return potentialColliders;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns
+   */
+  getHorizontalCollidersAt(x, y) {
+    /**
+     * @type {Collider[]}
+     */
+    var potentialColliders = [];
+
+    this.addIfNotUndefined(this.getCollider(x, y, 1, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, 0, 0), potentialColliders);
+    this.addIfNotUndefined(this.getCollider(x, y, -1, 0), potentialColliders);
+
+    return potentialColliders;
+  }
+
+  /**
+   *
+   * @returns {Bounds}
+   */
+  getBounds() {
+    var bounds = {
+      h: this.definition.length * this.TILE_DIMENSION,
+      w: this.definition[0].length * this.TILE_DIMENSION,
     };
-
-    var addCollider = function (i, j) {
-      collidersMatrix[j][i] = new Collider({
-        x: i * TILE_DIMENSION,
-        y: j * TILE_DIMENSION,
-        w: TILE_DIMENSION,
-        h: TILE_DIMENSION,
-      });
-    };
-
-    var removeCollider = function (i, j) {
-      delete collidersMatrix[j][i];
-    };
-
-    var draw = function (context, worldOffset) {
-      for (let rowIndex in collidersMatrix) {
-        for (let columnIndex in collidersMatrix[rowIndex])
-          collidersMatrix[rowIndex][columnIndex].draw(context, worldOffset);
-      }
-    };
-
-    var addIfNotUndefined = function (element, array) {
-      if (element !== undefined) {
-        array.push(element);
-      }
-    };
-
-    var getCollider = function (x, y, xOffset, yOffset) {
-      var coll;
-      if (
-        collidersMatrix[Math.floor((y + 10) / TILE_DIMENSION) + xOffset] !=
-        undefined
-      ) {
-        coll =
-          collidersMatrix[Math.floor((y + 10) / TILE_DIMENSION) + yOffset][
-            Math.floor((x + 10) / TILE_DIMENSION) + xOffset
-          ];
-      }
-      return coll;
-    };
-
-    var getPotentialCollidersAt = function (x, y) {
-      var potentialColliders = [];
-      addIfNotUndefined(getCollider(x, y, -1, -1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, -1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 1, -1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, -1, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 1, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, -1, 1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, 1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 1, 1), potentialColliders);
-
-      return potentialColliders;
-    };
-
-    var getVerticalCollidersAt = function (x, y) {
-      var potentialColliders = [];
-
-      addIfNotUndefined(getCollider(x, y, 0, -1), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, 1), potentialColliders);
-
-      return potentialColliders;
-    };
-
-    var getHorizontalCollidersAt = function (x, y) {
-      var potentialColliders = [];
-
-      addIfNotUndefined(getCollider(x, y, 1, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, 0, 0), potentialColliders);
-      addIfNotUndefined(getCollider(x, y, -1, 0), potentialColliders);
-
-      return potentialColliders;
-    };
-
-    var getBounds = function () {
-      var bounds = {
-        h: definition.length * TILE_DIMENSION,
-        w: definition[0].length * TILE_DIMENSION,
-      };
-      getBounds = function () {
-        return bounds;
-      };
-      return bounds;
-    };
-
-    return {
-      build: build,
-      draw: draw,
-      getPotentialCollidersAt: getPotentialCollidersAt,
-      getVerticalCollidersAt: getVerticalCollidersAt,
-      getHorizontalCollidersAt: getHorizontalCollidersAt,
-      getBounds: getBounds,
-      addCollider: addCollider,
-      removeCollider: removeCollider,
-    };
-  },
-};
+    return bounds;
+  }
+}

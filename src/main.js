@@ -112,7 +112,7 @@ window.onload = function () {
     ],
   ];
 
-  var level = Level.create({
+  var level = new Level({
     definition: levelDefinition,
   });
   level.build();
@@ -141,7 +141,7 @@ window.onload = function () {
   var mockKeyboard = new MockKeyboard();
   mockKeyboard.init();
 
-  var player_keyboard_provider = PlayerKeyboardProvider.create({
+  var player_keyboard_provider = new PlayerKeyboardProvider({
     keyboards: {
       PLAYER_1: keyboard,
       PLAYER_2: mockKeyboard,
@@ -160,13 +160,13 @@ window.onload = function () {
     player_id: "PLAYER_2",
   });
 
-  var jump = Jump.create({
+  var jump = new Jump({
     player_id: "PLAYER_1",
     player_state: player_state,
     keyboard_provider: player_keyboard_provider,
   });
 
-  var jump2 = Jump.create({
+  var jump2 = new Jump({
     player_id: "PLAYER_2",
     player_state: player_state2,
     keyboard_provider: player_keyboard_provider,
@@ -280,7 +280,7 @@ window.onload = function () {
     context: context,
     worldOffset: worldOffset,
     targets: [player_collider_1, player_collider_2],
-    getBounds: level.getBounds,
+    getBounds: level.getBounds.bind(level),
   });
 
   var updatables = [
