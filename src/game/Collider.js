@@ -1,64 +1,74 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
 
-export const Collider = {
-  create: function (options) {
-    var that = {};
-    that.x = options.x;
-    that.y = options.y;
-    that.w = options.w;
-    that.h = options.h;
-    that.debug = options.debug;
+export class Collider {
+  /**
+   *
+   * @param {{ x: number, y: number, w: number, h: number, debug: boolean }} options
+   */
+  constructor(options) {
+    this.x = options.x;
+    this.y = options.y;
+    this.w = options.w;
+    this.h = options.h;
+    this.debug = options.debug;
+  }
 
-    var collides = function (collider) {
-      var top = that.y;
-      var otherTop = collider.y;
-      var left = that.x;
-      var otherLeft = collider.x;
-      var right = that.x + that.w;
-      var otherRight = collider.x + collider.w;
-      var bottom = that.y + that.h;
-      var otherBottom = collider.y + collider.h;
-      var centerX = that.x + that.w / 2;
-      var centerY = that.y + that.h / 2;
-      var otherCenterX = collider.x + collider.w / 2;
-      var otherCenterY = collider.y + collider.h / 2;
-      var response = new Vector(0, 0);
+  /**
+   *
+   * @param {Collider} collider
+   * @returns {Vector}
+   */
+  collides(collider) {
+    const top = this.y;
+    const otherTop = collider.y;
+    const left = this.x;
+    const otherLeft = collider.x;
+    const right = this.x + this.w;
+    const otherRight = collider.x + collider.w;
+    const bottom = this.y + this.h;
+    const otherBottom = collider.y + collider.h;
+    const centerX = this.x + this.w / 2;
+    const centerY = this.y + this.h / 2;
+    const otherCenterX = collider.x + collider.w / 2;
+    const otherCenterY = collider.y + collider.h / 2;
+    const response = new Vector(0, 0);
 
-      if (bottom <= otherTop) return response;
-      if (top >= otherBottom) return response;
+    if (bottom <= otherTop) return response;
+    if (top >= otherBottom) return response;
 
-      if (right <= otherLeft) return response;
-      if (left >= otherRight) return response;
+    if (right <= otherLeft) return response;
+    if (left >= otherRight) return response;
 
-      var responseX =
-        that.w / 2 + collider.w / 2 - Math.abs(otherCenterX - centerX);
-      var responseY =
-        that.h / 2 + collider.h / 2 - Math.abs(otherCenterY - centerY);
+    let responseX =
+      this.w / 2 + collider.w / 2 - Math.abs(otherCenterX - centerX);
+    let responseY =
+      this.h / 2 + collider.h / 2 - Math.abs(otherCenterY - centerY);
 
-      if (centerX < otherCenterX) {
-        responseX *= -1;
+    if (centerX < otherCenterX) {
+      responseX *= -1;
+    }
+    if (centerY < otherCenterY) {
+      responseY *= -1;
+    }
+
+    response.x = responseX;
+    response.y = responseY;
+    return response;
+  }
+
+  /**
+   *
+   * @param {CanvasRenderingContext2D} context
+   * @param {Vector} worldOffset
+   */
+  draw(context, worldOffset) {
+    if (this.debug !== false) {
+      if (this.y > worldOffset.y + 480 + 32 || this.y < worldOffset.y - 32) {
+        return;
       }
-      if (centerY < otherCenterY) {
-        responseY *= -1;
-      }
-
-      response.x = responseX;
-      response.y = responseY;
-      return response;
-    };
-
-    var draw = function (context, worldOffset) {
-      if (that.debug !== false) {
-        if (that.y > worldOffset.y + 480 + 32 || that.y < worldOffset.y - 32) {
-          return;
-        }
-        context.strokeStyle = "rgb(0,0,0);";
-        context.strokeRect(that.x, that.y, that.w, that.h);
-      }
-    };
-
-    that.collides = collides;
-    that.draw = draw;
-    return that;
-  },
-};
+      context.strokeStyle = "rgb(0,0,0);";
+      context.strokeRect(this.x, this.y, this.w, this.h);
+    }
+  }
+}

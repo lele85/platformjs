@@ -212,7 +212,7 @@ window.onload = function () {
     keyboard: mockKeyboard,
   });
 
-  var player_collider_1 = Collider.create({
+  var player_collider_1 = new Collider({
     x: 40,
     y: 2000,
     w: 20,
@@ -220,7 +220,7 @@ window.onload = function () {
     debug: false,
   });
 
-  var player_collider_2 = Collider.create({
+  var player_collider_2 = new Collider({
     x: 200,
     y: 1500,
     w: 20,

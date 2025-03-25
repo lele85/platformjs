@@ -4,7 +4,7 @@ export const MovingPlatform = {
   create: () => {
     var that = {};
 
-    that.collider = Collider.create({
+    that.collider = new Collider({
       x: 300,
       y: 2480,
       w: 32,

@@ -14,7 +14,7 @@ export const Level = {
         var row = [];
         for (j = 0; j < definition[i].length; j++) {
           if (definition[i][j] === 1) {
-            var coll = Collider.create({
+            var coll = new Collider({
               x: j * TILE_DIMENSION,
               y: i * TILE_DIMENSION,
               w: TILE_DIMENSION,
@@ -28,7 +28,7 @@ export const Level = {
     };
 
     var addCollider = function (i, j) {
-      collidersMatrix[j][i] = Collider.create({
+      collidersMatrix[j][i] = new Collider({
         x: i * TILE_DIMENSION,
         y: j * TILE_DIMENSION,
         w: TILE_DIMENSION,
