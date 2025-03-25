@@ -146,7 +146,7 @@ window.onload = function () {
     },
   });
 
-  var levelEditor = LevelEditor.create(level, mouse, worldOffset);
+  var levelEditor = new LevelEditor(level, mouse, worldOffset);
 
   var platform = MovingPlatform.create();
 

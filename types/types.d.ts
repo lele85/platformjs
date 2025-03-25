@@ -27,3 +27,5 @@ type Bounds = {
   w: number;
   h: number;
 };
+
+type EditorMode = "ADD" | "REMOVE";

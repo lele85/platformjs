@@ -1,28 +1,71 @@
-export const LevelEditor = {
-  create: (level, mouse, worldOffset) => {
-    var mode = "ADD";
+// @ts-check
+import { Vector } from "../math/Vector";
+import { Mouse } from "../utils/Mouse";
+import { Level } from "./Level";
 
-    var functions = {
-      ADD: function (position) {
-        var tileSpaceCoords = position.toWorldSpace(worldOffset).toTileSpace();
-        level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);
-      },
-      REMOVE: function (position) {
-        var tileSpaceCoords = position.toWorldSpace(worldOffset).toTileSpace();
-        level.removeCollider(tileSpaceCoords.x, tileSpaceCoords.y);
-      },
-    };
+export class LevelEditor {
+  /**
+   * @type {Level}
+   */
+  level;
+  /**
+   * @type {Mouse}
+   */
+  mouse;
+  /**
+   * @type {Vector}
+   */
+  worldOffset;
 
-    mouse.onClick(function (position) {
-      functions[mode](position);
+  /**
+   *
+   * @param {Level} level
+   * @param {Mouse} mouse
+   * @param {Vector} worldOffset
+   */
+  constructor(level, mouse, worldOffset) {
+    this.level = level;
+    this.mouse = mouse;
+    this.worldOffset = worldOffset;
+    /**
+     * @type {EditorMode}
+     */
+    this.mode = "ADD";
+    this.execute = this.execute.bind(this);
+    this.init();
+  }
+
+  /**
+   *
+   * @param {EditorMode} mode
+   * @param {Vector} position
+   */
+  execute(mode, position) {
+    var tileSpaceCoords = position.toWorldSpace(this.worldOffset).toTileSpace();
+    switch (mode) {
+      case "ADD":
+        this.level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);
+        break;
+      case "REMOVE":
+        this.level.removeCollider(tileSpaceCoords.x, tileSpaceCoords.y);
+        break;
+      default:
+        console.warn(`Unknown mode: ${mode}`);
+        break;
+    }
+  }
+
+  /**
+   *
+   * @param {EditorMode} newMode
+   */
+  changeMode(newMode) {
+    this.mode = newMode;
+  }
+
+  init() {
+    this.mouse.onClick((position) => {
+      this.execute(this.mode, position);
     });
-
-    var changeMode = function (newMode) {
-      mode = newMode;
-    };
-
-    return {
-      changeMode: changeMode,
-    };
-  },
-};
+  }
+}
