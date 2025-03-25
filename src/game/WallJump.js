@@ -25,7 +25,7 @@ export const WallJump = {
       player_state.update_after_left_wall_jump();
     };
 
-    var on_gravity_inversion = function () {
+    var onGravityInversion = function () {
       wall_jump_direction.y *= -1;
     };
 
@@ -58,7 +58,7 @@ export const WallJump = {
     };
 
     return {
-      on_gravity_inversion: on_gravity_inversion,
+      onGravityInversion: onGravityInversion,
       update: update,
       applyTo: applyTo,
     };

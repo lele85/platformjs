@@ -73,7 +73,7 @@ export const PlayerState = {
       that.right_wall_jump_possible = false;
     };
 
-    that.on_gravity_inversion = function () {
+    that.onGravityInversion = function () {
       that.gravity_versor.y *= -1;
     };
 

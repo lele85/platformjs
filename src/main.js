@@ -184,7 +184,7 @@ window.onload = function () {
     keyboard_provider: player_keyboard_provider,
   });
 
-  var gravity = Gravity.create({
+  var gravity = new Gravity({
     observers: [
       jump,
       jump2,

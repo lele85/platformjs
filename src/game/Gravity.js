@@ -1,46 +1,47 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
+import { Keyboard } from "../utils/Keyboard.js";
 
-export const Gravity = {
-  /*
-    params:
-      - observers
-      - keyboard
-  */
-  create: (params) => {
-    var TIME = 1 / 60.0;
-    var keyboard = params.keyboard;
+export class Gravity {
+  /**
+   * @param {{ keyboard: Keyboard, observers: GravityObserver[] }} params
+   */
+  constructor({ keyboard, observers }) {
+    this.TIME = 1 / 60.0;
+    this.keyboard = keyboard;
+    this.acceleration = new Vector(0, 7000);
 
-    var gravity = {};
-    var acceleration = new Vector(0, 7000);
-    var observers = params.observers || [
-      {
-        on_gravity_inversion: function () {},
-      },
-    ];
+    this.observers = observers || [];
+  }
 
-    gravity.notify_gravity_inversion = function () {
-      for (let index in observers) {
-        observers[index].on_gravity_inversion();
-      }
-    };
+  notifyGravityInversion() {
+    for (let index in this.observers) {
+      this.observers[index].onGravityInversion();
+    }
+  }
 
-    gravity.applyTo = function (speed) {
-      speed.x = speed.x + 0.5 * acceleration.x * TIME;
-      speed.y = speed.y + 0.5 * acceleration.y * TIME;
-    };
+  /**
+   *
+   * @param {Vector} speed
+   */
+  applyTo(speed) {
+    speed.x = speed.x + 0.5 * this.acceleration.x * this.TIME;
+    speed.y = speed.y + 0.5 * this.acceleration.y * this.TIME;
+  }
 
-    gravity.invert_y = function () {
-      acceleration.y *= -1;
-      gravity.notify_gravity_inversion();
-    };
+  invert_y() {
+    this.acceleration.y *= -1;
+    this.notifyGravityInversion();
+  }
 
-    gravity.update = function (dt) {
-      TIME = dt;
-      if (keyboard.isJustPressed("INVERT_GRAVITY")) {
-        gravity.invert_y();
-      }
-    };
-
-    return gravity;
-  },
-};
+  /**
+   *
+   * @param {number} dt
+   */
+  update(dt) {
+    this.TIME = dt;
+    if (this.keyboard.isJustPressed("INVERT_GRAVITY")) {
+      this.invert_y();
+    }
+  }
+}

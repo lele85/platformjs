@@ -21,7 +21,7 @@ export const Jump = {
       current_speed.y += jump_direction.y * jump.jump_speed.y;
     };
 
-    var on_gravity_inversion = function () {
+    var onGravityInversion = function () {
       jump_direction.y *= -1;
     };
 
@@ -61,7 +61,7 @@ export const Jump = {
     jump.start = start;
     jump.stop = stop;
     jump.update = update;
-    jump.on_gravity_inversion = on_gravity_inversion;
+    jump.onGravityInversion = onGravityInversion;
     jump.applyTo = applyTo;
 
     return jump;

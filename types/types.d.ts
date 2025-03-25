@@ -18,3 +18,7 @@ type KeyboardEventSource = {
     useCapture: boolean
   ) => void;
 };
+
+type GravityObserver = {
+  onGravityInversion: () => void;
+};
