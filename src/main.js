@@ -238,12 +238,12 @@ window.onload = function () {
     player_state: player_state2,
   });
 
-  var level_limits_1 = LevelLimits.create({
+  var level_limits_1 = new LevelLimits({
     level: level,
     collider: player_collider_1,
   });
 
-  var level_limits_2 = LevelLimits.create({
+  var level_limits_2 = new LevelLimits({
     level: level,
     collider: player_collider_2,
   });
