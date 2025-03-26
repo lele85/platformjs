@@ -170,13 +170,13 @@ window.onload = function () {
     keyboard_provider: player_keyboard_provider,
   });
 
-  var wall_jump = WallJump.create({
+  var wall_jump = new WallJump({
     player_id: "PLAYER_1",
     player_state: player_state,
     keyboard_provider: player_keyboard_provider,
   });
 
-  var wall_jump2 = WallJump.create({
+  var wall_jump2 = new WallJump({
     player_id: "PLAYER_2",
     player_state: player_state2,
     keyboard_provider: player_keyboard_provider,

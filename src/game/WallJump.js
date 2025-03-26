@@ -1,66 +1,81 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
+import { PlayerKeyboardProvider } from "./PlayerKeyboardProvider.js";
+import { PlayerState } from "./PlayerState.js";
 
-export const WallJump = {
-  create: (params) => {
-    var player_state = params.player_state;
-    var keyboard_provider = params.keyboard_provider;
-    var player_id = params.player_id;
-    var should_rightwall_jump = false;
-    var should_left_wall_jump = false;
-    var wall_jump_speed = new Vector(350, 1000);
-    var wall_jump_direction = new Vector(1, 1);
+export class WallJump {
+  /**
+   *
+   * @param {{player_state: PlayerState, keyboard_provider: PlayerKeyboardProvider, player_id: string}} params
+   */
+  constructor({ player_state, keyboard_provider, player_id }) {
+    this.player_state = player_state;
+    this.keyboard_provider = keyboard_provider;
+    this.player_id = player_id;
+    this.should_rightwall_jump = false;
+    this.should_left_wall_jump = false;
+    this.wall_jump_speed = new Vector(350, 1000);
+    this.wall_jump_direction = new Vector(1, 1);
+  }
 
-    var applyTo = function (current_speed) {
-      applyLeftWalljumpTo(current_speed);
-      applyRightWalljumpTo(current_speed);
-    };
+  /**
+   *
+   * @param {Vector} current_speed
+   */
+  applyTo(current_speed) {
+    this.applyLeftWalljumpTo(current_speed);
+    this.applyRightWalljumpTo(current_speed);
+  }
 
-    var applyLeftWalljumpTo = function (current_speed) {
-      if (!should_left_wall_jump) {
-        return;
-      }
-      current_speed.x = wall_jump_direction.x * wall_jump_speed.x;
-      current_speed.y = -wall_jump_direction.y * wall_jump_speed.y;
-      should_left_wall_jump = false;
-      player_state.update_after_left_wall_jump();
-    };
+  /**
+   *
+   * @param {Vector} current_speed
+   * @returns
+   */
+  applyLeftWalljumpTo(current_speed) {
+    if (!this.should_left_wall_jump) {
+      return;
+    }
+    current_speed.x = this.wall_jump_direction.x * this.wall_jump_speed.x;
+    current_speed.y = -this.wall_jump_direction.y * this.wall_jump_speed.y;
+    this.should_left_wall_jump = false;
+    this.player_state.update_after_left_wall_jump();
+  }
 
-    var onGravityInversion = function () {
-      wall_jump_direction.y *= -1;
-    };
+  onGravityInversion() {
+    this.wall_jump_direction.y *= -1;
+  }
 
-    var applyRightWalljumpTo = function (current_speed) {
-      if (!should_rightwall_jump) {
-        return;
-      }
-      current_speed.x = -wall_jump_direction.x * wall_jump_speed.x;
-      current_speed.y = -wall_jump_direction.y * wall_jump_speed.y;
-      should_rightwall_jump = false;
-      player_state.update_after_right_wall_jump();
-    };
+  /**
+   *
+   * @param {Vector} current_speed
+   * @returns
+   */
+  applyRightWalljumpTo(current_speed) {
+    if (!this.should_rightwall_jump) {
+      return;
+    }
+    current_speed.x = -this.wall_jump_direction.x * this.wall_jump_speed.x;
+    current_speed.y = -this.wall_jump_direction.y * this.wall_jump_speed.y;
+    this.should_rightwall_jump = false;
+    this.player_state.update_after_right_wall_jump();
+  }
 
-    var update = function () {
-      var keyboard = keyboard_provider.getKeyboard(player_id);
-      if (
-        player_state.left_wall_jump_possible &&
-        player_state.on_left_wall &&
-        keyboard.isJustPressed("JUMP")
-      ) {
-        should_left_wall_jump = true;
-      }
-      if (
-        player_state.right_wall_jump_possible &&
-        player_state.on_right_wall &&
-        keyboard.isJustPressed("JUMP")
-      ) {
-        should_rightwall_jump = true;
-      }
-    };
-
-    return {
-      onGravityInversion: onGravityInversion,
-      update: update,
-      applyTo: applyTo,
-    };
-  },
-};
+  update() {
+    var keyboard = this.keyboard_provider.getKeyboard(this.player_id);
+    if (
+      this.player_state.left_wall_jump_possible &&
+      this.player_state.on_left_wall &&
+      keyboard.isJustPressed("JUMP")
+    ) {
+      this.should_left_wall_jump = true;
+    }
+    if (
+      this.player_state.right_wall_jump_possible &&
+      this.player_state.on_right_wall &&
+      keyboard.isJustPressed("JUMP")
+    ) {
+      this.should_rightwall_jump = true;
+    }
+  }
+}
