@@ -150,11 +150,11 @@ window.onload = function () {
 
   var platform = new MovingPlatform();
 
-  var player_state = PlayerState.create({
+  var player_state = new PlayerState({
     player_id: "PLAYER_1",
   });
 
-  var player_state2 = PlayerState.create({
+  var player_state2 = new PlayerState({
     player_id: "PLAYER_2",
   });
 
