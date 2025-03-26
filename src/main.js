@@ -226,17 +226,19 @@ window.onload = function () {
     debug: false,
   });
 
-  var spriteSheet = SpriteSheet.create({
+  var spriteSheet = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_1,
     player_state: player_state,
   });
+  spriteSheet.load();
 
-  var spriteSheet2 = SpriteSheet.create({
+  var spriteSheet2 = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_2,
     player_state: player_state2,
   });
+  spriteSheet2.load();
 
   var level_limits_1 = new LevelLimits({
     level: level,
