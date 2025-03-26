@@ -64,11 +64,12 @@ export class Collider {
    */
   draw(context, worldOffset) {
     if (this.debug !== false) {
+      // Check if the collider is out of the screen
       if (this.y > worldOffset.y + 480 + 32 || this.y < worldOffset.y - 32) {
         return;
       }
-      context.strokeStyle = "rgb(0,0,0);";
-      context.lineWidth = 2;
+      context.strokeStyle = "rgb(194, 24, 160)";
+      context.lineWidth = 1;
       context.strokeRect(this.x, this.y, this.w, this.h);
       context.fillStyle = "#DDD6FF";
       context.fillRect(this.x, this.y, this.w, this.h);

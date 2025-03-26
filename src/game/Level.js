@@ -93,7 +93,7 @@ export class Level {
     var coll;
     if (
       this.collidersMatrix[
-        Math.floor((y + 20) / this.TILE_DIMENSION) + xOffset
+        Math.floor((y + 10) / this.TILE_DIMENSION) + xOffset
       ] != undefined
     ) {
       coll =
