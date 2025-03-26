@@ -1,6 +1,7 @@
 // @ts-check
 import { Vector } from "../math/Vector.js";
 import { PlayerKeyboardProvider } from "./PlayerKeyboardProvider.js";
+import { PlayerState } from "./PlayerState.js";
 
 export class Jump {
   /**
@@ -8,7 +9,7 @@ export class Jump {
    * @param {{
    *  player_id : string,
    *  keyboard_provider : PlayerKeyboardProvider,
-   *  player_state: any
+   *  player_state: PlayerState
    * }} options
    */
   constructor({ player_id, keyboard_provider, player_state }) {
