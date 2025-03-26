@@ -194,7 +194,7 @@ window.onload = function () {
     keyboard: keyboard,
   });
 
-  var speed_limits = SpeedLimits.create({
+  var speed_limits = new SpeedLimits({
     up: 1000,
     down: 1000,
   });

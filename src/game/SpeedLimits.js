@@ -1,35 +1,34 @@
-export const SpeedLimits = {
-  /*
-    Options:
-      - up
-      - down
-      - left
-      - right
-      - player_state
-    */
-  create: (params) => {
-    var up = params.up || Infinity;
-    var down = params.down || Infinity;
-    var left = params.left || Infinity;
-    var right = params.right || Infinity;
+// @ts-check
+import { Vector } from "../math/Vector";
 
-    var applyTo = function (speed) {
-      if (speed.y > up) {
-        speed.y = up;
-      }
-      if (speed.y < -down) {
-        speed.y = -down;
-      }
-      if (speed.x > right) {
-        speed.x = right;
-      }
-      if (speed.x < -left) {
-        speed.x = -left;
-      }
-    };
+export class SpeedLimits {
+  /**
+   *
+   * @param {{up:number, down:number, left:number, right:number}} param0
+   */
+  constructor({ up, down, left, right }) {
+    this.up = up || Infinity;
+    this.down = down || Infinity;
+    this.left = left || Infinity;
+    this.right = right || Infinity;
+  }
 
-    return {
-      applyTo: applyTo,
-    };
-  },
-};
+  /**
+   *
+   * @param {Vector} speed
+   */
+  applyTo(speed) {
+    if (speed.y > this.up) {
+      speed.y = this.up;
+    }
+    if (speed.y < -this.down) {
+      speed.y = -this.down;
+    }
+    if (speed.x > this.right) {
+      speed.x = this.right;
+    }
+    if (speed.x < -this.left) {
+      speed.x = -this.left;
+    }
+  }
+}
