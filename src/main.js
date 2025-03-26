@@ -148,7 +148,7 @@ window.onload = function () {
 
   var levelEditor = new LevelEditor(level, mouse, worldOffset);
 
-  var platform = MovingPlatform.create();
+  var platform = new MovingPlatform();
 
   var player_state = PlayerState.create({
     player_id: "PLAYER_1",

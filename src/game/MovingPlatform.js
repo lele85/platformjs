@@ -1,42 +1,54 @@
+// @ts-check
+import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
 
-export const MovingPlatform = {
-  create: () => {
-    var that = {};
-
-    that.collider = new Collider({
+export class MovingPlatform {
+  constructor() {
+    this.collider = new Collider({
       x: 300,
       y: 2480,
       w: 32,
       h: 32,
+      debug: true,
     });
-    that.START_X = 300;
-    that.END_X = 500;
-    that.PIXEL_PER_FRAME = 1;
-    that.SPEED = 1;
+    this.START_X = 300;
+    this.END_X = 500;
+    this.PIXEL_PER_FRAME = 1;
+    this.SPEED = 1;
+  }
 
-    that.update = function (dt) {
-      that.collider.x += that.PIXEL_PER_FRAME;
-      if (that.collider.x > that.END_X) {
-        that.collider.x = that.END_X;
-        that.PIXEL_PER_FRAME *= -1;
-        that.SPEED *= -1;
-      }
-      if (that.collider.x < that.START_X) {
-        that.collider.x = that.START_X;
-        that.PIXEL_PER_FRAME *= -1;
-        that.SPEED *= -1;
-      }
-    };
+  /**
+   *
+   * @param {number} dt
+   */
+  update(dt) {
+    this.collider.x += this.PIXEL_PER_FRAME;
+    if (this.collider.x > this.END_X) {
+      this.collider.x = this.END_X;
+      this.PIXEL_PER_FRAME *= -1;
+      this.SPEED *= -1;
+    }
+    if (this.collider.x < this.START_X) {
+      this.collider.x = this.START_X;
+      this.PIXEL_PER_FRAME *= -1;
+      this.SPEED *= -1;
+    }
+  }
+  /**
+   *
+   * @param {CanvasRenderingContext2D} context
+   * @param {Vector} worldOffset
+   */
+  draw(context, worldOffset) {
+    this.collider.draw(context, worldOffset);
+  }
 
-    that.draw = function (context, worldOffset) {
-      that.collider.draw(context, worldOffset);
-    };
-
-    that.collides = function (otherCollider) {
-      return that.collider.collides(otherCollider);
-    };
-
-    return that;
-  },
-};
+  /**
+   *
+   * @param {Collider} otherCollider
+   * @returns
+   */
+  collides(otherCollider) {
+    return this.collider.collides(otherCollider);
+  }
+}
