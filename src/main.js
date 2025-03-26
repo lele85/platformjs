@@ -250,7 +250,7 @@ window.onload = function () {
     collider: player_collider_2,
   });
 
-  var player = Player.create({
+  var player = new Player({
     sprite: spriteSheet,
     collider: player_collider_1,
     platform: platform,
@@ -260,7 +260,7 @@ window.onload = function () {
     level_limits: level_limits_1,
   });
 
-  var player2 = Player.create({
+  var player2 = new Player({
     sprite: spriteSheet,
     collider: player_collider_2,
     platform: platform,

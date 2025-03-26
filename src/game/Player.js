@@ -1,55 +1,80 @@
+// @ts-check
 import { Vector } from "../math/Vector.js";
+import { Collider } from "./Collider.js";
 
-export const Player = {
-  create: (params) => {
-    var that = {};
-    var movingPlatform = params.platform;
-    var state = params.player_state;
-    var speed_influencers = params.speed_influencers;
-    var collider = params.collider;
-    var level_limits = params.level_limits;
+export class Player {
+  /**
+   *
+   * @param {{
+   *  platform: any,
+   *  player_state: any,
+   *  speed_influencers: any,
+   *  collider: any,
+   *  level_limits: any
+   * }} params
+   */
+  constructor({
+    platform,
+    player_state,
+    speed_influencers,
+    collider,
+    level_limits,
+  }) {
+    this.movingPlatform = platform;
+    this.state = player_state;
+    this.speed_influencers = speed_influencers;
+    this.collider = collider;
+    this.level_limits = level_limits;
+    this.speed = new Vector(0, 0);
+  }
 
-    that.speed = new Vector(0, 0);
+  /**
+   *
+   * @param {number} dt
+   */
+  update(dt) {
+    const oldY = this.collider.y;
+    const oldX = this.collider.x;
 
-    that.movingPlatform = movingPlatform;
-    that.state = state;
+    // Apply speed influencers
+    for (let i = this.speed_influencers.length - 1; i >= 0; i--) {
+      this.speed_influencers[i].applyTo(this.speed);
+    }
 
-    that.update = function (dt) {
-      var oldY = collider.y;
-      var oldX = collider.x;
+    this.collider.y = oldY + this.speed.y * dt;
+    this.collider.x = oldX + this.speed.x * dt;
 
-      //Apply speed influencers
-      for (let i = speed_influencers.length - 1; i >= 0; i--) {
-        speed_influencers[i].applyTo(that.speed);
-      }
+    const totalResponse = this.level_limits.applyTo(this.collider);
 
-      collider.y = oldY + that.speed.y * dt;
-      collider.x = oldX + that.speed.x * dt;
+    //   TODO: Collision with moving platform
 
-      var totalResponse = level_limits.applyTo(collider);
+    //   var response = that.movingPlatform.collides(collider);
+    //   if (response.y != 0) {
+    //     collider.x += that.movingPlatform.SPEED;
+    //     collider.y -= response.y;
+    //     totalYResponse -= response.y;
+    //     collisionWithMovingPlatform = true;
+    //   }
 
-      //   TODO: Collision with moving platform
+    this.speed.y = (this.collider.y - oldY) / dt;
+    this.state.update(totalResponse);
+  }
 
-      //   var response = that.movingPlatform.collides(collider);
-      //   if (response.y != 0) {
-      //     collider.x += that.movingPlatform.SPEED;
-      //     collider.y -= response.y;
-      //     totalYResponse -= response.y;
-      //     collisionWithMovingPlatform = true;
-      //   }
+  /**
+   *
+   * @param {Collider} otherCollider
+   * @returns
+   */
+  collides(otherCollider) {
+    return this.collider.collides(otherCollider);
+  }
 
-      that.speed.y = (collider.y - oldY) / dt;
-      that.state.update(totalResponse);
-    };
-
-    that.collides = function (otherCollider) {
-      return collider.collides(otherCollider);
-    };
-
-    that.draw = function (context, worldOffset) {
-      collider.draw(context, worldOffset);
-    };
-
-    return that;
-  },
-};
+  /**
+   *
+   * @param {CanvasRenderingContext2D} context
+   * @param {Vector} worldOffset
+   */
+  draw(context, worldOffset) {
+    this.collider.draw(context, worldOffset);
+  }
+}
