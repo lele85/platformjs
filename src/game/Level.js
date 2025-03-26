@@ -14,7 +14,6 @@ export class Level {
      * @type {Collider[][]}
      */
     this.collidersMatrix = [];
-    this.h = this.definition.length * this.TILE_DIMENSION;
   }
 
   build() {
@@ -94,7 +93,7 @@ export class Level {
     var coll;
     if (
       this.collidersMatrix[
-        Math.floor((y + 10) / this.TILE_DIMENSION) + xOffset
+        Math.floor((y + 20) / this.TILE_DIMENSION) + xOffset
       ] != undefined
     ) {
       coll =
@@ -103,31 +102,6 @@ export class Level {
         ][Math.floor((x + 10) / this.TILE_DIMENSION) + xOffset];
     }
     return coll;
-  }
-
-  /**
-   *
-   * @param {number} x
-   * @param {number} y
-   * @returns {Collider[]}
-   */
-  getPotentialCollidersAt(x, y) {
-    /**
-     * @type {Collider[]}
-     */
-    var potentialColliders = [];
-
-    this.addIfNotUndefined(this.getCollider(x, y, -1, -1), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 0, -1), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 1, -1), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, -1, 0), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 0, 0), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 1, 0), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, -1, 1), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 0, 1), potentialColliders);
-    this.addIfNotUndefined(this.getCollider(x, y, 1, 1), potentialColliders);
-
-    return potentialColliders;
   }
 
   /**

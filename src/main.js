@@ -22,14 +22,29 @@ import { Vector } from "./math/Vector";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
+  var offscreenCanvas = document.createElement("canvas");
   if (!canvas || canvas instanceof HTMLCanvasElement === false) {
     throw new Error("Canvas not found");
   }
   var context = canvas.getContext("2d");
-  if (!context || context instanceof CanvasRenderingContext2D === false) {
+  var offscreenContext = offscreenCanvas.getContext("2d");
+  if (
+    !context ||
+    !offscreenContext ||
+    context instanceof CanvasRenderingContext2D === false
+  ) {
     throw new Error("Context not found");
   }
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = 640 * ratio;
+  offscreenCanvas.width = 640;
+  canvas.height = 480 * ratio;
+  offscreenCanvas.height = 480;
+  canvas.style.width = 640 + "px";
+  canvas.style.height = 480 + "px";
   context.imageSmoothingEnabled = false;
+  offscreenContext.imageSmoothingEnabled = false;
+  context.scale(ratio, ratio);
   var worldOffset = new Vector(0, 0);
 
   // prettier-ignore
@@ -276,7 +291,7 @@ window.onload = function () {
   });
 
   var camera = new Camera({
-    context: context,
+    context: offscreenContext,
     worldOffset: worldOffset,
     targets: [player_collider_1, player_collider_2],
     getBounds: level.getBounds.bind(level),
@@ -306,17 +321,19 @@ window.onload = function () {
   /**
    *
    * @param {CanvasRenderingContext2D} context
+   * @param {CanvasRenderingContext2D} offscreenContext
    */
-  var mainloop = function (context) {
+  var mainloop = function (context, offscreenContext) {
     current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
     if (dt < 0.02) {
-      context.clearRect(worldOffset.x - 300, worldOffset.y, 1000, 480);
+      offscreenContext.clearRect(worldOffset.x, worldOffset.y, 640, 480);
+      context.clearRect(0, 0, 640, 480);
       for (let i = updatables.length - 1; i >= 0; i--) {
         updatables[i].update(dt);
       }
       for (let j = drawables.length - 1; j >= 0; j--) {
-        drawables[j].draw(context, worldOffset);
+        drawables[j].draw(offscreenContext, worldOffset);
       }
       if (keyboard.isJustPressed("SWITCH_PLAYER")) {
         player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
@@ -328,16 +345,17 @@ window.onload = function () {
       if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")) {
         levelEditor.changeMode("REMOVE");
       }
+      context.drawImage(offscreenCanvas, 0, 0);
     }
     last_frame_ticks = current_frame_ticks;
   };
 
   var animFrame = window.requestAnimationFrame;
 
-  var recursiveAnim = ((context) => () => {
-    mainloop(context);
+  var recursiveAnim = ((context, offscreenContext) => () => {
+    mainloop(context, offscreenContext);
     animFrame(recursiveAnim);
-  })(context);
+  })(context, offscreenContext);
 
   animFrame(recursiveAnim);
 };

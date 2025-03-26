@@ -68,7 +68,10 @@ export class Collider {
         return;
       }
       context.strokeStyle = "rgb(0,0,0);";
+      context.lineWidth = 2;
       context.strokeRect(this.x, this.y, this.w, this.h);
+      context.fillStyle = "#DDD6FF";
+      context.fillRect(this.x, this.y, this.w, this.h);
     }
   }
 }

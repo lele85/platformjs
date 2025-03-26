@@ -20,10 +20,6 @@ export class LevelLimits {
    * @type {Collider[]}
    */
   horizontalColliders;
-  /**
-   * @type {Collider[]}
-   */
-  potentialColliders;
 
   /**
    *
@@ -34,7 +30,6 @@ export class LevelLimits {
     this.collider = collider;
     this.verticalColliders = [];
     this.horizontalColliders = [];
-    this.potentialColliders = [];
   }
 
   /**
@@ -51,8 +46,8 @@ export class LevelLimits {
       totalYResponse += response.y;
       position.y += response.y;
     }
-    for (let index in this.potentialColliders) {
-      let otherCollider = this.potentialColliders[index];
+    for (let index in this.horizontalColliders) {
+      let otherCollider = this.horizontalColliders[index];
       let response = this.collider.collides(otherCollider);
       totalXResponse += response.x;
       position.x += response.x;
@@ -65,10 +60,6 @@ export class LevelLimits {
    * @param {number} dt
    */
   update(dt) {
-    this.potentialColliders = this.level.getPotentialCollidersAt(
-      this.collider.x,
-      this.collider.y
-    );
     this.verticalColliders = this.level.getVerticalCollidersAt(
       this.collider.x,
       this.collider.y

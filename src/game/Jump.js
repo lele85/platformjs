@@ -56,7 +56,7 @@ export class Jump {
     var keyboard = this.keyboard_provider.getKeyboard(this.player_id);
     if (this.jump_started) {
       this.jump_speed.y =
-        -400 / (1 + this.current_jump_time * this.current_jump_time * 1500);
+        -220 / (1 + this.current_jump_time * this.current_jump_time * 1500);
       this.current_jump_time += dt;
       if (this.current_jump_time > this.max_jump_time) {
         this.stop();
