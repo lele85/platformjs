@@ -3,6 +3,27 @@ import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
 
 export class MovingPlatform {
+  /**
+   * @type {Collider}
+   */
+  collider;
+  /**
+   * @type {number}
+   */
+  START_X;
+  /**
+   * @type {number}
+   */
+  END_X;
+  /**
+   * @type {number}
+   */
+  PIXEL_PER_FRAME;
+  /**
+   * @type {number}
+   */
+  SPEED;
+
   constructor() {
     this.collider = new Collider({
       x: 300,
