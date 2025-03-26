@@ -1,5 +1,6 @@
 // @ts-check
 import { Vector } from "../math/Vector";
+import { Collider } from "./Collider";
 
 export class Camera {
   /**
@@ -11,7 +12,7 @@ export class Camera {
    */
   worldOffset;
   /**
-   * @type {Vector[]}
+   * @type {Collider[]}
    */
   targets;
   /**
@@ -24,7 +25,7 @@ export class Camera {
    * @param {{
    *  context: CanvasRenderingContext2D,
    *  worldOffset: Vector,
-   *  targets: Vector[],
+   *  targets: Collider[],
    *  getBounds: () => Bounds
    * }} options
    */

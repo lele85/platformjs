@@ -4,7 +4,7 @@ import { Vector } from "../math/Vector";
 export class SpeedLimits {
   /**
    *
-   * @param {{up:number, down:number, left:number, right:number}} param0
+   * @param {{up:number, down:number, left?:number, right?:number}} param0
    */
   constructor({ up, down, left, right }) {
     this.up = up || Infinity;

@@ -1,3 +1,4 @@
+// @ts-check
 import { Level } from "./game/Level";
 import { Mouse } from "./utils/Mouse";
 import { Keyboard } from "./utils/Keyboard";
@@ -21,8 +22,14 @@ import { Vector } from "./math/Vector";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
+  if (!canvas || canvas instanceof HTMLCanvasElement === false) {
+    throw new Error("Canvas not found");
+  }
   var context = canvas.getContext("2d");
-  context.webkitImageSmoothingEnabled = false;
+  if (!context || context instanceof CanvasRenderingContext2D === false) {
+    throw new Error("Context not found");
+  }
+  context.imageSmoothingEnabled = false;
   var worldOffset = new Vector(0, 0);
 
   // prettier-ignore
@@ -202,12 +209,10 @@ window.onload = function () {
   var player_input_1 = new PlayerInput({
     player_id: "PLAYER_1",
     keyboard_provider: player_keyboard_provider,
-    keyboard: keyboard,
   });
   var player_input_2 = new PlayerInput({
     player_id: "PLAYER_2",
     keyboard_provider: player_keyboard_provider,
-    keyboard: mockKeyboard,
   });
 
   var player_collider_1 = new Collider({
@@ -229,14 +234,12 @@ window.onload = function () {
   var spriteSheet = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_1,
-    player_state: player_state,
   });
   spriteSheet.load();
 
   var spriteSheet2 = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_2,
-    player_state: player_state2,
   });
   spriteSheet2.load();
 
@@ -251,17 +254,14 @@ window.onload = function () {
   });
 
   var player = new Player({
-    sprite: spriteSheet,
     collider: player_collider_1,
     platform: platform,
     player_state: player_state,
     speed_influencers: [jump, speed_limits, player_input_1, gravity, wall_jump],
-    mouse: mouse,
     level_limits: level_limits_1,
   });
 
   var player2 = new Player({
-    sprite: spriteSheet,
     collider: player_collider_2,
     platform: platform,
     player_state: player_state2,
@@ -272,7 +272,6 @@ window.onload = function () {
       gravity,
       wall_jump2,
     ],
-    mouse: mouse,
     level_limits: level_limits_2,
   });
 
@@ -304,7 +303,11 @@ window.onload = function () {
   var current_frame_ticks = last_frame_ticks;
   var dt;
 
-  var mainloop = function () {
+  /**
+   *
+   * @param {CanvasRenderingContext2D} context
+   */
+  var mainloop = function (context) {
     current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
     if (dt < 0.02) {
@@ -329,18 +332,12 @@ window.onload = function () {
     last_frame_ticks = current_frame_ticks;
   };
 
-  var animFrame =
-    window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    null;
+  var animFrame = window.requestAnimationFrame;
 
-  var recursiveAnim = function () {
-    mainloop();
+  var recursiveAnim = ((context) => () => {
+    mainloop(context);
     animFrame(recursiveAnim);
-  };
+  })(context);
 
   animFrame(recursiveAnim);
 };
