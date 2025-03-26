@@ -199,12 +199,12 @@ window.onload = function () {
     down: 1000,
   });
 
-  var player_input_1 = PlayerInput.create({
+  var player_input_1 = new PlayerInput({
     player_id: "PLAYER_1",
     keyboard_provider: player_keyboard_provider,
     keyboard: keyboard,
   });
-  var player_input_2 = PlayerInput.create({
+  var player_input_2 = new PlayerInput({
     player_id: "PLAYER_2",
     keyboard_provider: player_keyboard_provider,
     keyboard: mockKeyboard,
