@@ -56,7 +56,9 @@ export class Camera {
     }
     var targetToCameraDistance =
       targetCameraY - this.semi_camera_h - this.worldOffset.y;
-    var dy = (targetToCameraDistance * this.CAMERA_SPEED) / this.getBounds().h;
+    var dy = Math.round(
+      (targetToCameraDistance * this.CAMERA_SPEED) / this.getBounds().h
+    );
 
     var targetCameraX = this.current_target.x;
     var targetCameraXLeftLimit = this.semi_camera_w;
@@ -65,7 +67,9 @@ export class Camera {
     }
     var targetToCameraXDistance =
       targetCameraX - this.semi_camera_w - this.worldOffset.x;
-    var dx = (targetToCameraXDistance * this.CAMERA_SPEED) / this.camera_w;
+    var dx = Math.round(
+      (targetToCameraXDistance * this.CAMERA_SPEED) / this.camera_w
+    );
     this.context.translate(-dx, -dy);
     this.worldOffset.x += dx;
     this.worldOffset.y += dy;

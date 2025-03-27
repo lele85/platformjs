@@ -235,7 +235,7 @@ window.onload = function () {
     y: 2000,
     w: 20,
     h: 20,
-    debug: false,
+    debug: true,
   });
 
   var player_collider_2 = new Collider({
@@ -243,7 +243,7 @@ window.onload = function () {
     y: 1500,
     w: 20,
     h: 20,
-    debug: false,
+    debug: true,
   });
 
   var spriteSheet = new SpriteSheet({
