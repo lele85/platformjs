@@ -11,7 +11,7 @@ export class Player {
    * @param {{
    *  platform: MovingPlatform,
    *  player_state: PlayerState,
-   *  speed_influencers: import("../../types/types.js").SpeedInfluencer[],
+   *  speed_influencers: SpeedInfluencer[],
    *  collider: Collider,
    *  level_limits: LevelLimits
    * }} params

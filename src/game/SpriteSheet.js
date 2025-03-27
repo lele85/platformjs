@@ -45,8 +45,9 @@ export class SpriteSheet {
    */
   draw(ctx) {
     if (this.loaded) {
-      const offset = this.player_state.walking == "LEFT" ? 20 : 0;
+      let offset = this.player_state.walking == "LEFT" ? 20 : 0;
       if (this.player_state.gravity_versor.y == 1) {
+        offset = this.player_state.walking == "LEFT" ? 0 : 20;
         ctx.save();
         ctx.translate(this.position.x + 10, this.position.y + 10);
         ctx.rotate(Math.PI);

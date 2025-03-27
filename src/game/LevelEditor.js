@@ -1,5 +1,5 @@
 // @ts-check
-import { Vector } from "../math/Vector";
+import { toTileSpace, toWorldSpace, Vector } from "../math/Vector";
 import { Mouse } from "../utils/Mouse";
 import { Level } from "./Level";
 
@@ -41,7 +41,10 @@ export class LevelEditor {
    * @param {Vector} position
    */
   execute(mode, position) {
-    var tileSpaceCoords = position.toWorldSpace(this.worldOffset).toTileSpace();
+    var tileSpaceCoords = toTileSpace(
+      this.worldOffset,
+      toWorldSpace(this.worldOffset, position)
+    );
     switch (mode) {
       case "ADD":
         this.level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);

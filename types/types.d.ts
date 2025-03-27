@@ -1,5 +1,3 @@
-import { Vector } from "../src/math/Vector";
-
 type ActionKeyMap = {
   [key: string]: string;
 };
@@ -30,8 +28,13 @@ type Bounds = {
   h: number;
 };
 
+type Vector = {
+  x: number;
+  y: number;
+};
+
 type EditorMode = "ADD" | "REMOVE";
 
 type SpeedInfluencer = {
-  applyTo: (speed: Vector) => Vector;
+  applyTo: (speed: Vector) => void;
 };
