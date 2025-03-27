@@ -41,10 +41,7 @@ export class LevelEditor {
    * @param {Vector} position
    */
   execute(mode, position) {
-    var tileSpaceCoords = toTileSpace(
-      this.worldOffset,
-      toWorldSpace(this.worldOffset, position)
-    );
+    var tileSpaceCoords = toTileSpace(toWorldSpace(this.worldOffset, position));
     switch (mode) {
       case "ADD":
         this.level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);
