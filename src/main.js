@@ -235,7 +235,7 @@ window.onload = function () {
     y: 2000,
     w: 20,
     h: 20,
-    debug: true,
+    debug: false,
   });
 
   var player_collider_2 = new Collider({
@@ -243,18 +243,20 @@ window.onload = function () {
     y: 1500,
     w: 20,
     h: 20,
-    debug: true,
+    debug: false,
   });
 
   var spriteSheet = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_1,
+    player_state: player_state,
   });
   spriteSheet.load();
 
   var spriteSheet2 = new SpriteSheet({
     url: "assets/walk2.png",
     position: player_collider_2,
+    player_state: player_state2,
   });
   spriteSheet2.load();
 

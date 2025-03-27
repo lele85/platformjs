@@ -1,10 +1,13 @@
+import { PlayerState } from "./PlayerState";
+
 // @ts-check
 export class SpriteSheet {
   /**
    *
-   * @param {{position: {x: number, y: number}, url: string}} options
+   * @param {{position: {x: number, y: number}, url: string, player_state:PlayerState }} options
    */
-  constructor({ position, url }) {
+  constructor({ position, url, player_state }) {
+    this.player_state = player_state;
     this.position = position;
     this.url = url;
     this.img = new Image();
@@ -42,10 +45,17 @@ export class SpriteSheet {
    */
   draw(ctx) {
     if (this.loaded) {
+      const offset = this.player_state.walking == "LEFT" ? 20 : 0;
+      if (this.player_state.gravity_versor.y == 1) {
+        ctx.save();
+        ctx.translate(this.position.x + 10, this.position.y + 10);
+        ctx.rotate(Math.PI);
+        ctx.translate(-this.position.x - 10, -this.position.y - 10);
+      }
       ctx.drawImage(
         this.img,
         this.current_frame * 20,
-        20,
+        offset,
         20,
         20,
         this.position.x,
@@ -53,6 +63,7 @@ export class SpriteSheet {
         20,
         20
       );
+      ctx.restore();
     }
   }
 }

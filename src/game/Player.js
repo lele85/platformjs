@@ -1,16 +1,19 @@
 // @ts-check
 import { Vector } from "../math/Vector.js";
 import { Collider } from "./Collider.js";
+import { LevelLimits } from "./LevelLimits.js";
+import { MovingPlatform } from "./MovingPlatform.js";
+import { PlayerState } from "./PlayerState.js";
 
 export class Player {
   /**
    *
    * @param {{
-   *  platform: any,
-   *  player_state: any,
-   *  speed_influencers: any,
-   *  collider: any,
-   *  level_limits: any
+   *  platform: MovingPlatform,
+   *  player_state: PlayerState,
+   *  speed_influencers: import("../../types/types.js").SpeedInfluencer[],
+   *  collider: Collider,
+   *  level_limits: LevelLimits
    * }} params
    */
   constructor({
@@ -55,6 +58,12 @@ export class Player {
     //     totalYResponse -= response.y;
     //     collisionWithMovingPlatform = true;
     //   }
+
+    if (this.speed.x > 0) {
+      this.state.setIsWalkingState("RIGHT");
+    } else if (this.speed.x < 0) {
+      this.state.setIsWalkingState("LEFT");
+    }
 
     this.speed.y = (this.collider.y - oldY) / dt;
     this.state.update(totalResponse);

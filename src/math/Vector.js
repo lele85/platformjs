@@ -1,9 +1,9 @@
+// @ts-check
 export class Vector {
   /**
    *
    * @param {number} x
    * @param {number} y
-   * @returns {Vector}
    */
   constructor(x, y) {
     this.x = x;

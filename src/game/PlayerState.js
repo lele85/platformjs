@@ -14,6 +14,7 @@ export class PlayerState {
     this.left_wall_jump_possible = true;
     this.right_wall_jump_possible = true;
     this.gravity_versor = new Vector(1, -1);
+    this.walking = "STATIC";
   }
 
   setOnGroundState() {
@@ -22,6 +23,14 @@ export class PlayerState {
     this.on_right_wall = false;
     this.left_wall_jump_possible = true;
     this.right_wall_jump_possible = true;
+  }
+
+  /**
+   *
+   * @param {'STATIC' | 'LEFT' | 'RIGHT'} state
+   */
+  setIsWalkingState(state) {
+    this.walking = state;
   }
 
   setCollisionWithMovingPlatformState() {
