@@ -1,4 +1,3 @@
-// @ts-check
 import { Vector } from "../math/Vector.js";
 import { Collider } from "./Collider.js";
 import { LevelLimits } from "./LevelLimits.js";

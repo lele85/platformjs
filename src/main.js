@@ -1,4 +1,3 @@
-// @ts-check
 import { Level } from "./game/Level";
 import { Mouse } from "./utils/Mouse";
 import { Keyboard } from "./utils/Keyboard";

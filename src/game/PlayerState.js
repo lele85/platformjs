@@ -1,4 +1,3 @@
-// @ts-check
 import { Vector } from "../math/Vector.js";
 
 export class PlayerState {

@@ -1,4 +1,3 @@
-// @ts-check
 import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
 

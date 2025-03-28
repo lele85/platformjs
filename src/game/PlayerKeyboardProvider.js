@@ -1,4 +1,3 @@
-// @ts-check
 import { Keyboard } from "../utils/Keyboard.js";
 import { MockKeyboard } from "../utils/MockKeyboard.js";
 

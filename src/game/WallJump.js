@@ -1,4 +1,3 @@
-// @ts-check
 import { Vector } from "../math/Vector.js";
 import { PlayerKeyboardProvider } from "./PlayerKeyboardProvider.js";
 import { PlayerState } from "./PlayerState.js";

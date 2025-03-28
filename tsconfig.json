@@ -2,9 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "allowJs": true,
-    "resolveJsonModule": true,
-    "module": "commonjs",
-    "checkJs": false,
+    "checkJs": true,
     "outDir": "compiled"
   },
   "exclude": ["node_modules"],

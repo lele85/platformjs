@@ -1,4 +1,3 @@
-// @ts-check
 import { Vector } from "../math/Vector";
 
 export class SpeedLimits {

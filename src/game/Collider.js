@@ -1,17 +1,16 @@
-// @ts-check
 import { Vector } from "../math/Vector.js";
 
 export class Collider {
   /**
    *
-   * @param {{ x: number, y: number, w: number, h: number, debug: boolean }} options
+   * @param {{ x: number, y: number, w: number, h: number, debug?: boolean }} options
    */
   constructor(options) {
     this.x = options.x;
     this.y = options.y;
     this.w = options.w;
     this.h = options.h;
-    this.debug = options.debug;
+    this.debug = options.debug || false;
   }
 
   /**

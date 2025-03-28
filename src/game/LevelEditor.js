@@ -1,4 +1,3 @@
-// @ts-check
 import { toTileSpace, toWorldSpace, Vector } from "../math/Vector";
 import { Mouse } from "../utils/Mouse";
 import { Level } from "./Level";

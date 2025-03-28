@@ -1,6 +1,5 @@
 import { PlayerState } from "./PlayerState";
 
-// @ts-check
 export class SpriteSheet {
   /**
    *
