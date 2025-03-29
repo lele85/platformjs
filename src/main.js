@@ -227,6 +227,7 @@ window.onload = function () {
     w: 20,
     h: 20,
     debug: true,
+    color: "red",
   });
 
   var player_collider_2 = new Collider({
@@ -235,6 +236,7 @@ window.onload = function () {
     w: 20,
     h: 20,
     debug: true,
+    color: "blue",
   });
 
   var level_limits_1 = new LevelLimits({
@@ -251,7 +253,14 @@ window.onload = function () {
     collider: player_collider_1,
     platform: platform,
     player_state: player_state,
-    speed_influencers: [jump, speed_limits, player_input_1, gravity, wall_jump],
+    // prettier-ignore
+    speed_influencers: [
+      jump,
+      speed_limits,
+      player_input_1,
+      gravity,
+      wall_jump,
+    ],
     level_limits: level_limits_1,
   });
 

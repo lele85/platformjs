@@ -43,26 +43,10 @@ export class Player {
       this.speed_influencers[i].applyTo(this.speed);
     }
 
-    this.collider.y = oldY + this.speed.y * dt;
-    this.collider.x = oldX + this.speed.x * dt;
+    this.collider.y += this.speed.y * dt;
+    this.collider.x += this.speed.x * dt;
 
     const totalResponse = this.level_limits.applyTo(this.collider);
-
-    //   TODO: Collision with moving platform
-
-    //   var response = that.movingPlatform.collides(collider);
-    //   if (response.y != 0) {
-    //     collider.x += that.movingPlatform.SPEED;
-    //     collider.y -= response.y;
-    //     totalYResponse -= response.y;
-    //     collisionWithMovingPlatform = true;
-    //   }
-
-    if (this.speed.x > 0) {
-      this.state.setIsWalkingState("RIGHT");
-    } else if (this.speed.x < 0) {
-      this.state.setIsWalkingState("LEFT");
-    }
 
     this.speed.y = (this.collider.y - oldY) / dt;
     this.state.update(totalResponse);

@@ -3,13 +3,14 @@ import { Vector } from "../math/Vector.js";
 export class Collider {
   /**
    *
-   * @param {{ x: number, y: number, w: number, h: number, debug?: boolean }} options
+   * @param {{ x: number, y: number, w: number, h: number, debug?: boolean , color?: string }} options
    */
   constructor(options) {
     this.x = options.x;
     this.y = options.y;
     this.w = options.w;
     this.h = options.h;
+    this.color = options.color || "#DDD6FF";
     this.debug = options.debug || false;
   }
 
@@ -67,7 +68,7 @@ export class Collider {
       if (this.y > worldOffset.y + 480 + 32 || this.y < worldOffset.y - 32) {
         return;
       }
-      context.fillStyle = "#DDD6FF";
+      context.fillStyle = this.color;
       context.fillRect(
         Math.floor(this.x + 2),
         Math.floor(this.y + 2),
