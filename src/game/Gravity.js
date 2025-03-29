@@ -6,9 +6,8 @@ export class Gravity {
    * @param {{ keyboard: Keyboard, observers: GravityObserver[] }} params
    */
   constructor({ keyboard, observers }) {
-    this.TIME = 1 / 60.0;
     this.keyboard = keyboard;
-    this.acceleration = new Vector(0, 7000);
+    this.acceleration = new Vector(0, 3500);
 
     this.observers = observers || [];
   }
@@ -22,10 +21,11 @@ export class Gravity {
   /**
    *
    * @param {Vector} speed
+   * @param {number} dt
    */
-  applyTo(speed) {
-    speed.x = speed.x + 0.5 * this.acceleration.x * this.TIME;
-    speed.y = speed.y + 0.5 * this.acceleration.y * this.TIME;
+  applyTo(speed, dt) {
+    speed.x += this.acceleration.x * dt;
+    speed.y += this.acceleration.y * dt;
   }
 
   invert_y() {
@@ -38,7 +38,6 @@ export class Gravity {
    * @param {number} dt
    */
   update(dt) {
-    this.TIME = dt;
     if (this.keyboard.isJustPressed("INVERT_GRAVITY")) {
       this.invert_y();
     }

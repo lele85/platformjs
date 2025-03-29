@@ -25,8 +25,9 @@ export class Jump {
 
   /**
    * @param {Vector} current_speed
+   * @param {number} dt
    */
-  applyTo(current_speed) {
+  applyTo(current_speed, dt) {
     current_speed.x += this.jump_direction.x * this.jump_speed.x;
     current_speed.y += this.jump_direction.y * this.jump_speed.y;
   }

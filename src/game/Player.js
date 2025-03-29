@@ -40,13 +40,13 @@ export class Player {
 
     // Apply speed influencers
     for (let i = this.speed_influencers.length - 1; i >= 0; i--) {
-      this.speed_influencers[i].applyTo(this.speed);
+      this.speed_influencers[i].applyTo(this.speed, dt);
     }
 
     this.collider.y += this.speed.y * dt;
     this.collider.x += this.speed.x * dt;
 
-    const totalResponse = this.level_limits.applyTo(this.collider);
+    const totalResponse = this.level_limits.applyTo(this.collider, dt);
 
     this.speed.y = (this.collider.y - oldY) / dt;
     this.state.update(totalResponse);
@@ -67,6 +67,15 @@ export class Player {
    * @param {Vector} worldOffset
    */
   draw(context, worldOffset) {
+    // Draw a debug representation of the player_state
+    context.fillStyle = "black";
+    context.font = "8px Monospace";
+    context.fillText(
+      this.state.get_state().toString(),
+      this.collider.x,
+      this.collider.y
+    );
+
     this.collider.draw(context, worldOffset);
   }
 }

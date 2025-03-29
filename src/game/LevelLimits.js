@@ -34,9 +34,10 @@ export class LevelLimits {
   /**
    *
    * @param {Vector} position
+   * @param {number} dt
    * @returns
    */
-  applyTo(position) {
+  applyTo(position, dt) {
     let totalXResponse = 0;
     let totalYResponse = 0;
     for (let index in this.verticalColliders) {

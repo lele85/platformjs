@@ -36,5 +36,5 @@ type Vector = {
 type EditorMode = "ADD" | "REMOVE";
 
 type SpeedInfluencer = {
-  applyTo: (speed: Vector) => void;
+  applyTo: (speed: Vector, dt: number) => void;
 };

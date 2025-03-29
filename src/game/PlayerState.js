@@ -7,7 +7,7 @@ export class PlayerState {
    */
   constructor({ player_id }) {
     this.player_id = player_id;
-    this.on_ground = true;
+    this.on_ground = false;
     this.on_left_wall = false;
     this.on_right_wall = false;
     this.left_wall_jump_possible = true;

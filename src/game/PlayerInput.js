@@ -11,20 +11,19 @@ export class PlayerInput {
     this.MAX_HORIZONTAL_SPEED = 250;
     this.HORIZONTAL_DECELERATION = 1600;
     this.HORIZONTAL_ACCELERATION = 2000;
-    this.TIME = 1 / 60;
   }
 
-  //TODO: Refactoring updatable should not go on apply to
   /**
    *
    * @param {Vector} speed
+   * @param {number} dt
    */
-  applyTo(speed) {
+  applyTo(speed, dt) {
     var keyboard = this.keyboard_provider.getKeyboard(this.player_id);
     if (keyboard.isHeld("RIGHT")) {
       var x_speed_increment = 0;
       if (speed.x < this.MAX_HORIZONTAL_SPEED) {
-        x_speed_increment = this.HORIZONTAL_ACCELERATION * this.TIME;
+        x_speed_increment = this.HORIZONTAL_ACCELERATION * dt;
       }
       speed.x += x_speed_increment;
     }
@@ -32,27 +31,19 @@ export class PlayerInput {
     if (keyboard.isHeld("LEFT")) {
       var x_speed_increment = 0;
       if (speed.x > -this.MAX_HORIZONTAL_SPEED) {
-        x_speed_increment = this.HORIZONTAL_ACCELERATION * this.TIME;
+        x_speed_increment = this.HORIZONTAL_ACCELERATION * dt;
       }
       speed.x -= x_speed_increment;
     }
 
     if (!keyboard.isHeld("RIGHT") && !keyboard.isHeld("LEFT")) {
       if (speed.x > 0) {
-        speed.x -= this.HORIZONTAL_DECELERATION * this.TIME;
+        speed.x -= this.HORIZONTAL_DECELERATION * dt;
         if (speed.x < 0) speed.x = 0;
       } else if (speed.x < 0) {
-        speed.x += this.HORIZONTAL_DECELERATION * this.TIME;
+        speed.x += this.HORIZONTAL_DECELERATION * dt;
         if (speed.x > 0) speed.x = 0;
       }
     }
-  }
-
-  /**
-   *
-   * @param {number} dt
-   */
-  update(dt) {
-    this.TIME = dt;
   }
 }

@@ -15,8 +15,9 @@ export class SpeedLimits {
   /**
    *
    * @param {Vector} speed
+   * @param {number} dt
    */
-  applyTo(speed) {
+  applyTo(speed, dt) {
     if (speed.y > this.up) {
       speed.y = this.up;
     }
