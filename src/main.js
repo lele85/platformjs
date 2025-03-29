@@ -13,7 +13,6 @@ import { Gravity } from "./game/Gravity";
 import { SpeedLimits } from "./game/SpeedLimits";
 import { PlayerInput } from "./game/PlayerInput";
 import { Collider } from "./game/Collider";
-import { SpriteSheet } from "./game/SpriteSheet";
 import { LevelLimits } from "./game/LevelLimits";
 import { Camera } from "./game/Camera";
 import { MockKeyboard } from "./utils/MockKeyboard";
@@ -21,28 +20,21 @@ import { Vector } from "./math/Vector";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
-  var offscreenCanvas = document.createElement("canvas");
   if (!canvas || canvas instanceof HTMLCanvasElement === false) {
     throw new Error("Canvas not found");
   }
-  var context = canvas.getContext("2d");
-  var offscreenContext = offscreenCanvas.getContext("2d");
-  if (
-    !context ||
-    !offscreenContext ||
-    context instanceof CanvasRenderingContext2D === false
-  ) {
+  // get webgl context
+  var context = canvas.getContext("2d", { desynchronized: true });
+
+  if (!context || context instanceof CanvasRenderingContext2D === false) {
     throw new Error("Context not found");
   }
   const ratio = window.devicePixelRatio || 1;
   canvas.width = 640 * ratio;
-  offscreenCanvas.width = 640;
   canvas.height = 480 * ratio;
-  offscreenCanvas.height = 480;
   canvas.style.width = 640 + "px";
   canvas.style.height = 480 + "px";
   context.imageSmoothingEnabled = false;
-  offscreenContext.imageSmoothingEnabled = false;
   context.scale(ratio, ratio);
   var worldOffset = new Vector(0, 0);
 
@@ -234,7 +226,7 @@ window.onload = function () {
     y: 2000,
     w: 20,
     h: 20,
-    debug: false,
+    debug: true,
   });
 
   var player_collider_2 = new Collider({
@@ -242,22 +234,8 @@ window.onload = function () {
     y: 1500,
     w: 20,
     h: 20,
-    debug: false,
+    debug: true,
   });
-
-  var spriteSheet = new SpriteSheet({
-    url: "assets/walk2.png",
-    position: player_collider_1,
-    player_state: player_state,
-  });
-  spriteSheet.load();
-
-  var spriteSheet2 = new SpriteSheet({
-    url: "assets/walk2.png",
-    position: player_collider_2,
-    player_state: player_state2,
-  });
-  spriteSheet2.load();
 
   var level_limits_1 = new LevelLimits({
     level: level,
@@ -292,7 +270,7 @@ window.onload = function () {
   });
 
   var camera = new Camera({
-    context: offscreenContext,
+    context: context,
     worldOffset: worldOffset,
     targets: [player_collider_1, player_collider_2],
     getBounds: level.getBounds.bind(level),
@@ -310,10 +288,8 @@ window.onload = function () {
     level_limits_2,
     wall_jump,
     wall_jump2,
-    spriteSheet,
-    spriteSheet2,
   ];
-  var drawables = [spriteSheet, spriteSheet2, level, player, player2, platform];
+  var drawables = [level, player, player2, platform];
 
   var last_frame_ticks = DateTime.now();
   var current_frame_ticks = last_frame_ticks;
@@ -322,19 +298,24 @@ window.onload = function () {
   /**
    *
    * @param {CanvasRenderingContext2D} context
-   * @param {CanvasRenderingContext2D} offscreenContext
    */
-  var mainloop = function (context, offscreenContext) {
+  var mainloop = function (context) {
     current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
-    if (dt < 0.02) {
-      offscreenContext.clearRect(worldOffset.x, worldOffset.y, 640, 480);
-      context.clearRect(0, 0, 640, 480);
+
+    if (dt < 0.05) {
+      // Clear the canvas
+      context.clearRect(
+        worldOffset.x,
+        worldOffset.y,
+        camera.camera_w,
+        camera.camera_h
+      );
       for (let i = updatables.length - 1; i >= 0; i--) {
         updatables[i].update(dt);
       }
       for (let j = drawables.length - 1; j >= 0; j--) {
-        drawables[j].draw(offscreenContext, worldOffset);
+        drawables[j].draw(context, worldOffset);
       }
       if (keyboard.isJustPressed("SWITCH_PLAYER")) {
         player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
@@ -346,17 +327,16 @@ window.onload = function () {
       if (keyboard.isJustPressed("EDITOR_REMOVE_MODE")) {
         levelEditor.changeMode("REMOVE");
       }
-      context.drawImage(offscreenCanvas, 0, 0);
+    } else {
+      console.log("skip frame");
     }
     last_frame_ticks = current_frame_ticks;
   };
 
-  var animFrame = window.requestAnimationFrame;
+  var recursiveAnim = ((context) => () => {
+    mainloop(context);
+    window.requestAnimationFrame(recursiveAnim);
+  })(context);
 
-  var recursiveAnim = ((context, offscreenContext) => () => {
-    mainloop(context, offscreenContext);
-    animFrame(recursiveAnim);
-  })(context, offscreenContext);
-
-  animFrame(recursiveAnim);
+  window.requestAnimationFrame(recursiveAnim);
 };

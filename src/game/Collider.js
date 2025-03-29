@@ -67,12 +67,10 @@ export class Collider {
       if (this.y > worldOffset.y + 480 + 32 || this.y < worldOffset.y - 32) {
         return;
       }
-      context.fillStyle = "rgb(194, 24, 160)";
-      context.fillRect(Math.floor(this.x), Math.floor(this.y), this.w, this.h);
       context.fillStyle = "#DDD6FF";
       context.fillRect(
-        Math.floor(this.x + 1),
-        Math.floor(this.y + 1),
+        Math.floor(this.x + 2),
+        Math.floor(this.y + 2),
         this.w - 2,
         this.h - 2
       );
