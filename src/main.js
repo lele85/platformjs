@@ -17,7 +17,7 @@ import { LevelLimits } from "./game/LevelLimits";
 import { Camera } from "./game/Camera";
 import { MockKeyboard } from "./utils/MockKeyboard";
 import { Vector } from "./math/Vector";
-import level0 from "./assets/levels/000.txt?raw";
+import level0 from "../assets/levels/000.txt?raw";
 
 window.onload = function () {
   var canvas = document.getElementById("myCanvas");
