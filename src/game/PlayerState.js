@@ -79,7 +79,6 @@ export class PlayerState {
    * @param {Vector} collisionResponse
    */
   _updateCheckOnGround(collisionResponse) {
-    //
     if (
       (this.gravity_versor.y == -1 && collisionResponse.y < 0) || // Normal Gravity
       (this.gravity_versor.y == 1 && collisionResponse.y > 0) // Inverse gravity
@@ -95,6 +94,11 @@ export class PlayerState {
    * @param {Vector} collisionResponse
    */
   _updateCheckOnWalls(collisionResponse) {
+    if (this.on_ground) {
+      this.on_left_wall = false;
+      this.on_right_wall = false;
+      return;
+    }
     if (collisionResponse.x > 0) {
       this.on_left_wall = true;
       this.on_right_wall = false;
