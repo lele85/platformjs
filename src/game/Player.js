@@ -68,13 +68,12 @@ export class Player {
    */
   draw(context, worldOffset) {
     // Draw a debug representation of the player_state
+    const x = this.collider.x;
+    const y = this.collider.y;
+
     context.fillStyle = "black";
     context.font = "8px Monospace";
-    context.fillText(
-      this.state.get_state().toString(),
-      this.collider.x,
-      this.collider.y
-    );
+    context.fillText(this.state.debugState().toString(), x, y);
 
     this.collider.draw(context, worldOffset);
   }

@@ -38,7 +38,7 @@ export class WallJump {
     current_speed.x = this.wall_jump_direction.x * this.wall_jump_speed.x;
     current_speed.y = -this.wall_jump_direction.y * this.wall_jump_speed.y;
     this.should_left_wall_jump = false;
-    this.player_state.update_after_left_wall_jump();
+    this.player_state.updateAfterLeftWallJump();
   }
 
   onGravityInversion() {
@@ -57,7 +57,7 @@ export class WallJump {
     current_speed.x = -this.wall_jump_direction.x * this.wall_jump_speed.x;
     current_speed.y = -this.wall_jump_direction.y * this.wall_jump_speed.y;
     this.should_rightwall_jump = false;
-    this.player_state.update_after_right_wall_jump();
+    this.player_state.updateAfterRightWallJump();
   }
 
   update() {

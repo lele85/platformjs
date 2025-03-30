@@ -23,34 +23,28 @@ export class PlayerState {
     this.right_wall_jump_possible = true;
   }
 
-  setCollisionWithMovingPlatformState() {
-    this.on_ground = true;
-    this.on_left_wall = false;
-    this.on_right_wall = false;
-    this.left_wall_jump_possible = false;
-    this.right_wall_jump_possible = false;
-  }
-
   /**
    *
    * @param {Vector} collisionResponse
    */
   update(collisionResponse) {
-    this.update_check_on_ground(collisionResponse);
-    this.update_check_on_walls(collisionResponse);
+    this.updateCheckOnGround(collisionResponse);
+    this.updateCheckOnWalls(collisionResponse);
   }
 
   /**
    *
    * @param {Vector} collisionResponse
    */
-  update_check_on_ground(collisionResponse) {
+  updateCheckOnGround(collisionResponse) {
+    //
     if (
       (this.gravity_versor.y == -1 && collisionResponse.y < 0) || // Normal Gravity
-      (this.gravity_versor.y == 1 && collisionResponse.y > 0)
+      (this.gravity_versor.y == 1 && collisionResponse.y > 0) // Inverse gravity
     ) {
-      // Inverse gravity
       this.setOnGroundState();
+    } else {
+      this.on_ground = false;
     }
   }
 
@@ -58,7 +52,7 @@ export class PlayerState {
    *
    * @param {Vector} collisionResponse
    */
-  update_check_on_walls(collisionResponse) {
+  updateCheckOnWalls(collisionResponse) {
     if (collisionResponse.x > 0) {
       this.on_left_wall = true;
       this.on_right_wall = false;
@@ -73,17 +67,25 @@ export class PlayerState {
     }
   }
 
-  update_after_jump() {
+  isOnGround() {
+    return this.on_ground;
+  }
+
+  onJumpStart() {
     this.on_ground = false;
   }
 
-  update_after_left_wall_jump() {
+  onJumpEnd() {
+    this.on_ground = false;
+  }
+
+  updateAfterLeftWallJump() {
     this.on_left_wall = false;
     this.left_wall_jump_possible = false;
     this.right_wall_jump_possible = true;
   }
 
-  update_after_right_wall_jump() {
+  updateAfterRightWallJump() {
     this.on_right_wall = false;
     this.left_wall_jump_possible = true;
     this.right_wall_jump_possible = false;
@@ -93,7 +95,7 @@ export class PlayerState {
     this.gravity_versor.y *= -1;
   }
 
-  get_state() {
+  debugState() {
     var state = [];
     if (this.on_ground) {
       state.push("on_ground");

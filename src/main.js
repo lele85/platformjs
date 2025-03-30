@@ -298,8 +298,13 @@ window.onload = function () {
     wall_jump,
     wall_jump2,
   ];
-  var drawables = [level, player, player2, platform];
-
+  var drawables = [
+    // prettier-ignore
+    player,
+    player2,
+    level,
+    platform,
+  ];
   var last_frame_ticks = DateTime.now();
   var current_frame_ticks = last_frame_ticks;
   var dt;
