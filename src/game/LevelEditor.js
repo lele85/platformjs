@@ -67,4 +67,12 @@ export class LevelEditor {
       this.execute(this.mode, position);
     });
   }
+
+  dump() {
+    console.log(
+      this.level.definition
+        .map((row) => row.map((collider) => (collider ? "1" : "0")).join(""))
+        .join("\n")
+    );
+  }
 }

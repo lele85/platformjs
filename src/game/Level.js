@@ -46,6 +46,7 @@ export class Level {
       h: this.TILE_DIMENSION,
       debug: true,
     });
+    this.definition[j][i] = 1;
   }
 
   /**
@@ -55,6 +56,7 @@ export class Level {
    */
   removeCollider(i, j) {
     delete this.collidersMatrix[j][i];
+    this.definition[j][i] = 0;
   }
 
   /**

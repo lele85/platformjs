@@ -38,3 +38,8 @@ type EditorMode = "ADD" | "REMOVE";
 type SpeedInfluencer = {
   applyTo: (speed: Vector, dt: number) => void;
 };
+
+declare module "*?raw" {
+  const content: string;
+  export default content;
+}

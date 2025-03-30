@@ -46,9 +46,17 @@ export class Player {
     this.collider.y += this.speed.y * dt;
     this.collider.x += this.speed.x * dt;
 
+    this.speed.y = (this.collider.y - oldY) / dt;
+    this.speed.x = (this.collider.x - oldX) / dt;
+
     const totalResponse = this.level_limits.applyTo(this.collider, dt);
 
-    this.speed.y = (this.collider.y - oldY) / dt;
+    // If we are colliding with the ground, stop the vertical speed
+    // This is a hack to avoid the player during a jump to keep accelerating
+    if (totalResponse.y !== 0) {
+      this.speed.y = 0;
+    }
+
     this.state.update(totalResponse);
   }
 

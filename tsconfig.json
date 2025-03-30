@@ -6,5 +6,5 @@
     "outDir": "compiled"
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*", "./types/*"]
+  "include": ["src/**/*", "./types/*", "./assets/*"]
 }
