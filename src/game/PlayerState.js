@@ -15,56 +15,13 @@ export class PlayerState {
     this.gravity_versor = new Vector(1, -1);
   }
 
-  setOnGroundState() {
-    this.on_ground = true;
-    this.on_left_wall = false;
-    this.on_right_wall = false;
-    this.left_wall_jump_possible = true;
-    this.right_wall_jump_possible = true;
-  }
-
   /**
    *
    * @param {Vector} collisionResponse
    */
   update(collisionResponse) {
-    this.updateCheckOnGround(collisionResponse);
-    this.updateCheckOnWalls(collisionResponse);
-  }
-
-  /**
-   *
-   * @param {Vector} collisionResponse
-   */
-  updateCheckOnGround(collisionResponse) {
-    //
-    if (
-      (this.gravity_versor.y == -1 && collisionResponse.y < 0) || // Normal Gravity
-      (this.gravity_versor.y == 1 && collisionResponse.y > 0) // Inverse gravity
-    ) {
-      this.setOnGroundState();
-    } else {
-      this.on_ground = false;
-    }
-  }
-
-  /**
-   *
-   * @param {Vector} collisionResponse
-   */
-  updateCheckOnWalls(collisionResponse) {
-    if (collisionResponse.x > 0) {
-      this.on_left_wall = true;
-      this.on_right_wall = false;
-    }
-    if (collisionResponse.x < 0) {
-      this.on_left_wall = false;
-      this.on_right_wall = true;
-    }
-    if (collisionResponse.x == 0) {
-      this.on_right_wall = false;
-      this.on_left_wall = false;
-    }
+    this._updateCheckOnGround(collisionResponse);
+    this._updateCheckOnWalls(collisionResponse);
   }
 
   isOnGround() {
@@ -107,5 +64,48 @@ export class PlayerState {
       state.push("on_right_wall");
     }
     return state;
+  }
+
+  _setOnGroundState() {
+    this.on_ground = true;
+    this.on_left_wall = false;
+    this.on_right_wall = false;
+    this.left_wall_jump_possible = true;
+    this.right_wall_jump_possible = true;
+  }
+
+  /**
+   *
+   * @param {Vector} collisionResponse
+   */
+  _updateCheckOnGround(collisionResponse) {
+    //
+    if (
+      (this.gravity_versor.y == -1 && collisionResponse.y < 0) || // Normal Gravity
+      (this.gravity_versor.y == 1 && collisionResponse.y > 0) // Inverse gravity
+    ) {
+      this._setOnGroundState();
+    } else {
+      this.on_ground = false;
+    }
+  }
+
+  /**
+   *
+   * @param {Vector} collisionResponse
+   */
+  _updateCheckOnWalls(collisionResponse) {
+    if (collisionResponse.x > 0) {
+      this.on_left_wall = true;
+      this.on_right_wall = false;
+    }
+    if (collisionResponse.x < 0) {
+      this.on_left_wall = false;
+      this.on_right_wall = true;
+    }
+    if (collisionResponse.x == 0) {
+      this.on_right_wall = false;
+      this.on_left_wall = false;
+    }
   }
 }
