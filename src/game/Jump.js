@@ -35,12 +35,10 @@ export class Jump {
 
   start() {
     this.jump_speed.y = -1000;
-    this.state.onJumpStart();
   }
 
   stop() {
     this.jump_speed.y = 0;
-    this.state.onJumpEnd();
   }
 
   /**

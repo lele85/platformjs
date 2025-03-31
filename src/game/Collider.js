@@ -70,8 +70,8 @@ export class Collider {
       }
       context.fillStyle = this.color;
       context.fillRect(
-        Math.floor(this.x + 2),
-        Math.floor(this.y + 2),
+        Math.round(this.x + 1),
+        Math.round(this.y + 1),
         this.w - 2,
         this.h - 2
       );

@@ -10,68 +10,34 @@ export class PlayerState {
     this.on_ground = false;
     this.on_left_wall = false;
     this.on_right_wall = false;
-    this.left_wall_jump_possible = true;
-    this.right_wall_jump_possible = true;
     this.gravity_versor = new Vector(1, -1);
   }
 
   /**
    *
    * @param {Vector} collisionResponse
+   * @param {boolean} onLeftWall
+   * @param {boolean} onRightWall
    */
-  update(collisionResponse) {
+  update(collisionResponse, onLeftWall, onRightWall) {
     this._updateCheckOnGround(collisionResponse);
-    this._updateCheckOnWalls(collisionResponse);
+    this._updateCheckOnWalls(onLeftWall, onRightWall);
   }
 
   isOnGround() {
     return this.on_ground;
   }
 
-  onJumpStart() {
-    this.on_ground = false;
+  isOnLeftWall() {
+    return this.on_left_wall;
   }
 
-  onJumpEnd() {
-    this.on_ground = false;
-  }
-
-  updateAfterLeftWallJump() {
-    this.on_left_wall = false;
-    this.left_wall_jump_possible = false;
-    this.right_wall_jump_possible = true;
-  }
-
-  updateAfterRightWallJump() {
-    this.on_right_wall = false;
-    this.left_wall_jump_possible = true;
-    this.right_wall_jump_possible = false;
+  isOnRightWall() {
+    return this.on_right_wall;
   }
 
   onGravityInversion() {
     this.gravity_versor.y *= -1;
-  }
-
-  debugState() {
-    var state = [];
-    if (this.on_ground) {
-      state.push("on_ground");
-    }
-    if (this.on_left_wall) {
-      state.push("on_left_wall");
-    }
-    if (this.on_right_wall) {
-      state.push("on_right_wall");
-    }
-    return state;
-  }
-
-  _setOnGroundState() {
-    this.on_ground = true;
-    this.on_left_wall = false;
-    this.on_right_wall = false;
-    this.left_wall_jump_possible = true;
-    this.right_wall_jump_possible = true;
   }
 
   /**
@@ -83,7 +49,7 @@ export class PlayerState {
       (this.gravity_versor.y == -1 && collisionResponse.y < 0) || // Normal Gravity
       (this.gravity_versor.y == 1 && collisionResponse.y > 0) // Inverse gravity
     ) {
-      this._setOnGroundState();
+      this.on_ground = true;
     } else {
       this.on_ground = false;
     }
@@ -91,25 +57,18 @@ export class PlayerState {
 
   /**
    *
-   * @param {Vector} collisionResponse
+   * @param {boolean} onLeftWall
+   * @param {boolean} onRightWall
    */
-  _updateCheckOnWalls(collisionResponse) {
+  _updateCheckOnWalls(onLeftWall, onRightWall) {
     if (this.on_ground) {
+      this.on_left_wall = false;
+      this.on_right_wall = false;
       this.on_left_wall = false;
       this.on_right_wall = false;
       return;
     }
-    if (collisionResponse.x > 0) {
-      this.on_left_wall = true;
-      this.on_right_wall = false;
-    }
-    if (collisionResponse.x < 0) {
-      this.on_left_wall = false;
-      this.on_right_wall = true;
-    }
-    if (collisionResponse.x == 0) {
-      this.on_right_wall = false;
-      this.on_left_wall = false;
-    }
+    this.on_left_wall = onLeftWall;
+    this.on_right_wall = onRightWall;
   }
 }

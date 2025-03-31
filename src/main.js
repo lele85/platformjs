@@ -208,6 +208,7 @@ window.onload = function () {
   });
 
   var updatables = [
+    keyboard,
     platform,
     jump,
     jump2,
@@ -240,19 +241,6 @@ window.onload = function () {
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
 
     if (dt < 0.05) {
-      // Clear the canvas
-      context.clearRect(
-        worldOffset.x,
-        worldOffset.y,
-        camera.camera_w,
-        camera.camera_h
-      );
-      for (let i = updatables.length - 1; i >= 0; i--) {
-        updatables[i].update(dt);
-      }
-      for (let j = drawables.length - 1; j >= 0; j--) {
-        drawables[j].draw(context, worldOffset);
-      }
       if (keyboard.isJustPressed("SWITCH_PLAYER")) {
         player_keyboard_provider.switchKeyboards("PLAYER_1", "PLAYER_2");
         camera.nextTarget();
@@ -265,6 +253,19 @@ window.onload = function () {
       }
       if (keyboard.isJustPressed("DUMP_LEVEL")) {
         levelEditor.dump();
+      }
+      // Clear the canvas
+      context.clearRect(
+        worldOffset.x,
+        worldOffset.y,
+        camera.camera_w,
+        camera.camera_h
+      );
+      for (let i = updatables.length - 1; i >= 0; i--) {
+        updatables[i].update(dt);
+      }
+      for (let j = drawables.length - 1; j >= 0; j--) {
+        drawables[j].draw(context, worldOffset);
       }
     } else {
       console.log("skip frame");

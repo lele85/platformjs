@@ -28,6 +28,33 @@ export class Player {
     this.collider = collider;
     this.level_limits = level_limits;
     this.speed = new Vector(0, 0);
+
+    this.rightWallProbe = new Collider({
+      x: this.collider.x,
+      y: this.collider.y,
+      w: 5,
+      h: this.collider.h,
+      debug: true,
+      color: "black",
+    });
+
+    this.leftWallProbe = new Collider({
+      x: this.collider.x - 10,
+      y: this.collider.y,
+      w: 5,
+      h: this.collider.h,
+      debug: true,
+      color: "black",
+    });
+
+    this.groundProbe = new Collider({
+      x: this.collider.x,
+      y: this.collider.y + this.collider.h,
+      w: this.collider.w,
+      h: 5,
+      debug: true,
+      color: "black",
+    });
   }
 
   /**
@@ -42,7 +69,6 @@ export class Player {
     for (let i = this.speed_influencers.length - 1; i >= 0; i--) {
       this.speed_influencers[i].applyTo(this.speed, dt);
     }
-
     this.collider.y += this.speed.y * dt;
     this.collider.x += this.speed.x * dt;
 
@@ -61,7 +87,20 @@ export class Player {
       this.speed.x = 0;
     }
 
-    this.state.update(totalResponse);
+    this.rightWallProbe.x = this.collider.x + this.collider.w;
+    this.rightWallProbe.y = this.collider.y;
+    this.leftWallProbe.x = this.collider.x - this.leftWallProbe.w;
+    this.leftWallProbe.y = this.collider.y;
+
+    this.state.gravity_versor.y === -1
+      ? (this.groundProbe.y = this.collider.y + this.collider.h)
+      : (this.groundProbe.y = this.collider.y - this.groundProbe.h);
+    this.groundProbe.x = this.collider.x;
+
+    const collidesLeft = this.level_limits.collidesLeft(this.leftWallProbe);
+    const collidesRight = this.level_limits.collidesRight(this.rightWallProbe);
+
+    this.state.update(totalResponse, collidesLeft, collidesRight);
   }
 
   /**
@@ -79,14 +118,17 @@ export class Player {
    * @param {Vector} worldOffset
    */
   draw(context, worldOffset) {
-    // Draw a debug representation of the player_state
-    const x = this.collider.x;
-    const y = this.collider.y;
-
-    context.fillStyle = "black";
-    context.font = "8px Monospace";
-    context.fillText(this.state.debugState().toString(), x, y);
-
     this.collider.draw(context, worldOffset);
+
+    // Debug player state
+    if (this.state.isOnGround()) {
+      this.groundProbe.draw(context, worldOffset);
+    }
+    if (this.state.isOnLeftWall()) {
+      this.leftWallProbe.draw(context, worldOffset);
+    }
+    if (this.state.isOnRightWall()) {
+      this.rightWallProbe.draw(context, worldOffset);
+    }
   }
 }

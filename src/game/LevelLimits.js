@@ -57,16 +57,44 @@ export class LevelLimits {
 
   /**
    *
+   * @param {Collider} collider
+   * @returns
+   */
+  collidesLeft(collider) {
+    for (let index in this.horizontalColliders) {
+      let otherCollider = this.horizontalColliders[index];
+      if (collider.collides(otherCollider).x > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @param {Collider} collider
+   */
+  collidesRight(collider) {
+    for (let index in this.horizontalColliders) {
+      let otherCollider = this.horizontalColliders[index];
+      if (collider.collides(otherCollider).x < 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   *
    * @param {number} dt
    */
   update(dt) {
     this.verticalColliders = this.level.getVerticalCollidersAt(
-      this.collider.x,
-      this.collider.y
+      this.collider.x + this.collider.w / 2,
+      this.collider.y + this.collider.h / 2
     );
     this.horizontalColliders = this.level.getHorizontalCollidersAt(
-      this.collider.x,
-      this.collider.y
+      this.collider.x + this.collider.w / 2,
+      this.collider.y + this.collider.h / 2
     );
   }
 }

@@ -93,14 +93,13 @@ export class Level {
   getCollider(x, y, xOffset, yOffset) {
     var coll;
     if (
-      this.collidersMatrix[
-        Math.floor((y + 10) / this.TILE_DIMENSION) + xOffset
-      ] != undefined
+      this.collidersMatrix[Math.floor(y / this.TILE_DIMENSION) + xOffset] !=
+      undefined
     ) {
       coll =
-        this.collidersMatrix[
-          Math.floor((y + 10) / this.TILE_DIMENSION) + yOffset
-        ][Math.floor((x + 10) / this.TILE_DIMENSION) + xOffset];
+        this.collidersMatrix[Math.floor(y / this.TILE_DIMENSION) + yOffset][
+          Math.floor(x / this.TILE_DIMENSION) + xOffset
+        ];
     }
     return coll;
   }
@@ -135,7 +134,6 @@ export class Level {
      * @type {Collider[]}
      */
     var potentialColliders = [];
-
     this.addIfNotUndefined(this.getCollider(x, y, 1, 0), potentialColliders);
     this.addIfNotUndefined(this.getCollider(x, y, 0, 0), potentialColliders);
     this.addIfNotUndefined(this.getCollider(x, y, -1, 0), potentialColliders);

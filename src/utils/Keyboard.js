@@ -75,11 +75,7 @@ export class Keyboard {
    * @returns
    */
   isJustPressed(action) {
-    if (this.justPressed[this.actionKeyMap[action]] === true) {
-      this.justPressed[this.actionKeyMap[action]] = false;
-      return true;
-    }
-    return false;
+    return this.justPressed[this.actionKeyMap[action]];
   }
 
   /**
@@ -97,10 +93,15 @@ export class Keyboard {
    * @returns
    */
   isJustReleased(action) {
-    if (this.justReleased[this.actionKeyMap[action]] === true) {
-      this.justReleased[this.actionKeyMap[action]] = false;
-      return true;
+    return this.justReleased[this.actionKeyMap[action]];
+  }
+
+  update() {
+    for (let key in this.justPressed) {
+      this.justPressed[key] = false;
     }
-    return false;
+    for (let key in this.justReleased) {
+      this.justReleased[key] = false;
+    }
   }
 }
