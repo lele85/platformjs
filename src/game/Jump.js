@@ -15,8 +15,6 @@ export class Jump {
     this.player_id = player_id;
     this.keyboard_provider = keyboard_provider;
     this.state = player_state;
-    this.started = false;
-    this.current_jump_time = 0;
     this.jump_speed = new Vector(0, 0);
     this.jump_direction = new Vector(1, 1);
   }
@@ -26,10 +24,8 @@ export class Jump {
    * @param {number} dt
    */
   applyTo(current_speed, dt) {
-    if (this.started) {
-      current_speed.x += this.jump_direction.x * this.jump_speed.x;
-      current_speed.y += this.jump_direction.y * this.jump_speed.y;
-    }
+    current_speed.x += this.jump_direction.x * this.jump_speed.x;
+    current_speed.y += this.jump_direction.y * this.jump_speed.y;
   }
 
   onGravityInversion() {
@@ -38,15 +34,11 @@ export class Jump {
   }
 
   start() {
-    this.started = true;
-    this.current_jump_time = 0;
-    this.jump_speed.y = -100;
+    this.jump_speed.y = -1000;
     this.state.onJumpStart();
   }
 
   stop() {
-    this.started = false;
-    this.current_jump_time = 0;
     this.jump_speed.y = 0;
     this.state.onJumpEnd();
   }
@@ -57,27 +49,14 @@ export class Jump {
   update(dt) {
     var keyboard = this.keyboard_provider.getKeyboard(this.player_id);
 
-    // Manage started jump
-    if (this.started) {
-      this.current_jump_time += dt;
-
-      // Reduce jump speed over time
-      this.jump_speed.y += 80 * this.current_jump_time;
-      this.jump_speed.y = Math.min(this.jump_speed.y, 0);
+    // Stop jump
+    if (!this.state.isOnGround()) {
+      this.stop();
     }
 
     // Start jump
-    if (
-      !this.started &&
-      this.state.isOnGround() &&
-      keyboard.isJustPressed("JUMP")
-    ) {
+    if (this.state.isOnGround() && keyboard.isJustPressed("JUMP")) {
       this.start();
-    }
-
-    // Stop jump
-    if (this.started && this.state.isOnGround()) {
-      this.stop();
     }
   }
 }

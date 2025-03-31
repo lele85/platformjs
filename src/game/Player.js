@@ -52,9 +52,13 @@ export class Player {
     const totalResponse = this.level_limits.applyTo(this.collider, dt);
 
     // If we are colliding with the ground, stop the vertical speed
-    // This is a hack to avoid the player during a jump to keep accelerating
     if (totalResponse.y !== 0) {
       this.speed.y = 0;
+    }
+
+    // If we are colliding with a wall, stop the horizontal speed
+    if (totalResponse.x !== 0) {
+      this.speed.x = 0;
     }
 
     this.state.update(totalResponse);
