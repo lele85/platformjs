@@ -41,6 +41,7 @@ export class Camera {
     this.camera_h = 480;
     this.semi_camera_h = this.camera_h / 2;
     this.current_target = this.targets[0];
+    this.moveCameraTo(this.current_target.x, this.current_target.y);
   }
 
   /**
@@ -88,6 +89,17 @@ export class Camera {
     this.context.translate(-dx, -dy);
     this.worldOffset.x += dx;
     this.worldOffset.y += dy;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   */
+  moveCameraTo(x, y) {
+    this.worldOffset.x = Math.max(0, x - this.semi_camera_w);
+    this.worldOffset.y = Math.min(this.getBounds().h - this.camera_h, y);
+    this.context.translate(-this.worldOffset.x, -this.worldOffset.y);
   }
 
   nextTarget() {
