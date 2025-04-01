@@ -1,6 +1,7 @@
 import { Vector } from "../math/Vector.js";
 import { Collider } from "./Collider.js";
 import { Level } from "./Level.js";
+import { MovingPlatform } from "./MovingPlatform.js";
 
 export class LevelLimits {
   /**
@@ -21,14 +22,20 @@ export class LevelLimits {
   horizontalColliders;
 
   /**
-   *
-   * @param {{level:Level, collider:Collider}} options
+   * @type {MovingPlatform[]}
    */
-  constructor({ level, collider }) {
+  movingPlatforms;
+
+  /**
+   *
+   * @param {{level:Level, collider:Collider, movingPlatforms: MovingPlatform[]}} options
+   */
+  constructor({ level, collider, movingPlatforms }) {
     this.level = level;
     this.collider = collider;
     this.verticalColliders = [];
     this.horizontalColliders = [];
+    this.movingPlatforms = movingPlatforms;
   }
 
   /**
@@ -52,6 +59,22 @@ export class LevelLimits {
       totalXResponse += response.x;
       position.x += response.x;
     }
+    for (let index in this.movingPlatforms) {
+      let response = this.collider.collides(
+        this.movingPlatforms[index].collider
+      );
+      if (response.y < 0) {
+        position.y += response.y;
+        totalYResponse += response.y;
+        position.x += this.movingPlatforms[index].SPEED * dt;
+      }
+      if (response.y > 0) {
+        position.y += response.y;
+        totalYResponse += response.y;
+        position.x -= this.movingPlatforms[index].SPEED * dt;
+      }
+    }
+
     return new Vector(totalXResponse, totalYResponse);
   }
 
@@ -67,6 +90,12 @@ export class LevelLimits {
         return true;
       }
     }
+    for (let index in this.movingPlatforms) {
+      let otherCollider = this.movingPlatforms[index].collider;
+      if (collider.collides(otherCollider).x > 0) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -76,6 +105,12 @@ export class LevelLimits {
   collidesRight(collider) {
     for (let index in this.horizontalColliders) {
       let otherCollider = this.horizontalColliders[index];
+      if (collider.collides(otherCollider).x < 0) {
+        return true;
+      }
+    }
+    for (let index in this.movingPlatforms) {
+      let otherCollider = this.movingPlatforms[index].collider;
       if (collider.collides(otherCollider).x < 0) {
         return true;
       }

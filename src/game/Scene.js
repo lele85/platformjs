@@ -108,7 +108,23 @@ export class Scene {
 
     this.levelEditor = new LevelEditor(level, mouse, this.worldOffset);
 
-    var platform = new MovingPlatform();
+    var platform = new MovingPlatform({
+      x: TILE_DIMENSION * 9,
+      y: TILE_DIMENSION * 76,
+      w: TILE_DIMENSION * 3,
+      h: TILE_DIMENSION,
+      speed: 100,
+      direction: "LEFT",
+    });
+
+    var platform2 = new MovingPlatform({
+      x: TILE_DIMENSION * 4,
+      y: TILE_DIMENSION * 72,
+      w: TILE_DIMENSION * 4,
+      h: TILE_DIMENSION,
+      speed: 120,
+      direction: "RIGHT",
+    });
 
     var player_state = new PlayerState({
       player_id: "PLAYER_1",
@@ -189,11 +205,13 @@ export class Scene {
     var level_limits_1 = new LevelLimits({
       level: level,
       collider: player_collider_1,
+      movingPlatforms: [platform, platform2],
     });
 
     var level_limits_2 = new LevelLimits({
       level: level,
       collider: player_collider_2,
+      movingPlatforms: [platform, platform2],
     });
 
     var player = new Player({
@@ -235,6 +253,7 @@ export class Scene {
     this.updatables = [
       this.keyboard,
       platform,
+      platform2,
       jump,
       jump2,
       player,
@@ -252,6 +271,7 @@ export class Scene {
       player2,
       level,
       platform,
+      platform2,
     ];
   }
 

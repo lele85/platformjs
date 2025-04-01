@@ -15,14 +15,7 @@ export class Player {
    *  level_limits: LevelLimits
    * }} params
    */
-  constructor({
-    platform,
-    player_state,
-    speed_influencers,
-    collider,
-    level_limits,
-  }) {
-    this.movingPlatform = platform;
+  constructor({ player_state, speed_influencers, collider, level_limits }) {
     this.state = player_state;
     this.speed_influencers = speed_influencers;
     this.collider = collider;

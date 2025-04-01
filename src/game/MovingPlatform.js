@@ -18,24 +18,28 @@ export class MovingPlatform {
   /**
    * @type {number}
    */
-  PIXEL_PER_FRAME;
-  /**
-   * @type {number}
-   */
   SPEED;
 
-  constructor() {
+  /**
+   * @param {{x:number, y:number, w:number, h:number, speed:number, direction: 'LEFT' | 'RIGHT'}} options
+   */
+  constructor({ x, y, w, h, speed, direction }) {
     this.collider = new Collider({
-      x: 300,
-      y: 2480,
-      w: TILE_DIMENSION,
-      h: TILE_DIMENSION,
+      x: x,
+      y: y,
+      w: w,
+      h: h,
       debug: true,
     });
-    this.START_X = 300;
-    this.END_X = 500;
-    this.PIXEL_PER_FRAME = 1;
-    this.SPEED = 1;
+    this.START_X =
+      direction === "LEFT"
+        ? this.collider.x
+        : this.collider.x - TILE_DIMENSION * 3;
+    this.END_X =
+      direction === "LEFT"
+        ? this.collider.x + TILE_DIMENSION * 3
+        : this.collider.x;
+    this.SPEED = speed;
   }
 
   /**
@@ -43,15 +47,13 @@ export class MovingPlatform {
    * @param {number} dt
    */
   update(dt) {
-    this.collider.x += this.PIXEL_PER_FRAME;
+    this.collider.x += this.SPEED * dt;
     if (this.collider.x > this.END_X) {
       this.collider.x = this.END_X;
-      this.PIXEL_PER_FRAME *= -1;
       this.SPEED *= -1;
     }
     if (this.collider.x < this.START_X) {
       this.collider.x = this.START_X;
-      this.PIXEL_PER_FRAME *= -1;
       this.SPEED *= -1;
     }
   }
