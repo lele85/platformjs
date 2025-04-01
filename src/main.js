@@ -26,12 +26,27 @@ window.onload = function () {
   var last_frame_ticks = DateTime.now();
   var current_frame_ticks = last_frame_ticks;
   var dt;
+  let paused = false;
+
+  // Pause and resume the game when the window loses and gains focus
+  // This is useful since browsers throttle the execution of background tabs
+  window.onfocus = function () {
+    last_frame_ticks = DateTime.now();
+    paused = false;
+  };
+
+  window.onblur = function () {
+    paused = true;
+  };
 
   /**
    *
    * @param {CanvasRenderingContext2D} context
    */
   var mainloop = function (context) {
+    if (paused) {
+      return;
+    }
     current_frame_ticks = DateTime.now();
     dt = (current_frame_ticks - last_frame_ticks) / 1000;
 
