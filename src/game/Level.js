@@ -1,13 +1,14 @@
 import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
 
+export const TILE_DIMENSION = 32;
+
 export class Level {
   /**
    *
    * @param {{ definition: number[][] }} options
    */
   constructor(options) {
-    this.TILE_DIMENSION = 32;
     this.definition = options.definition || [];
     /**
      * @type {Collider[][]}
@@ -21,10 +22,10 @@ export class Level {
       for (let j = 0; j < this.definition[i].length; j++) {
         if (this.definition[i][j] === 1) {
           var coll = new Collider({
-            x: j * this.TILE_DIMENSION,
-            y: i * this.TILE_DIMENSION,
-            w: this.TILE_DIMENSION,
-            h: this.TILE_DIMENSION,
+            x: j * TILE_DIMENSION,
+            y: i * TILE_DIMENSION,
+            w: TILE_DIMENSION,
+            h: TILE_DIMENSION,
             debug: true,
           });
           row[j] = coll;
@@ -40,10 +41,10 @@ export class Level {
    */
   addCollider(i, j) {
     this.collidersMatrix[j][i] = new Collider({
-      x: i * this.TILE_DIMENSION,
-      y: j * this.TILE_DIMENSION,
-      w: this.TILE_DIMENSION,
-      h: this.TILE_DIMENSION,
+      x: i * TILE_DIMENSION,
+      y: j * TILE_DIMENSION,
+      w: TILE_DIMENSION,
+      h: TILE_DIMENSION,
       debug: true,
     });
     this.definition[j][i] = 1;
@@ -93,12 +94,12 @@ export class Level {
   getCollider(x, y, xOffset, yOffset) {
     var coll;
     if (
-      this.collidersMatrix[Math.floor(y / this.TILE_DIMENSION) + xOffset] !=
+      this.collidersMatrix[Math.floor(y / TILE_DIMENSION) + xOffset] !=
       undefined
     ) {
       coll =
-        this.collidersMatrix[Math.floor(y / this.TILE_DIMENSION) + yOffset][
-          Math.floor(x / this.TILE_DIMENSION) + xOffset
+        this.collidersMatrix[Math.floor(y / TILE_DIMENSION) + yOffset][
+          Math.floor(x / TILE_DIMENSION) + xOffset
         ];
     }
     return coll;
@@ -147,8 +148,8 @@ export class Level {
    */
   getBounds() {
     var bounds = {
-      h: this.definition.length * this.TILE_DIMENSION,
-      w: this.definition[0].length * this.TILE_DIMENSION,
+      h: this.definition.length * TILE_DIMENSION,
+      w: this.definition[0].length * TILE_DIMENSION,
     };
     return bounds;
   }

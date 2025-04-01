@@ -1,4 +1,4 @@
-import { Level } from "./Level";
+import { Level, TILE_DIMENSION } from "./Level";
 import { Mouse } from "../utils/Mouse";
 import { Keyboard } from "../utils/Keyboard";
 import { PlayerKeyboardProvider } from "./PlayerKeyboardProvider";
@@ -169,8 +169,8 @@ export class Scene {
     });
 
     var player_collider_1 = new Collider({
-      x: players[0].x * 32,
-      y: players[0].y * 32,
+      x: players[0].x * TILE_DIMENSION,
+      y: players[0].y * TILE_DIMENSION,
       w: 20,
       h: 20,
       debug: true,
@@ -178,8 +178,8 @@ export class Scene {
     });
 
     var player_collider_2 = new Collider({
-      x: players[1].x * 32,
-      y: players[1].y * 32,
+      x: players[1].x * TILE_DIMENSION,
+      y: players[1].y * TILE_DIMENSION,
       w: 20,
       h: 20,
       debug: true,

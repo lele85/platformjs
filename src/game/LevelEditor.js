@@ -1,6 +1,6 @@
 import { toTileSpace, toWorldSpace, Vector } from "../math/Vector";
 import { Mouse } from "../utils/Mouse";
-import { Level } from "./Level";
+import { Level, TILE_DIMENSION } from "./Level";
 
 export class LevelEditor {
   /**
@@ -40,7 +40,10 @@ export class LevelEditor {
    * @param {Vector} position
    */
   execute(mode, position) {
-    var tileSpaceCoords = toTileSpace(toWorldSpace(this.worldOffset, position));
+    var tileSpaceCoords = toTileSpace(
+      toWorldSpace(this.worldOffset, position),
+      TILE_DIMENSION
+    );
     switch (mode) {
       case "ADD":
         this.level.addCollider(tileSpaceCoords.x, tileSpaceCoords.y);

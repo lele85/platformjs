@@ -1,5 +1,6 @@
 import { Vector } from "../math/Vector";
 import { Collider } from "./Collider";
+import { TILE_DIMENSION } from "./Level";
 
 export class MovingPlatform {
   /**
@@ -27,8 +28,8 @@ export class MovingPlatform {
     this.collider = new Collider({
       x: 300,
       y: 2480,
-      w: 32,
-      h: 32,
+      w: TILE_DIMENSION,
+      h: TILE_DIMENSION,
       debug: true,
     });
     this.START_X = 300;

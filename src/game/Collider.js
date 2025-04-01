@@ -1,4 +1,5 @@
 import { Vector } from "../math/Vector.js";
+import { TILE_DIMENSION } from "./Level.js";
 
 export class Collider {
   /**
@@ -65,7 +66,10 @@ export class Collider {
   draw(context, worldOffset) {
     if (this.debug !== false) {
       // Check if the collider is out of the screen
-      if (this.y > worldOffset.y + 480 + 32 || this.y < worldOffset.y - 32) {
+      if (
+        this.y > worldOffset.y + 480 + TILE_DIMENSION ||
+        this.y < worldOffset.y - TILE_DIMENSION
+      ) {
         return;
       }
       context.fillStyle = this.color;

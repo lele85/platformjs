@@ -11,13 +11,13 @@ export function toWorldSpace(worldPosition, vector) {
 /**
  *
  * @param {Vector} vector
+ * @param {number} tileDimension
  * @returns
  */
-export function toTileSpace(vector) {
-  const TILE_DIMENSION = 32;
+export function toTileSpace(vector, tileDimension) {
   return new Vector(
-    Math.floor(vector.x / TILE_DIMENSION),
-    Math.floor(vector.y / TILE_DIMENSION)
+    Math.floor(vector.x / tileDimension),
+    Math.floor(vector.y / tileDimension)
   );
 }
 
