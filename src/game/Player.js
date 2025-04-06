@@ -55,29 +55,33 @@ export class Player {
    * @param {number} dt
    */
   update(dt) {
-    const oldY = this.collider.y;
-    const oldX = this.collider.x;
-
-    // Apply speed influencers
+    //Apply speed influencers
     for (let i = this.speed_influencers.length - 1; i >= 0; i--) {
       this.speed_influencers[i].applyTo(this.speed, dt);
     }
+
+    // Update the collider position
     this.collider.y += this.speed.y * dt;
     this.collider.x += this.speed.x * dt;
 
-    this.speed.y = (this.collider.y - oldY) / dt;
-    this.speed.x = (this.collider.x - oldX) / dt;
-
-    const totalResponse = this.level_limits.applyTo(this.collider, dt);
+    const totalResponse = this.level_limits.collides(this.collider);
 
     // If we are colliding with the ground, stop the vertical speed
-    if (totalResponse.y !== 0) {
+    if (
+      (totalResponse.y > 0 && this.speed.y < 0) ||
+      (totalResponse.y < 0 && this.speed.y > 0)
+    ) {
       this.speed.y = 0;
+      this.collider.y += totalResponse.y;
     }
 
     // If we are colliding with a wall, stop the horizontal speed
-    if (totalResponse.x !== 0) {
+    if (
+      (totalResponse.x > 0 && this.speed.x < 0) ||
+      (totalResponse.x < 0 && this.speed.x > 0)
+    ) {
       this.speed.x = 0;
+      this.collider.x += totalResponse.x;
     }
 
     this.rightWallProbe.x = this.collider.x + this.collider.w;

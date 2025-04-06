@@ -204,13 +204,11 @@ export class Scene {
 
     var level_limits_1 = new LevelLimits({
       level: level,
-      collider: player_collider_1,
       movingPlatforms: [platform, platform2],
     });
 
     var level_limits_2 = new LevelLimits({
       level: level,
-      collider: player_collider_2,
       movingPlatforms: [platform, platform2],
     });
 
@@ -220,11 +218,11 @@ export class Scene {
       player_state: player_state,
       // prettier-ignore
       speed_influencers: [
-      jump,
-      speed_limits,
-      player_input_1,
-      gravity,
-      wall_jump,
+        jump,
+        speed_limits,
+        player_input_1,
+        wall_jump,
+        gravity,
     ],
       level_limits: level_limits_1,
     });
@@ -260,8 +258,6 @@ export class Scene {
       player2,
       this.camera,
       gravity,
-      level_limits_1,
-      level_limits_2,
       wall_jump,
       wall_jump2,
     ];

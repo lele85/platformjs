@@ -8,9 +8,9 @@ export class PlayerInput {
   constructor({ player_id, keyboard_provider }) {
     this.player_id = player_id;
     this.keyboard_provider = keyboard_provider;
-    this.MAX_HORIZONTAL_SPEED = 250;
+    this.MAX_HORIZONTAL_SPEED = 350;
     this.HORIZONTAL_DECELERATION = 1600;
-    this.HORIZONTAL_ACCELERATION = 2000;
+    this.HORIZONTAL_ACCELERATION = 2500;
   }
 
   /**

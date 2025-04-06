@@ -51,16 +51,6 @@ export class Camera {
   update(dt) {
     // Calculate the vertical limits of the camera
     var targetCameraY = this.current_target.y;
-    var targetCameraYBottomLimit = this.getBounds().h - this.semi_camera_h;
-    var targetCameraYTopLimit = this.semi_camera_h;
-
-    // Apply vertical limits
-    if (targetCameraY > targetCameraYBottomLimit) {
-      targetCameraY = targetCameraYBottomLimit;
-    }
-    if (targetCameraY < targetCameraYTopLimit) {
-      targetCameraY = targetCameraYTopLimit;
-    }
 
     // Calculate the vertical distance between the target and the camera
     var targetToCameraDistanceY =
@@ -71,12 +61,6 @@ export class Camera {
 
     // Calculate the horizontal limits of the camera
     var targetCameraX = this.current_target.x;
-    var targetCameraXLeftLimit = this.semi_camera_w;
-
-    // Apply horizontal limits
-    if (targetCameraX < targetCameraXLeftLimit) {
-      targetCameraX = targetCameraXLeftLimit;
-    }
 
     // Calculate the horizontal distance between the target and the camera
     var targetToCameraDistanceX =
@@ -97,8 +81,8 @@ export class Camera {
    * @param {number} y
    */
   moveCameraTo(x, y) {
-    this.worldOffset.x = Math.max(0, x - this.semi_camera_w);
-    this.worldOffset.y = Math.min(this.getBounds().h - this.camera_h, y);
+    this.worldOffset.x = x - this.semi_camera_w;
+    this.worldOffset.y = y - this.semi_camera_h;
     this.context.translate(-this.worldOffset.x, -this.worldOffset.y);
   }
 
