@@ -71,16 +71,30 @@ export class Player {
     for (let i = 0; i < movingPlatforms.length; i++) {
       const platform = movingPlatforms[i];
       const response = this.collider.collides(platform.collider);
-      if (response.y < 0) {
-        this.collider.y += response.y;
-        this.speed.y = 0;
-        this.collider.x += platform.SPEED * dt;
-        movingPlatformResponse.y += response.y;
-      }
-      if (response.y > 0) {
-        this.collider.y += response.y;
-        this.speed.y = 0;
-        movingPlatformResponse.y += response.y;
+      if (this.state.gravity_versor.y === -1) {
+        if (response.y < 0 && this.speed.y > 0) {
+          this.collider.y += response.y;
+          this.speed.y = 0;
+          this.collider.x += platform.SPEED * dt;
+          movingPlatformResponse.y += response.y;
+        }
+        if (response.y > 0) {
+          this.collider.y += response.y;
+          this.speed.y = 0;
+          movingPlatformResponse.y += response.y;
+        }
+      } else {
+        if (response.y > 0 && this.speed.y < 0) {
+          this.collider.y += response.y;
+          this.speed.y = 0;
+          this.collider.x += platform.SPEED * dt;
+          movingPlatformResponse.y += response.y;
+        }
+        if (response.y < 0) {
+          this.collider.y += response.y;
+          this.speed.y = 0;
+          movingPlatformResponse.y += response.y;
+        }
       }
     }
 
