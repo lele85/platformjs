@@ -73,12 +73,7 @@ export class Collider {
         return;
       }
       context.fillStyle = this.color;
-      context.fillRect(
-        Math.round(this.x + 1),
-        Math.round(this.y + 1),
-        this.w - 2,
-        this.h - 2
-      );
+      context.fillRect(this.x + 1, this.y + 1, this.w - 2, this.h - 2);
     }
   }
 }

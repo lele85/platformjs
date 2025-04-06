@@ -21,23 +21,24 @@ export class MovingPlatform {
   SPEED;
 
   /**
-   * @param {{x:number, y:number, w:number, h:number, speed:number, direction: 'LEFT' | 'RIGHT'}} options
+   * @param {{x:number, y:number, w:number, h:number, speed:number, direction: 'LEFT' | 'RIGHT', color: string, distance: number}} options
    */
-  constructor({ x, y, w, h, speed, direction }) {
+  constructor({ x, y, w, h, speed, direction, color, distance }) {
     this.collider = new Collider({
       x: x,
       y: y,
       w: w,
       h: h,
       debug: true,
+      color: color,
     });
     this.START_X =
       direction === "LEFT"
         ? this.collider.x
-        : this.collider.x - TILE_DIMENSION * 3;
+        : this.collider.x - TILE_DIMENSION * distance;
     this.END_X =
       direction === "LEFT"
-        ? this.collider.x + TILE_DIMENSION * 3
+        ? this.collider.x + TILE_DIMENSION * distance
         : this.collider.x;
     this.SPEED = speed;
   }

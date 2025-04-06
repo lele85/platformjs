@@ -115,15 +115,19 @@ export class Scene {
       h: TILE_DIMENSION,
       speed: 100,
       direction: "LEFT",
+      color: "green",
+      distance: 3,
     });
 
     var platform2 = new MovingPlatform({
-      x: TILE_DIMENSION * 4,
+      x: TILE_DIMENSION * 5,
       y: TILE_DIMENSION * 72,
-      w: TILE_DIMENSION * 4,
+      w: TILE_DIMENSION * 3,
       h: TILE_DIMENSION,
       speed: 120,
       direction: "RIGHT",
+      color: "orange",
+      distance: 4,
     });
 
     var player_state = new PlayerState({

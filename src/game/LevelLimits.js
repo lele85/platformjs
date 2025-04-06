@@ -60,6 +60,29 @@ export class LevelLimits {
    * @param {Collider} collider
    * @returns
    */
+  getMovingPlatforms(collider) {
+    return this.movingPlatforms.filter((platform) => {
+      if (platform.collider.x + platform.collider.w < collider.x) {
+        return false;
+      }
+      if (platform.collider.x > collider.x + collider.w) {
+        return false;
+      }
+      if (platform.collider.y + platform.collider.h < collider.y) {
+        return false;
+      }
+      if (platform.collider.y > collider.y + collider.h) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  /**
+   *
+   * @param {Collider} collider
+   * @returns
+   */
   collidesLeft(collider) {
     const horizontalColliders = this.level.getHorizontalCollidersAt(
       collider.x + collider.w / 2,

@@ -64,24 +64,44 @@ export class Player {
     this.collider.y += this.speed.y * dt;
     this.collider.x += this.speed.x * dt;
 
-    const totalResponse = this.level_limits.collides(this.collider);
+    const movingPlatformResponse = new Vector(0, 0);
+
+    // Get moving platforms
+    const movingPlatforms = this.level_limits.getMovingPlatforms(this.collider);
+    for (let i = 0; i < movingPlatforms.length; i++) {
+      const platform = movingPlatforms[i];
+      const response = this.collider.collides(platform.collider);
+      if (response.y < 0) {
+        this.collider.y += response.y;
+        this.speed.y = 0;
+        this.collider.x += platform.SPEED * dt;
+        movingPlatformResponse.y += response.y;
+      }
+      if (response.y > 0) {
+        this.collider.y += response.y;
+        this.speed.y = 0;
+        movingPlatformResponse.y += response.y;
+      }
+    }
+
+    const levelCollisionResponse = this.level_limits.collides(this.collider);
 
     // If we are colliding with the ground, stop the vertical speed
     if (
-      (totalResponse.y > 0 && this.speed.y < 0) ||
-      (totalResponse.y < 0 && this.speed.y > 0)
+      (levelCollisionResponse.y > 0 && this.speed.y < 0) ||
+      (levelCollisionResponse.y < 0 && this.speed.y > 0)
     ) {
       this.speed.y = 0;
-      this.collider.y += totalResponse.y;
+      this.collider.y += levelCollisionResponse.y;
     }
 
     // If we are colliding with a wall, stop the horizontal speed
     if (
-      (totalResponse.x > 0 && this.speed.x < 0) ||
-      (totalResponse.x < 0 && this.speed.x > 0)
+      (levelCollisionResponse.x > 0 && this.speed.x < 0) ||
+      (levelCollisionResponse.x < 0 && this.speed.x > 0)
     ) {
       this.speed.x = 0;
-      this.collider.x += totalResponse.x;
+      this.collider.x += levelCollisionResponse.x;
     }
 
     this.rightWallProbe.x = this.collider.x + this.collider.w;
@@ -97,7 +117,14 @@ export class Player {
     const collidesLeft = this.level_limits.collidesLeft(this.leftWallProbe);
     const collidesRight = this.level_limits.collidesRight(this.rightWallProbe);
 
-    this.state.update(totalResponse, collidesLeft, collidesRight);
+    this.state.update(
+      {
+        x: levelCollisionResponse.x + movingPlatformResponse.x,
+        y: levelCollisionResponse.y + movingPlatformResponse.y,
+      },
+      collidesLeft,
+      collidesRight
+    );
   }
 
   /**
